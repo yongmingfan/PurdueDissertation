@@ -1,0 +1,87 @@
+\section{Background and Related Work}
+\label{sec:snarkprobe-background}
+
+In this section, we introduce the necessary background and prior work related to zkSNARKs, fuzzing, SMT solvers, and automated testing for cryptographic vulnerabilities.
+
+\subsection{Background}
+% \parhead{Zero-knowledge proofs.}
+% In a zero-knowledge protocol \cite{gmw86} a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
+% It has been shown that any NP statement has a zero knowledge proof system \cite{gmw86b}, providing us with an immense range of and flexibility in the statements and properties that we are able to prove.
+% For practical settings, we typically focus on \textit{non-interactive} zero-knowledge proofs of knowledge (or NIZKs), where a prover can produce a proof without any interaction from the verifier.
+
+\parhead{zkSNARKs.}
+In a zero-knowledge protocol \cite{gmw86} a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
+zkSNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)~\cite{cryptoeprint:2013:507,parno2013pinocchio,groth2016size} are one of the current most popular zero-knowledge proof systems, and have begun to see increasingly complex, real world deployment in a number of privacy-preserving applications~\cite{zcash,darkforest,aleo,filecoin,zkrollup}.
+At a very high level, zkSNARKs work as follows.  The first step in proof creation is to turn the statement that one wishes to prove into an equivalent form that relies on knowing a solution to some algebraic equations.  This representation is then broken down into an arithmetic circuit.  To ensure the correct evaluation of the circuit (and thus the proof), a programmer must express a series of constraints on the wires, called a constraint system, which is typically a Rank 1 constraint system or R1CS. 
+zkSNARK libraries often provide an abstraction called a \textit{gadget}, as expressing large programs with constraints can be quite difficult.  A gadget allows programmers to specify a series of inputs, hidden internal variables and constraints on the inputs and internal variables. Rather than expressing a large program as many constraints, one can instead express it as some gadgets, and a few constraints binding them together.
+
+\parhead{Fuzzing.}
+Fuzzing is an automated software security testing technique to explore software for bugs that cause incorrect or unexpected results, program crashes, or in some extreme cases, lead to exploit paths. Fuzzing works by generating inputs and monitoring the program for crashing, assertions, and memory leaks \cite{chen2018systematic} without the need for manual review by developers, security engineers, and auditors, which can be ineffective, expensive, and hard to guarantee complete coverage.
+An important part of fuzzing is code coverage, a metric used to evaluate how much of the target program is tested.
+Early fuzzing systems only generated inputs by mutating a seed input and watching for crashes or errors. Over time, fuzzing test structure has been improved and other techniques have been developed to improve the effectiveness, such as coverage feedback \cite{bohme2017coverage,bohme2017directed}, advanced algorithms \cite{bohme2017directed,householder2012probability,woo2013scheduling}, and machine learning \cite{godefroid2017learn}. Some feedback-guided fuzzing tools have also been developed \cite{afl,syzkaller}, which have found security vulnerabilities in widely deployed software \cite{stevens2017summoning}.
+
+\parhead{SMT Solvers.}
+Satisfiability modulo theory (SMT) is a complex version of the boolean satisfiability problem (SAT) that can determine if a mathematical equation is satisfiable or unsatisfiable.  Z3 (which we choose to use in this paper) is an efficient SMT solver that has been used in various software verification and analysis applications \cite{moura2008z3}. Typically, SMT solvers such as Z3 can only handle first-order logic, but recent research \cite{barbosa2019extending} proposed a pragmatic extension for SMT solvers to support higher-order logic.
+Most SMT solvers are built based on an efficient SAT solver \cite{de2011satisfiability}, and as SAT is an NP-Complete problem, SMT solving is considered to be an NP-Hard and undecidable problem. 
+
+
+\subsection{Related Works}
+There has been work to automate the conversion between proof statement and R1CS \cite{fredrikson2014zo,snarky,xjsnark,circom}, but they do not necessarily guarantee the correctness of the translation.  Manually writing/editing R1CS is also still popular as it can result in substantial efficiency gains.  Such work can help secure new applications but cannot help with the security of existing implementations.
+
+Fuzzing has been used for some cryptographic implementations.
+Special-purpose fuzzing has been used for TLS \cite{somorovsky2016systematic,walz2017exploiting}. CDF \cite{aumasson2017automated} targets cryptographic algorithms such as DSA, ECDSA, and RSA. %, and works primarily by using differential fuzzing and known test vectors.
+%, which feeds in edge cases and various values, and then compares the output to either a set of known test vectors or the output of another implementation.
+We are inspired in part by these ideas, though we have no known test vectors or reference implementations to compare against and use more targetted input generation techniques.
+In addition, most general purpose fuzzing tools cannot detect \textit{\logicerror{s}} since they are specifically designed to find and trigger standard software errors.
+We consider a \logicerror to be one that causes a deviation from the expected protocol flow or an incorrect output, without causing an error message or crash.
+To the best of our knowledge, we are the first to build such fuzzing techniques for zkSNARKs.
+
+We provide a comparison of \tool and the most relevant existing fuzzing tools in Table \ref{tab:snarkprobe-fuzzer_comparison}, focusing on the types of errors they are able to catch, if they can precisely locate such errors, and their adaptability to \zksnark{s}.  Currently, most fuzzing tools are limited to identifying software errors. While some tools such as CDF and SHA-3 Test have the capability to identify \logicerror{s}, their functionality is restricted and cannot be easily extended.
+Presently, our \SnarkFuzzer stands as the only fuzzing tool capable of detecting both software and \logicerror{s} for \zksnark{s}, accompanied by source code references and protocol location information.
+
+\begin{table}[t]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{c||c|ccc|cc}
+\hline
+\multirow{3}{*}{Fuzzer} & \multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Adapt to\\ zkSNARK\end{tabular}} & \multicolumn{3}{c|}{Error Types} & \multicolumn{2}{c}{Error Location} \\ \cline{3-7} 
+ &  & \multicolumn{1}{c|}{\multirow{2}{*}{Program}} & \multicolumn{2}{c|}{Logic} & \multicolumn{1}{c|}{\multirow{2}{*}{Code}} & \multicolumn{1}{c}{\multirow{2}{*}{Scheme}} \\ \cline{4-5}
+ &  & \multicolumn{1}{c|}{} & \multicolumn{1}{l|}{Crypto} & \multicolumn{1}{l|}{\zksnark} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} \\ \hline\hline
+AFL \cite{afl} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\Circle} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \Circle \\ \hline
+CDF \cite{aumasson2017automated} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\LEFTcircle} & \Circle & \multicolumn{1}{c|}{\Circle} & \Circle \\ \hline
+SHA-3 Test \cite{mouha2018finding} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\CIRCLE} & \Circle & \multicolumn{1}{c|}{\Circle} & \Circle \\ \hline
+TLS-Attacker \cite{somorovsky2016systematic} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\LEFTcircle} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \LEFTcircle \\ \hline
+\textbf{\tool} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Comparison of \tool and a selection of cryptographic and generic fuzzing tools. A \LEFTcircle~ means achieves in select instances.}
+\label{tab:snarkprobe-fuzzer_comparison}
+\vspace*{-18pt}
+\end{table}
+
+%\subsubsection{Comparing with Existing Cryptography Evaluation Tool}
+%\fanyo{We conducted a comparative analysis between \SnarkFuzzer and existing generic and cryptographic fuzzing tools in order to highlight the improvements and advantages offered by our \SnarkFuzzer. Table \ref{tab:fuzzer_comparison} presents a comprehensive overview of the comparison between \SnarkFuzzer and other available fuzzer tools. Currently, most fuzzing tools, particularly generic fuzzing tools like AFL, are limited to identifying software errors within the source code. While some cryptographic fuzzing tools such as CDF and SHA-3 Test have the capability to identify \logicerror, their functionality is restricted. For instance, CDF is only compatible with certain cryptographic algorithm test vectors such as RSA, XOR, and DSA. On the other hand, SHA-3 Test specifically focuses on hash function implementations adhering to the SHA-3 Competition API. It should be noted that their techniques cannot be directly applied to the \zksnark protocol due to the heightened complexity associated with hashing functions within \zksnark. Presently, our \SnarkFuzzer stands as the only fuzzing/\framework tool capable of detecting both software and \logicerror within the \zksnark protocol with indications of error types, accompanied by source code references and protocol location information.}
+
+
+Additionally, an important part of many fuzzers is how they handle code coverage analysis.
+While off-the-shelf tools like LLVM might seem to fit well for this, as it natively provides a source code line coverage data report~\cite{llvmcoverage}, this is insufficient for our desired application.  Our fuzzer focuses specifically on branch coverage and coverage of critical cryptographic components, not generic line coverage.  Additionally, we found that many existing zkSNARK libraries may not work well (or even compile) with LLVM.  This motivates our development of the \branchmodel and its use of GDB, as existing tools do not suffice.
+
+There has also been prior work on automating the development of cryptographic attacks.  Much of this work has focused on side-channels~\cite{phan2017synthesis,pasareanu2016multi,bang2018online}, though it has also seen other applications~\cite{beck2020automating}.  Prior work has also sought to automatically deploy existing, known attacks~\cite{kupser2015break}.
+These are largely orthogonal and do not extend to existing zkSNARK systems.
+Such attack models work to model timing results by combining a fixed secret input with many other inputs that are chosen by an attacker and often employ SAT solvers.
+Recent work has provided a more general framework for such techniques and extended them to automate format oracle attacks~\cite{beck2020automating}.
+This also extends work which sought to automatically deploy existing, known attacks~\cite{kupser2015break}.  While these works also seek to automatically detect vulnerabilities in different contexts, and use some similar techniques such as SMT solvers, these are largely orthogonal to our current work and do not extend to existing zkSNARK systems.
+
+There is a growing trend towards computer aided cryptography and formal verification of implementations (see \cite{barbosa2021sok} for a detailed discussion).  Project Everest~\cite{projecteverest} contains a variety of formally verified software components.  While we are seeing increasingly complex protocols being formally verified~\cite{protzenko2019formally}, we have not yet seen these techniques applied to zkSNARKs.  We see our work both as a step towards a formally verified zkSNARK implementation, bridging the current gap through the use of heuristic techniques like fuzzing, as well as a complement to it.  A formally verified implementation could be used to provide a trustworthy ground truth for our fuzzing techniques, for example.  In addition, formal verification is typically targeted at a single implementation, which necessitates re-running the often complicated process for each new application.  \tool is designed to streamline the process and make it easy for a user to check a variety of applications or libraries, with little manual effort.
+
+\subsection{Challenges and motivation}
+Based on the prior work and current techquies, there are following challenges to evaluate the security of a \zksnark library, which are also our motivation to develop our \tool.
+\begin{itemize}[leftmargin=*]
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+		\item Manually evaluating the security of cryptographic library source code requires a significant investment of time and resources.
+        \item Existing cryptographic fuzzers and their techniques does not support \zksnark or  other zero knowledge proof protocol due to their complexity.
+        \item General-purpose fuzzing tools cannot detect \textit{\logicerror{s}} and are unable to produce suitable input for \zksnark programs.
+	  %\item \fanyo{We evaluate \tool's ability with recent \zksnark applications in academic paper and projects to find potential inconsistencies and different types of errors in zkSNARK protocols and implementations and discuss the various inconsistencies it detected.}
+\end{itemize}
+

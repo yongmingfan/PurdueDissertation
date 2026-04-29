@@ -1,0 +1,40 @@
+\section{Reproduction}
+\label{sec:cryptobinary-reproduction}
+% To verify the reproducibility and replicability for each tool, we conduct a end-to-end evaluation experiment as the following procedure
+% \begin{itemize}
+%   \item Compile the tool's source code from sketch in different operating system (Windows, Mac OS, and Linux) if source code is provided
+%   \item Evaluate the benchmark provided by original tool if provided.
+%   \item Evaluate each tool with our new  benchmark system
+% \end{itemize}
+
+We start by assessing the reproducibility of each tool by employing consistent experimental setups, procedures, and operating conditions to replicate their purported capabilities. 
+
+In our reproducibility evaluation we follow the ACM guidelines on reproducibility \cite{rar}, using the same measurement procedure, system setting, and operating conditions as the tool's original test cases\footnote{For the precise details and steps of our reproducibility evaluation see Appendix \ref{app:cryptobinary-repro_procedure}.}. This will help us to understand the basic fundamental reliability for each tool.  When tools do not pass the reproduction evaluation, we also provide a brief discussion for why.
+\autoref{tab:cryptobinary-reproducibility} shows the reproducibility results.
+% \fanyo{We use \cmark to indicate successful reproduction of the tool with their original test cases, \xmark for failure to reproduce or when the tool is unavailable (neither source code nor compiled binary is provided), and \texttt{n/a} if the tool is executable but lacks the original test cases.}
+
+\begin{table}[h]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{c|c|c|c|c|c}
+\hline
+Aligot & \makecell{Crypto\\Hunt} & \makecell{Crypto\\Knight}  & DRACA  & FindCrypt2  & FALKE-MC \\ \hline
+\cmark & \xmark & \cmark & \textminus & \textminus & \xmark  \\ \hline \hline
+HCD & Kerckhoff  & \makecell{PEiD \\ KANAL}  & SignSrch  & \makecell{Softmax \\ Classifier}  & \makecell{Where’s \\ Crypto}\\ \hline
+\textminus  & \xmark & \textminus & \textminus & \xmark & \cmark  \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Reproducibility outcome for each tools. \cmark~indicates a tool that has passed the reproduction evaluation, while \xmark~represents a tool that has either failed the reproduction evaluation or is not accessible. \textminus~denotes a tool that is available for use, but the developer has not provided the original test cases.}
+\label{tab:cryptobinary-reproducibility}
+\vspace{-10pt}
+\end{table}
+
+Note that for certain tools, the developers only provided the executable binary program without the accompanying source code or test cases necessary for evaluation, making a reproducibility assessment unfeasible (denoted \textminus). Some tools are not publicly available in either source code or executable binary form, making a reproducibility evaluation impossible. As a result, they are marked with a \xmark. Additionally, we encountered crashes when running Pin-based tools with the latest version of Intel Pin, indicating that the design of older cryptographic detection tools may not be compatible with newer Pin versions. However, Aligot is the one exception to this.  Aligot provides step-by-step test cases, and, based on this, we have successfully reproduced each step with the expected results. Therefore, we consider Aligot reproducible, as we were able to replicate the test results using their original measurement procedures.
+
+\subsection{Non-Reproducible Tools}
+\parhead{CryptoHunt} has been successfully executed, but we are unable to provide the complete benchmarking framework and performance evaluation results. CryptoHunt detects cryptographic functions in binary code through a bit-precise symbolic loop mapping approach. However, depending on the binary's size, CryptoHunt may identify up to 10,000 loops within the binary. Without additional filtering, the process of comparing each of these loops with reference loops becomes exceedingly time-consuming and infeasible.
+
+\parhead{Kerckhoff} cannot be evaluated in this paper due to its incompatibility with existing available versions of the Pin tracing tool, which cause it to crash. We have encountered a similar issue in the replication evaluation as well, which will be discussed in \autoref{sec:cryptobinary-replication}.
+%This issue may be similar to the experience we have with Aligot, which informs future researchers that detection tools developed to depend on specific tracing functionalities may not age well or be suitable for current/future binary programs. \clg{Also not sure what you mean here with Aligot since that one worked? Also check what I rephrased here.}
+
+\parhead{Softmax Classifier \textnormal{and} FALKE-MC} cannot be evaluated in this paper since they are not available for public use, as neither the source code nor the compiled binary is provided. Only the original research paper is available, with no accompanying software or executable.

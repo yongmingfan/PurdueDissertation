@@ -1,0 +1,144 @@
+\section{Error Catching Evaluation}
+\label{sec:snarkprobe-errorcatching}
+
+Our second set of evaluations demonstrates \tool's ability to \emph{automatically} catch different types of errors in \zksnark libraries.  We test \tool on \libsnark, \bellman, \arkworks, and \texttt{playsnark}, as well as on the circuit generator \circom.  Additionally, we show how \tool would have caught a previous CVE in the \zksnark component of Zcash, a popular privacy-preserving cryptocurrency.  In total, \tool detected seven inconsistencies in current \zksnark libraries, successfully \textit{automatically} located the previous vulnerability, and could potentially detect two additional types of errors. % (which we discuss in Appendix~\ref{app:potentialerrors} due to space constraints as these were not found in any high profile applications at this time). 
+We summarize our results in Table~\ref{tab:snarkprobe-error_summary}.%, including the type of error, which component of \tool is able to detect the error, and what exactly the error affects.
+
+%\fanyo{The main goals of our evaluations of \tool are to show that 1) out tools can detect errors or vulnerabilities especially \logicerror{} in \zksnark libraries with improved performance comparing to other tools; 2) our tools have can detect these errors in a reasonable runtime with real \zksnark libraries and applications.}
+
+%\fanyo{Our first major point of evaluation is \tool's ability to \emph{automatically} catch different types of errors in widely-used zkSNARK libraries and circuit generator.  In this section, we introduce the errors that \tool found in real world \zksnark libraries for both \ConstraintChecker and \SnarkFuzzer. We also evaluate \SnarkFuzzer to compare with current fuzzing tool to show the performance improvements and enhanced abilities of our design. We will also discuss the runtime performance in Section \ref{sec:evaluation}.}
+%
+%\fanyo{We firstly evaluated \tool with three major, widely used \zksnark libraries and its circuit generator including \libsnark, \bellman, and \arkworks. Meanwhile, we also evaluate some other libraries and circuit generator from recent projects and academic papers such as playsnark, LegoSNARK, and Circom. To better show the ability of our \tool, we also evaluate our \tool with previous \zksnark library versions, and the evaluation results shows that our \tool can also detect. In total, \tool found 7 issues or bugs in current \zksnark libraries plus 1 vulnerability in previous version \zksnark library and table \ref{tab:error_summary} contains the summary information for each bug \tool found.}
+
+
+\begin{table}[p]
+\centering
+\rotatebox{90}{
+\begin{minipage}{\textheight}
+\footnotesize
+{
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular*}{\textheight}{@{\extracolsep{\fill}}|lllll|}
+\hline
+\multicolumn{1}{|c||}{\textbf{Error/Vulnerability}} &
+\multicolumn{1}{c|}{\textbf{Type}} &
+\multicolumn{1}{c|}{\textbf{Affected Component}} &
+\multicolumn{1}{c|}{\textbf{Program}} &
+\multicolumn{1}{c|}{\textbf{Found by}} \\ \hline\hline
+
+\multicolumn{5}{|c|}{\textit{Potentially Locatable in Current Libraries}} \\ \hline
+\multicolumn{1}{|l||}{Incorrect manual flattening by developer} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{R1CS Circuit} & \multicolumn{1}{l|}{All libraries} & ConstraintChecker \\ \hline
+\multicolumn{1}{|l||}{Multiple gadget misuse} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{R1CS Circuit} & \multicolumn{1}{l|}{All libraries} & ConstraintChecker \\ \hline
+
+\multicolumn{5}{|c|}{\textit{Found in Current Libraries}} \\ \hline
+\multicolumn{1}{|l||}{Incorrect bit/comparison gadget implementation} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{R1CS Circuit} & \multicolumn{1}{l|}{libsnark} & ConstraintChecker \\ \hline
+\multicolumn{1}{|l||}{Mismatch in circuit generation and usage} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{R1CS Circuit} & \multicolumn{1}{l|}{All libraries} & ConstraintChecker \\ \hline
+\multicolumn{1}{|l||}{Groth16 pre-pairing computation in Setup} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{Groth16 Protocol} & \multicolumn{1}{l|}{bellman/arkworks} & SnarkFuzzer \\ \hline
+\multicolumn{1}{|l||}{Inconsistent QAP extension index usage} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{PGHR13 Protocol} & \multicolumn{1}{l|}{libsnark} & SnarkFuzzer \\ \hline
+\multicolumn{1}{|l||}{Toxic waste not safely destroyed} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{PGHR13 Protocol} & \multicolumn{1}{l|}{playsnark} & SnarkFuzzer \\ \hline
+\multicolumn{1}{|l||}{Program out of memory with large circuit} & \multicolumn{1}{l|}{Software Error} & \multicolumn{1}{l|}{-} & \multicolumn{1}{l|}{libsnark} & SnarkFuzzer \\ \hline
+
+\multicolumn{5}{|c|}{\textit{Found in Previous Versions of Libraries}} \\ \hline
+\multicolumn{1}{|l||}{CVE-2019-7167} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{PGHR13 Protocol} & \multicolumn{1}{l|}{libsnark (2018)} & SnarkFuzzer \\ \hline
+\end{tabular*}
+}
+\caption{Summary of the current potential errors and inconsistencies, and previous vulnerabilities, that \tool is able to catch and locate.}
+\label{tab:snarkprobe-error_summary}
+\end{minipage}
+}
+\end{table}
+
+
+
+\subsection{Potentially Locatable in Current Libraries}
+\parhead{Incorrect Flattening.}
+There is always a possibility that a developer may generate an incorrect R1CS matrix for their circuit, since this process is often done by hand.
+While we did not find any examples of this in the few applications we tested, consider the following scenario.
+Take a statement equation like $x^3 + x + 5 = y$ which the developer will typically flatten into \texttt{R1CS\_gates} with private input $x = 3$ and public input $y = 35$.  This set of equations is then equal to $x^3 + x + 5 = 35$. However, the developer \emph{may} incorrectly flatten the statement equation into \texttt{R1CS\_gates\_2}.
+
+% \vspace*{-6pt}
+\noindent\begin{minipage}{0.5\linewidth}
+{\small
+\[ \texttt{R1CS\_gates} =
+\begin{cases}
+x * x = w_{1} \\
+w_{1} * x = w_{2} \\
+w_{2} + x = w_{3} \\
+w_{3} + 5 = y
+\end{cases} \]
+}
+\end{minipage}%
+\begin{minipage}{0.5\linewidth}
+{\small
+\[ \texttt{R1CS\_gates\_2} := \begin{cases} 
+x * x = w_{1} \\
+w_{1} * x = w_{2} \\
+w_{2} + 2 * x = w_{3} \\
+w_{3} + 2 = y
+\end{cases} \]
+}
+\end{minipage}
+%\vspace*{-6pt}
+
+While \texttt{R1CS\_gates\_2} still satisfies the private input $x = 3$ and public input $y = 35$, causing the underlying library to output an acceptable proof, this flattening does not in fact equal the statement equation $x^3 + x + 5 = y$.
+Although the statement equation and \texttt{R1CS\_gates\_2} satisfy the witness, and their domains have the same upper and lower bounds, they have a different output range, which our \ConstraintChecker will catch and flag as an error.
+
+\parhead{Combining Multiple Gadgets.}
+%Many zkSNARK libraries provide an abstraction called a gadget to make realizing proofs easier for developers (see Section~\ref{sec:background}).
+%Since manually flattening statement equations can be difficult in most real world examples, and many types of statements are often reused, gadgets are widely used by developers.  In fact, many existing libraries also recommend to newcomers in their tutorials that they use gadgets~\cite{arkworks}.
+Recall that a gadget is an abstraction that many \zksnark libraries contain to make developing proofs easier for developers.
+Multiple gadgets may also be combined to create a single proof.  Gadgets are generally created and provided independently, which means that one must combine them with care. For example, say a developer uses the gadgets $greater\_than$ and $equal\_to$ to create a proof that a prover has a value which is greater than or equal to a certain number.  For this proof, only one input should be used for both gadgets.  However, a naive developer may create a proof that has an individual input for each gadget instead of a single input for the entire circuit.  In this case, a malicious prover can create a separate program with the same circuit and use two inputs with different values to satisfy each gadget and hence the entire circuit (when in reality these two inputs need to be identical). In this case, our \ConstraintChecker can detect the inconsistency between the R1CS matrix and statement equations to find potential issues with using multiple gadgets incorrectly. 
+
+
+\subsection{Found in Current Libraries}
+\parhead{Defective Gadgets.}
+%Many zkSNARK libraries provide an abstraction called a gadget to make realizing proofs easier for developers (see Section~\ref{sec:background}).
+%Since manually flattening statement equations can be difficult in most real world examples (see Appendix~\ref{app:potentialerrors} for an example), and many types of statements are often reused, gadgets are widely used by developers.  In fact, many existing libraries also recommend to newcomers in their tutorials that they use gadgets~\cite{arkworks}.
+Gadgets may be implemented incorrectly, causing inconsistencies between the original (desired) statement equation and the R1CS gates generated. Our \ConstraintChecker is able to find these inconsistencies in its checks for equivalence, regardless of whether a gadget was used or not. %The \ConstraintChecker found two different types of potential gadget issues in \libsnark.  While neither of these issues are critical flaws, and both can be prevented by a conscientious developer, it is good for even an experienced developer to be aware of potential implementation pitfalls and what is (and is not) handled by a library.
+%\fanyo{Some gadgets in \libsnark require the developer to provide the size in bits of the integer value(s) in their proof. If an incorrect bit size is provided, then one can build a ``fake proof''\footnote{One that will verify even though the prover does not actually have a valid witness.}, and \libsnark will not block this behavior nor raise any warning messages to the verifier or implementer. A concrete example located by our \ConstraintChecker can be found in the \texttt{comparison\_gadget}. (delete)}
+
+The \texttt{comparison\_gadget} in \libsnark uses bit shifting to compare two variables $A$ and $B$ by calculating $2^n + B - A$ and then counting the number of 0s and 1s in the resulting bit array (the corresponding R1CS constraints are shown in Appendix \ref{app:snarkprobe-comparison}). If the developer incorrectly specifies a bit length smaller than the size of $A$ or $B$, the \texttt{comparison\_gadget} will not generate the correct R1CS, which may result in a ``fake proof''\footnote{One that will verify even though the prover does not actually have a valid witness.}.  \libsnark will not block this behavior or raise any warning messages. Consider a developer that uses the \texttt{comparison\_gadget} to generate the statement equation $x < 60$ where $x \in \mathbb F_{p}$.  The R1CS should then only have a valid solution in $[0, 60)$. However, if an incorrect bit length is provided, we found that all numbers in the range $(\seqsplit{21888242871839275222246405745257275088548364400416034343698204186575808494653}, p)$ still satisfy this incorrect R1CS, allowing a dishonest prover to generate a valid proof without knowledge of a correct secret value.
+After our tool flagged this potential issue, on further manual investigation we did see that the \libsnark source code contains a comment about using the correct bit size, though this could go unnoticed by a novice user or be abused by a malicious one to forge proofs.
+
+%Since manually flattening statement equations can be difficult in most real world examples, and many types of statements are often reused, gadgets are widely used by developers.  Many existing libraries also recommend to newcomers in their tutorials that they use gadgets~\cite{arkworks}.  Because of this widespread usage, we feel that developers need to be aware of gadget subtleties, and as such \SnarkFuzzer can help increase the security of zkSNARK deployments.
+
+\parhead{Mismatch Between Circuit Generation and Usage.}
+In addition to end-to-end libraries, there are a growing number of circuit generators available to assist developers in constructing R1CS/circuits for proof generation, with \circom~\cite{circom} being a widespread example\footnote{We note that \circom is just an example that we tested, and that the same should hold true for other circuit generators as well.}.
+\circom generates R1CS files that can then be utilized by libraries such as \texttt{snarkjs}~\cite{snarkjs}, \texttt{wasmsnark}~\cite{wasmsnark}, and \texttt{rapidSnark}~\cite{rapidsnark}. However, during our evaluation process, our \ConstraintChecker identified a crucial potential issue: the absence of attribute cross-checking between the circuit generator and formal proof generation library.
+
+While the circuit generator may produce valid R1CS that accurately represents the prover's original statement, the proof generation library might, for example, employ a different elliptic curve and finite field to generate the proof by default. Consequently, when operating under distinct elliptic curve and finite field settings, the circuit no longer maintains equivalence with the original statement. This discrepancy can be problematic both for a developer and a verifier who are unaware that a circuit can yield different representations under different elliptic curve configurations.  In such cases, the prover can produce a seemingly ``valid'' proof for the verifier without knowledge of the secret value.
+
+
+\parhead{\groth16 Pre-Pairing.}
+The \groth16 protocol produces $P = g^{\alpha}$ and $Q = h^{\beta}$ as part of \textsf{Setup}, which are subsequently used in \textsf{Verify} to calculate the pairing $e(P, Q)$. However, our \valuechecker found that \bellman stores the pairing $e(P, Q)$ as part of the verification key instead of $P$ and $Q$. Pre-computing and directly providing $e(P, Q)$ is an optimization that helps make verification more efficient (as pairings are quite slow to calculate).  As this is a well-known optimization, we can confidently say that this will not cause any sort of vulnerability, but we err on the side of caution and flag all inconsistencies between the source code and protocol for further review since these can greatly increase the risk of actual vulnerabilities.
+
+\parhead{Pinocchio Protocol Inconsistencies.}
+In the \pinocchio key generator, there exist values $\overrightarrow{A}$, $\overrightarrow{B}$, and $\overrightarrow{C}$ that need to be extended via $A_{m+1} = B_{m+2} = C_{m+3}$ and $A_{m+2} = A_{m+3} = B_{m+1} = B_{m+3} = C_{m+1} = C_{m+2}$ per the specification \cite{ben2014succinct}. However, our \valuechecker found that \libsnark only extended $\overrightarrow{A}$, $\overrightarrow{B}$, and $\overrightarrow{C}$ via $A_{m+1} = B_{m+1} = C_{m+1}$ as an optimization for space complexity. After a review of the \libsnark source code and protocol, we believe this inconsistency will not lead to a security vulnerability given how the values are used in practice.  However, this instance is more subtle and less well-known than the previous one, so while it might not be exploitable, we believe inconsistencies of this nature are still valuable to flag for further review as this might not always be the case.
+
+\parhead{Toxic Waste.}
+As part of the \zksnark setup process, a set of private parameters informally referred to as ``toxic waste'' are generated.  This toxic waste must be destroyed after the setup process, as possession of it allows one to forge proofs.
+%In order to maintain the integrity of the system and prevent unauthorized acquisition of secret knowledge by verifiers, it is imperative to eradicate toxic waste within the \zksnark protocol.
+However, our \SnarkFuzzer identified an actual implementation error in a \zksnark library called \texttt{playsnark}, whereby toxic waste is not properly destroyed during the setup phase. \texttt{playsnark}~\cite{playsnark} serves as a learning playground for proof systems, including Pinocchio and Groth16.
+%It lacks a comprehensive security audit by a qualified engineer, rendering it unsuitable for security-sensitive applications\footnote{And it in fact makes no claims to have deployable security.}.
+While \texttt{playsnark} makes no claims that it should be used for security-sensitive applications, we feel that this example still exemplifies valuable use cases for \tool.  First, it can indeed catch errors that would be exploitable in real applications.  And second, while libraries like \bellman and \libsnark are professionally audited, this will likely not always be the case for all \zksnark code in production usage in the future (as we have seen in many other domains).  Tooling such as \tool can be an invaluable resource for non-experts and small organizations, enabling them to assess the security posture of unaudited \zksnark libraries, audit their own code throughout the development process, and facilitating informed decisions regarding future security implementations.
+
+
+\parhead{\libsnark Out of Memory.}
+\SnarkFuzzer detects a corner-case software error in \libsnark. When our \inputgenerator tried to produce a large R1CS matrix with tens of thousands of variables and constraints, we discovered that \libsnark cannot compile and produce a \zksnark program with such a large R1CS matrix without throwing a segmentation fault or memory error.  Intuitively, this occurs because the input matrix we generated was quite dense, i.e., it had a large number of both variables and constraints, as opposed to being quite sparse like most typical R1CS matrices.  \libsnark's R1CS storage format is clearly not setup to handle such cases.  In general, this would not impact the typical usage of the \libsnark, as our fuzzer is designed to look for extreme cases like this that might not happen with a typical real world proof statement.
+%However, one cannot guarantee that such a case will never happen in practice, which is why tools like \tool can be valuable for stress testing implementations.
+
+We take this example as a chance to take a step back and revisit our comparison of \SnarkFuzzer to a traditional, more generic fuzzer like AFL.  As generic memory and software errors such as this have nothing to do with the actual cryptography and \zksnark logic, traditional fuzzers are also able to detect them.  However, it is likely to take a generic fuzzer significantly longer (and many more inputs) to catch such errors, as they lack the context to understand what an ``extreme'' input means in this instance, and, as we have seen, it is not easy to instrument a fuzzer with this context.  Additionally, all previous instances that we discussed would not be detectable by a generic fuzzer, as they are specifically cryptographic logic errors.
+
+%This is a general software error, and it can be detected by \SnarkFuzzer and other generic fuzzing test. However, since out of memory error do not correlate to the cryptographic protocol, generic fuzzer like AFL can also detect this error. AFL and other generic fuzzers only run orders of magnitude more inputs without logic checking \fanyo{(Not sure if logic checking is the correct word)} in \valuechecker, which require less runtime for a single input seed. However, \SnarkFuzzer is a fuzzer with \framework, which requires less number of seed inputs to find bugs. Therefore, Comparing with generic fuzzers such as AFL, \SnarkFuzzer still have advantage to find some system bug in a \zksnark library. 
+
+
+
+\subsection{Found in Previous Versions of Libraries}
+\parhead{CVE-2019-7167 Problem.} Finally, we discuss how \tool (specifically \SnarkFuzzer) is able to detect real world vulnerabilities by demonstrating its ability to pinpoint a previous CVE.
+CVE-2019-7167 \cite{gabizon2019auroralight} was found in \libsnark through a manual code audit, as part of its usage in the popular privacy-preserving cryptocurrency Zcash \cite{zcash} (and has since been patched).
+%Our \SnarkFuzzer also detected the \pinocchio protocol vulnerability reported as CVE-2019-7167 \cite{gabizon2019auroralight} in \libsnark.  This vulnerability was found by Gabizon in 2019 \cite{gabizon2019auroralight} and has since been fixed by Zcash \cite{zcash} and in \libsnark.
+At a high level, this vulnerability produced a bypass element in the key generation that damaged the soundness of the \zksnark proof system. To fix this vulnerability, the value of $pk_{A}^{'}$ must be replaced from $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=0}^{m+3}$ to $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=n+1}^{m+3}$, with all other values the same.
+
+To test this, we downloaded a version of \libsnark from 2018 (Commit hash: bf2146b).
+When running \SnarkFuzzer, the \valuechecker \textit{automatically} found this inconsistency and vulnerability in key generation. Additionally, while \libsnark has since fixed this issue, it did not directly modify the structure of $pk_{A}^{'}$ in order to keep consistency with the structure of the other proving keys. Therefore, $pk_{A}^{'}$ still has size $m + 3$ instead of $(m + 3) - (n + 1)$. \libsnark just added an extra handler to reformat the $pk_{A}^{'}$ size in the prover, and while this does not appear to have caused any additional issues, it is unclear if this could result in other corner case issues.
+

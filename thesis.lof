@@ -1,0 +1,12 @@
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Evolution of cryptographic function identification techniques}}{20}{figure.caption.20}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Timeline of the development of cryptographic algorithm detection tools}}{22}{figure.caption.22}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Types of cryptographic functionality and designs targeted by different tools and approaches, by percentage of tools surveyed}}{28}{figure.caption.28}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Evaluation result for MD5 with different compilers. A full marker indicates that function can be detected and an empty marker that it cannot.}}{39}{figure.caption.50}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Detection percentage by algorithm across all tools}}{46}{figure.caption.61}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Workflow of \texttt {SNARKProbe}\xspace . White boxes represent subcomponents universal for all zkSNARK libraries, forward diagonal stripes represent those designed for a specific library, and backward diagonal stripes represent those designed for a specific programming language.}}{60}{figure.caption.87}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Runtime of each component in SnarkFuzzer\xspace with different libraries and protocols, both in terms of actual time as well as percentage of the total.}}{75}{figure.caption.111}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Percentage (breadth) of library coverage after a given number of iterations}}{76}{figure.caption.113}%
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Examples of Domain Comparison}}{111}{figure.caption.195}%
+\contentsline {figure}{\numberline {B.2}{\ignorespaces Example file for the ideal branch file}}{111}{figure.caption.198}%
+\contentsline {figure}{\numberline {B.3}{\ignorespaces Example file for the ideal value file}}{111}{figure.caption.199}%
+\contentsline {figure}{\numberline {B.4}{\ignorespaces Content of variable type G1}}{112}{figure.caption.201}%

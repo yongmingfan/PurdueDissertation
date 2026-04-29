@@ -1,0 +1,518 @@
+%
+%  all-biblatex.bib  2025-01-15  Mark Senn  http://bit.ly/marksenn
+%
+%  This is an example BibLaTeX data file.
+%
+%  BibLaTeX documentation is at
+%    https://mirror.math.princeton.edu/pub/CTAN/macros/latex/contrib/biblatex/doc/biblatex.pdf
+%
+%  I like to order the entries by author, and within author by date.
+%  If, for example, I later added a second 1994 publication for Goossens,
+%  I would give it the key, "goossens1994b".
+%
+%  From http://isbn.org/about_ISBN_standard
+%    For more than thirty years, ISBNs were 10 digits long.
+%    On January 1, 2007 the ISBN system switched to a 13-digit
+%    format.  Now all ISBNs are 13-digits long.
+%
+%  The apa7-<number> references are from the _Publication Manual
+%  of the American Psychological Association_, 7th edition,
+%  pages 317--352.
+%
+
+@inproceedings{groth2016size,
+  title={On the size of pairing-based non-interactive arguments},
+  author={Groth, Jens},
+  booktitle={Eurocrypt},
+  year={2016},
+}
+
+@inproceedings{parno2013pinocchio,
+  title={Pinocchio: Nearly practical verifiable computation},
+  author={Parno, Bryan and Howell, Jon and Gentry, Craig and Raykova, Mariana},
+  booktitle={IEEE S\&P},
+  year={2013},
+}
+
+@techreport{nitulescu2020zk,
+  title={zk-SNARKs: A Gentle Introduction},
+  author={Nitulescu, Anca},
+  year={2020},
+  institution={Technical report}
+}
+
+@inproceedings{ben2014succinct,
+  title={Succinct Non-Interactive zero knowledge for a von neumann architecture},
+  author={Ben-Sasson, Eli and Chiesa, Alessandro and Tromer, Eran and Virza, Madars},
+  booktitle={USENIX Security},
+  year={2014}
+}
+
+@manual{circl,
+  title        = {Introducing CIRCL: An Advanced Cryptographic Library},
+  author       = {Armando Faz-Hern\'{a}ndez and Kris Kwiatkowski},
+  organization = {Cloudflare},
+  note         = {Available at \url{https://github.com/cloudflare/circl}. v1.2.0 Accessed Jun 2022},
+  month        = jun,
+  year         = {2019}
+}
+
+@manual{pyecc,
+  title        = {Python implementation of ECC pairing and bn\_128 and bls12\_381 curve operations},
+  author       = {Ethereum},
+  organization = {Ethereum},
+  note         = {Available at \url{https://github.com/ethereum/py\_ecc}. Accessed Dec 2021},
+  month        = dec,
+  year         = {2021}
+}
+
+@misc{gabizon2019auroralight,
+      author = {Ariel Gabizon},
+      title = {AuroraLight: Improved prover efficiency and SRS size in a Sonic-like system},
+      howpublished = {Cryptology ePrint Archive, Paper 2019/601},
+      year = {2019},
+      url = {https://eprint.iacr.org/2019/601}
+}
+
+@article{aumasson2017automated,
+  title={Automated testing of crypto software using differential fuzzing},
+  author={Aumasson, Jean-Philippe and Romailler, Yolan},
+  journal={Black Hat USA},
+  year={2017}
+}
+
+@inproceedings{somorovsky2016systematic,
+  title={Systematic fuzzing and testing of TLS libraries},
+  author={Somorovsky, Juraj},
+  booktitle={ACM CCS},
+  year={2016}
+}
+
+@article{walz2017exploiting,
+  title={Exploiting dissent: towards fuzzing-based differential black-box testing of TLS implementations},
+  author={Walz, Andreas and Sikora, Axel},
+  journal={IEEE TDSC},
+  year={2017},
+}
+
+@article{aljaafari2020verifying,
+  title={Verifying Software Vulnerabilities in IoT Cryptographic Protocols},
+  author={Aljaafari, Fatimah and Cordeiro, Lucas C and Mustafa, Mustafa A},
+  journal={arXiv preprint arXiv:2001.09837},
+  year={2020}
+}
+
+@article{chen2018systematic,
+  title={A systematic review of fuzzing techniques},
+  author={Chen, Chen and Cui, Baojiang and Ma, Jinxin and Wu, Runpu and Guo, Jianchao and Liu, Wenqian},
+  journal={Computers \& Security},
+  year={2018},
+}
+
+@article{bohme2017coverage,
+  title={Coverage-based greybox fuzzing as markov chain},
+  author={B{\"o}hme, Marcel and Pham, Van-Thuan and Roychoudhury, Abhik},
+  journal={IEEE TSE},
+  year={2017},
+}
+
+@inproceedings{bohme2017directed,
+  title={Directed greybox fuzzing},
+  author={B{\"o}hme, Marcel and Pham, Van-Thuan and Nguyen, Manh-Dung and Roychoudhury, Abhik},
+  booktitle={ACM CCS},
+  year={2017}
+}
+
+@techreport{householder2012probability,
+  title={Probability-based parameter selection for black-box fuzz testing},
+  author={Householder, Allen D and Foote, Jonathan M},
+  year={2012},
+  institution={Carnegie Mellon University, SEI}
+}
+
+@inproceedings{woo2013scheduling,
+  title={Scheduling black-box mutational fuzzing},
+  author={Woo, Maverick and Cha, Sang Kil and Gottlieb, Samantha and Brumley, David},
+  booktitle={ACM CCS},
+  year={2013}
+}
+
+@inproceedings{godefroid2017learn,
+  title={Learn\&fuzz: Machine learning for input fuzzing},
+  author={Godefroid, Patrice and Peleg, Hila and Singh, Rishabh},
+  booktitle={ASE},
+  year={2017},
+}
+
+@manual{afl,
+  title        = {American fuzzy lop},
+  author       = {Michal Zalewski},
+  note         = {Available at \url{https://github.com/mirrorer/afl}. v2.52b Accessed July 2022},
+  year         = {2016}
+}
+
+@manual{syzkaller,
+  title        = {syzkaller - kernel fuzzer},
+  author       = {Google},
+  note         = {Available at \url{https://github.com/google/syzkaller}. Accessed July 2022},
+  year         = {2017}
+}
+
+@article{stevens2017summoning,
+  title={Summoning demons: The pursuit of exploitable bugs in machine learning},
+  author={Stevens, Rock and Suciu, Octavian and Ruef, Andrew and Hong, Sanghyun and Hicks, Michael and Dumitra{\c{s}}, Tudor},
+  journal={arXiv preprint arXiv:1701.04739},
+  year={2017}
+}
+
+@inproceedings{goldreich1986prove,
+  title={How to prove all NP statements in zero-knowledge and a methodology of cryptographic protocol design},
+  author={Goldreich, Oded and Micali, Silvio and Wigderson, Avi},
+  booktitle={Eurocrypt},
+  year={1986},
+}
+
+@inproceedings{fredrikson2014zo,
+  title={Z{\O}: An Optimizing Distributing Zero-Knowledge Compiler},
+  author={Fredrikson, Matthew and Livshits, Benjamin},
+  booktitle={USENIX Security},
+  year={2014}
+}
+
+@manual{snarky,
+  title        = {snarky},
+  author       = {o1-labs},
+  note         = {Available at \url{https://github.com/o1-labs/snarky}. Accessed August 2022},
+	year = {2023}
+}
+
+@manual{xjsnark,
+  title        = {xJsnark},
+  author       = {Ahmed Kosba},
+  note         = {Available at \url{https://github.com/akosba/xjsnark}. Accessed August 2022},
+	year = {2022}
+}
+
+@manual{circom,
+  title        = {circom - Curcuit Compiler for ZK Proving Systems},
+  author       = {iden3},
+  note         = {Available at \url{https://github.com/iden3/circom}. Accessed August 2022},
+	year = {2023}
+}
+
+@article{chen2022review,
+  title={A Review of zk-SNARKs},
+  author={Chen, Thomas and Lu, Hui and Kunpittaya, Teeramet and Luo, Alan},
+  journal={arXiv preprint arXiv:2202.06877},
+  year={2022}
+}
+
+@inproceedings{moura2008z3,
+  title={Z3: An efficient SMT solver},
+  author={Moura, Leonardo de and Bj{\o}rner, Nikolaj},
+  booktitle={TACAS},
+  year={2008},
+}
+
+@article{de2011satisfiability,
+  title={Satisfiability modulo theories: introduction and applications},
+  author={De Moura, Leonardo and Bj{\o}rner, Nikolaj},
+  journal={CACM},
+  year={2011},
+}
+
+@inproceedings{barbosa2019extending,
+  title={Extending SMT solvers to higher-order logic},
+  author={Barbosa, Haniel and Reynolds, Andrew and Ouraoui, Daniel El and Tinelli, Cesare and Barrett, Clark},
+  booktitle={CADE},
+  year={2019},
+}
+
+
+@inproceedings{Parafrost-OsamaWB-tacas21,
+  author    = {Muhammad Osama and
+               Anton Wijs and
+               Armin Biere},
+  editor    = {Jan Friso Groote and
+               Kim Guldstrand Larsen},
+  title     = {{SAT} Solving with {GPU} Accelerated Inprocessing},
+  booktitle = {TACAS},
+  year      = {2021},
+}
+
+@manual{fpsmtgpu,
+  title        = {Solving floating point SMT constraints on a GPU},
+  author       = {John Cunniff and Nobel Gautam and Brendan Dolan-Gavitt},
+  note         = {Available at \url{https://github.com/moyix/fpsmt_gpu}. Accessed August 2022},
+	year = {2020}
+}
+
+@inproceedings{osama2021gpu,
+  title={GPU Acceleration of Bounded Model Checking with ParaFROST},
+  author={Osama, Muhammad and Wijs, Anton},
+  booktitle={CAV},
+  year={2021},
+}
+
+%%%%%
+% Christina
+
+@inproceedings{phan2017synthesis,
+  title={Synthesis of adaptive side-channel attacks},
+  author={Phan, Quoc-Sang and Bang, Lucas and Pasareanu, Corina S and Malacaria, Pasquale and Bultan, Tevfik},
+  booktitle={IEEE CSF},
+  year={2017},
+}
+
+@inproceedings{pasareanu2016multi,
+  title={Multi-run side-channel analysis using Symbolic Execution and Max-SMT},
+  author={Pasareanu, Corina S and Phan, Quoc-Sang and Malacaria, Pasquale},
+  booktitle={IEEE CSF},
+  year={2016},
+}
+
+@inproceedings{bang2018online,
+  title={Online synthesis of adaptive side-channel attacks based on noisy observations},
+  author={Bang, Lucas and Rosner, Nicol{\'a}s and Bultan, Tevfik},
+  booktitle={IEEE EuroS\&P},
+  year={2018},
+}
+
+@inproceedings{beck2020automating,
+  title={Automating the Development of Chosen Ciphertext Attacks},
+  author={Beck, Gabrielle and Zinkus, Maximilian and Green, Matthew},
+  booktitle={USENIX Security},
+  year={2020}
+}
+
+@inproceedings{kupser2015break,
+  title={How to Break $\{$XML$\}$ Encryption--Automatically},
+  author={Kupser, Dennis and Mainka, Christian and Schwenk, Jorg and Somorovsky, Juraj},
+  booktitle={USENIX WOOT},
+  year={2015}
+}
+
+@misc{cryptoeprint:2013:507,
+    author = {Eli Ben-Sasson and Alessandro Chiesa and Daniel Genkin and Eran Tromer and Madars Virza},
+    title = {SNARKs for C: Verifying Program Executions Succinctly and in Zero Knowledge},
+    howpublished = {Cryptology ePrint Archive, Report 2013/507},
+    year = {2013},
+}
+
+@misc{cryptoeprint:2013:279,
+    author = {Bryan Parno and Craig Gentry and Jon Howell and Mariana Raykova},
+    title = {Pinocchio: Nearly Practical Verifiable Computation},
+    howpublished = {Cryptology ePrint Archive, Report 2013/279},
+    year = {2013},
+}
+
+@misc{cryptoeprint:2016:260,
+    author = {Jens Groth},
+    title = {On the Size of Pairing-based Non-interactive Arguments},
+    howpublished = {Cryptology ePrint Archive, Report 2016/260},
+    year = {2016},
+}
+
+@INPROCEEDINGS{gmw86,
+AUTHOR = "O. Goldreich and S. Micali and A. Wigderson",
+TITLE = "Proofs that yield nothing but their validity and a methodology of cryptographic protocol design",
+BOOKTITLE = "FOCS",
+YEAR = {1986}	}
+
+@misc{libsnark,
+  title = {{libsnark}: a C++ library for zkSNARK proofs},
+  howpublished = {\url{https://github.com/scipr-lab/libsnark}},
+	year = {2020}
+}
+
+@misc{bellman,
+  title = {{bellman}, a zk-SNARK library},
+  howpublished = {\url{https://github.com/zkcrypto/bellman}},
+	year = {2023}
+}
+
+@misc{arkworks,
+  title = {{libsnark}: A Rust implementation of the Groth16 zkSNARK},
+  howpublished = {\url{https://github.com/arkworks-rs/groth16}},
+	year = {2023}
+}
+
+@misc{gnark,
+  title = {{gnark} zk-SNARK library},
+  howpublished = {\url{https://github.com/Consensys/gnark}},
+	year = {2023}
+}
+
+@misc{z3,
+  title = {{z3}, The Z3 Theorem Prover},
+  howpublished = {\url{https://github.com/Z3Prover/z3}},
+	year = {2023}
+}
+
+@misc{atheris,
+  title = {{atheris}, Atheris: A Coverage-Guided, Native Python Fuzzer},
+  howpublished = {\url{https://github.com/google/atheris}},
+	year = {2023}
+}
+
+@misc{doxygen,
+  title = {{doxygen}, Doxygen},
+  howpublished = {\url{https://github.com/doxygen/doxygen}},
+	year = {2023}
+}
+
+@misc{snarkjs,
+  title = {snarkjs},
+  howpublished = {\url{https://github.com/iden3/snarkjs}},
+	year = {2023}
+}
+
+@misc{wasmsnark,
+  title = {wasmsnark},
+  howpublished = {\url{https://github.com/iden3/wasmsnark}},
+	year = {2023}
+}
+
+@misc{rapidsnark,
+  title = {rapidsnark},
+  howpublished = {\url{https://github.com/iden3/rapidsnark}},
+	year = {2023}
+}
+
+%%%%%
+
+@misc{darkforest,
+  title = {Dark Forest},
+  howpublished = {\url{https://blog.zkga.me/}},
+	year = {2022}
+}
+
+@misc{zcash,
+  title = {Zcash},
+  howpublished = {\url{https://z.cash/}},
+	year = {2023}
+}
+
+@misc{aleo,
+  title = {Aleo},
+  howpublished = {\url{https://www.aleo.org/}},
+	year = {2023}
+}
+
+@misc{filecoin,
+  title = {zkSNARKs for the World},
+  howpublished = {\url{https://research.protocol.ai/sites/snarks/}},
+	year = {2023}
+}
+
+@misc{zkrollup,
+  title = {Zero-knowledge rollups},
+  howpublished = {\url{https://ethereum.org/en/developers/docs/scaling/zk-rollups/}},
+	year = {2022}
+}
+
+@inproceedings{gmw86b,
+ author = {Goldreich, Oded and Micali, Silvio and Wigderson, Avi},
+ title = {How to prove all NP-statements in zero-knowledge, and a methodology of cryptographic protocol design},
+ booktitle = {CRYPTO},
+ year = {1986},
+}
+
+@misc{projecteverest,
+  title = {Project Everest},
+  howpublished = {\url{https://project-everest.github.io/}},
+	year = {2023}
+}
+
+@inproceedings{protzenko2019formally,
+  title={Formally verified cryptographic web applications in webassembly},
+  author={Protzenko, Jonathan and Beurdouche, Benjamin and Merigoux, Denis and Bhargavan, Karthikeyan},
+  booktitle={IEEE S\&P},
+  year={2019},
+}
+
+@inproceedings{barbosa2021sok,
+  title={SoK: Computer-aided cryptography},
+  author={Barbosa, Manuel and Barthe, Gilles and Bhargavan, Karthik and Blanchet, Bruno and Cremers, Cas and Liao, Kevin and Parno, Bryan},
+  booktitle={IEEE S\&P},
+  year={2021},
+}
+
+@misc{zcashcounterfeit,
+  title = {Zcash Counterfeiting Vulnerability Successfully Remediated},
+  howpublished = {\url{https://electriccoin.co/blog/zcash-counterfeiting-vulnerability-successfully-remediated/}},
+	year = {2019}
+}
+
+@misc{zcashvulns,
+  title = {Fixing Vulnerabilities in the Zcash Protocol},
+  howpublished = {\url{https://electriccoin.co/blog/fixing-zcash-vulns/}},
+	year = {2016}
+}
+
+@misc{zcashaudit,
+  title = {NU4 Cryptographic Specification and Implementation Review},
+  howpublished = {\url{https://research.nccgroup.com/wp-content/uploads/2020/09/NCC\_Group\_Zcash\_ZCHX006\_Report\_2020-09-03\_v2.0.pdf}},
+	year = {2020}
+}
+
+@misc{usgov,
+  title = {Advancing a Vision for Privacy Enhancing Technologies},
+	author={Alexander Macgillivray and Tess deBlanc-Knowles},
+  howpublished = {\url{https://www.whitehouse.gov/ostp/news-updates/2022/06/28/advancing-a-vision-for-privacy-enhancing-technologies/}},
+	year = {2022}
+}
+
+@misc{adoption,
+  title = {Millions Flock to Telegram and Signal as Fears Grow Over Big Tech},
+	author={Jack Nicas and Mike Isaac and Sheera Frenkel},
+  howpublished = {\url{https://www.nytimes.com/2021/01/13/technology/telegram-signal-apps-big-tech.html}},
+	year = {2021}
+}
+
+@inproceedings{garman2016dancing,
+  title={Dancing on the Lip of the Volcano: Chosen Ciphertext Attacks on Apple $\{$iMessage$\}$},
+  author={Garman, Christina and Green, Matthew and Kaptchuk, Gabriel and Miers, Ian and Rushanan, Michael},
+  booktitle={USENIX Security},
+  year={2016}
+}
+
+@inproceedings{naveed2015inference,
+  title={Inference attacks on property-preserving encrypted databases},
+  author={Naveed, Muhammad and Kamara, Seny and Wright, Charles V},
+  booktitle={ACM CCS},
+  year={2015}
+}
+
+@misc{curveball,
+  title = {Patch Critical Cryptographic Vulnerability in Microsoft Windows Clients and Servers},
+	author={NSA},
+  howpublished = {\url{https://media.defense.gov/2020/Jan/14/2002234275/-1/-1/0/CSA-WINDOWS-10-CRYPT-LIB-20190114.PDF}},
+	year = {2020}
+}
+
+@inproceedings{rupprecht2020call,
+  title={Call Me Maybe: Eavesdropping Encrypted $\{$LTE$\}$ Calls With $\{$ReVoLTE$\}$},
+  author={Rupprecht, David and Kohls, Katharina and Holz, Thorsten and P{\"o}pper, Christina},
+  booktitle={USENIX Security},
+  year={2020}
+}
+
+@misc{llvmcoverage,
+  title = {Clang's Source-based Code Coverage},
+  howpublished = {\url{https://clang.llvm.org/docs/SourceBasedCodeCoverage.html}},
+	year = {2023}
+}
+
+@article{mouha2018finding,
+  title={Finding bugs in cryptographic hash function implementations},
+  author={Mouha, Nicky and Raunak, Mohammad S and Kuhn, D Richard and Kacker, Raghu},
+  journal={IEEE transactions on reliability},
+  year={2018},
+}
+
+@misc{playsnark,
+  title = {Playsnark: a playground to learn proofs systems},
+  howpublished = {\url{https://github.com/nikkolasg/playsnark}},
+	year = {2020}
+}

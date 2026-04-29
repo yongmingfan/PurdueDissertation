@@ -1,0 +1,483 @@
+% \iffalse
+
+% \section{Additional Error Catching Evaluation}
+% \label{app:snarkprobe-extraerror}
+
+% We now discuss various inconsistency warnings that \tool automatically found during our evaluation.  While many of these are ``safe'' optimizations, we do not consider these warnings to be false positive results, as we want to flag both critical, exploitable errors, as well as subtle modifications that would benefit from expert review to ensure their safety.
+
+% \subsection{\pinocchio Protocol Inconsistencies}
+% In the \pinocchio key generator, values $\overrightarrow{A}$, $\overrightarrow{B}$, and $\overrightarrow{C}$ need to be extended via $A_{m+1} = B_{m+2} = C_{m+3}$ and $A_{m+2} = A_{m+3} = B_{m+1} = B_{m+3} = C_{m+1} = C_{m+2}$ as part of the specification \cite{ben2014succinct}. However, our \valuechecker found that \libsnark only extended $\overrightarrow{A}$, $\overrightarrow{B}$, and $\overrightarrow{C}$ via $A_{m+1} = B_{m+1} = C_{m+1}$ due to an optimization for space complexity, which our tool flagged because it does not match the original protocol specification. After a review of the \libsnark source code and protocol, we believe this inconsistency will not lead to a specific security vulnerability in \libsnark, but we believe that all inconsistencies between source code and protocol specification should be flagged and carefully reviewed, particularly for newer implementations that are not as battle-tested as \libsnark. This also serves as a demonstration that \SnarkFuzzer can indeed detect protocol inconsistencies in actual zkSNARK libraries, meaning that security engineers could utilize our tool to help focus their time and energy on the inconsistencies and potential issues that \tool found, which will reduce the time and cost for code auditing.
+
+% Additionally, our \valuechecker also detected the \pinocchio protocol vulnerability reported as CVE-2019-7167 \cite{gabizon2019auroralight} in \libsnark.  This vulnerability was found by Gabizon in 2019 \cite{gabizon2019auroralight} and has since been fixed by Zcash \cite{zcash} and in \libsnark. At a high level, this vulnerability produced a bypass element in the key generation that damaged the soundness of the zkSNARKs proof system. To fix this vulnerability, the value of $pk_{A}^{'}$ will be replaced from $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=0}^{m+3}$ to $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=n+1}^{m+3}$, and other proving keys remain same. When running \SnarkFuzzer, the \valuechecker found this inconsistency in key generation. While \libsnark has fixed this issue, it did not directly modify the structure of proving key $pk_{A}^{'}$ in order to keep consistency with the structure of the other proving keys. Therefore, $pk_{A}^{'}$ still has size $m + 3$ instead of $(m + 3) - (n + 1)$. \libsnark added an extra handler to reformat the $pk_{A}^{'}$ size in the prover, but not following the original protocol still could bring risks that may break the soundness of the proof system.
+
+% %%%%%
+
+% \subsection{\groth16 Protocol Inconsistencies}
+% The \groth16 protocol produces $P = g^{\alpha}$ and $Q = h^{\beta}$ as part of \textsf{Groth.Setup}, which are subsequently used in \textsf{Groth.Verify} to calculate the pairing $e(P, Q)$. However, our \valuechecker found that \libsnark uses the pairing of $e(P, Q)$ as part of the verification key in place of $P$ and $Q$ in \textsf{Groth.Setup}. Directly providing $e(P, Q)$ is an optimization that helps make verification more efficient (as pairings are quite slow to calculate).  As this is a well-known optimization, we can confidently say that this will not cause any sort of vulnerability, but again, we flag all inconsistencies between the source code and protocol for further review since not following the protocol can greatly increase the risk of cause cryptographic implementation errors.
+
+% \fi
+
+%%%%%%%%%%
+
+%\input{futurework}
+
+%%%%%%%%%%
+
+%%%%%%%%%%
+
+\newpage
+\section{Additional Information for \ConstraintChecker}
+
+\subsection{An optimization for the SMT solver}
+\label{app:snarkprobe-constraintopt}
+
+The SMT solver may take a while to solve some complicated equations. To reduce the processing time in the equality check, we introduce optimizations and simplify some equations in the R1CS matrix. For example, many \libsnark gadgets use bit shifting, which produces the equation $(x * (1 + (p - 1) * x)) \bmod p = 0$ in R1CS gates. This equation represents $x = 0$ or $x = 1$. For our optimization, if the \ConstraintChecker detects such a relation, it will be replaced with $0 \le x \land x \le 1$ where $x \in \mathbb{F}$. These are logically equivalent, but our replacement is much easier for the SMT solver to work with.  A real world gadget like the \texttt{comparison\_gadget} in \libsnark has 16 constraints, and there are 11 constraints representing $x = 0$ or $x = 1$ (see Appendix \ref{app:snarkprobe-comparison}). %Therefore, this replacement optimization can significantly reduce the actual time to compare the equivalence between statement equations and R1CS gates.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Protocol of the \ConstraintChecker by the SMT Solver}
+\label{app:snarkprobe-eqalgorithm}
+
+%\noindent
+%\begin{minipage}{\textwidth}
+    %\centering
+    %\includegraphics[width=0.9\textwidth]{imgs/algo.jpg}
+    %%\vspace{-0.5cm}
+    %\captionof{figure}{Protocol of the \ConstraintChecker by SMT Solver}
+%\end{minipage}
+%
+%\newpage
+
+\hspace*{-0.03\textwidth}%\tiny{
+\noindent\begin{tabular}{p{0.5\textwidth}p{0.03\textwidth}p{0.5\textwidth}}
+\tiny{
+\fbox{%
+    \parbox{\linewidth}{%
+		{\fussy
+        \textbf{(a) Parameters.}
+					\begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
+            \item [] \texttt{A set of statement equations $E_{1}$ in size $p$ where equation $e_{1}^{i} \in E_{1}$ and $i \in [1,p]$.}
+            \\\\
+            \item [] \texttt{A set of equations $E_{2}$ converted from R1CS gates in size $q$ where $e_{2}^{i} \in E_{2}$ and $i \in [1,q]$.}
+            \\\\
+            \item [] \texttt{$m$ private variables $x_{1}^{i}$ in $E_{1}$ where $i \in [1,m]$ and $n$ private variables $x_{2}^{i}$ in $E_{2}$ where $i \in [1,n]$ and $n \geq m$. A set of \\ auxiliary input $v_{x}^{i}$.}
+            \\\\
+            \item [] \texttt{$k$ public variables $y_{1}^{i}$ in $E_{1}$ and $k$ public variables $y_{2}^{i}$ in $E_{2}$ where $i \in [1,k]$. A set of primary input $v_{y}^{i}$.}
+            \\\\
+            \item [] \texttt{A SMT Pro Solver $S$ and Optimizer $O$ with modulus $P$. $0 \leq x_{1} < P$, $0 \leq x_{2} < P$, $0 \leq y_{1} < P$, and $0 \leq y_{2} < P$ without optimization.\\}
+					\end{enumerate}
+    }%
+		}
+}%
+}
+&
+&
+\tiny{
+\fbox{%
+    \parbox{\linewidth}{%
+		{\fussy
+        \textbf{(c) Equivalent comparison.\\}
+        \texttt{INPUTS: $E_{1}$, $E_{2}$, $S$.\\}
+        \texttt{OUTPUTS: Boolean result of function equality.\\}
+        \texttt{Set two solvers $S_{1}$ and $S_{2} \in S$.}
+        \begin{enumerate}
+            \item [1.] \texttt{Comparing with public variables:}
+            \item [] \texttt{Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $y_{1}^{i}$ to $S_{1}$.}
+            \item [] \texttt{Add $e_{2}^{i} \in E_{2}$ where $i \in [1,q]$ and range of $x_{2}^{i}$, $y_{2}^{i}$ to $S_{1}$.}
+            \item [] \texttt{Add $x_{1}^{i} == x_{2}^{i}$ where $i \in [1,m]$ to $S_{1}$.}
+            \item [] \texttt{Add $y_{1}^{i} \neq y_{2}^{i}$ where $i \in [1,k]$ to $S_{1}$.}
+            \item [] \texttt{Check if $S_{1}$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c_1$.}
+            \\
+            \item [2.] \texttt{Comparing with Boolean variables:}
+            \item [] \texttt{Set $b_1$ and $b_2$ $\in$ BOOLEAN}
+            \item [] \texttt{Add $b_1 = $ \textit{AND}$(E_{1})$ to $S_{2}$.}
+            \item [] \texttt{Add $b_2 = $ \textit{AND}$(E_{2})$ to $S_{2}$.}
+            \item [] \texttt{Add $x_{1}^{i} == x_{2}^{i}$ where $i \in [1,m]$ to $S_{2}$.}
+            \item [] \texttt{Add $y_{1}^{i} == y_{2}^{i}$ where $i \in [1,k]$ to $S_{2}$.}
+            \item [] \texttt{Add $b_1 \neq b_2$ to $S_{2}$.}
+            \item [] \texttt{Check if $S_2$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c_2$.}
+            \\
+            \item [3.] \texttt{Output ($c_1 == $ \textit{UNSAT} \textit{AND} $c_2 == $ \textit{UNSAT}).}
+        \end{enumerate}
+    }%
+		}
+} } \\%
+& & \\
+\tiny{
+\fbox{%
+    \parbox{\linewidth}{%
+		{\fussy
+        \textbf{(b) Function valid check.\\}
+        \texttt{INPUTS: $E_{1}$, $E_{2}$, $S$.\\}
+        \texttt{OUTPUTS: Boolean result of function validation.}
+        \begin{enumerate}
+            \item [1.] \texttt{Check and solve the R1CS gates:}
+            \item [] \texttt{Set a solvers $S_{1} \in S$.}
+            \item [] \texttt{Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $x_{2}^{i}$ to $S_{1}$.}
+            \item [] \texttt{Solve $S_{1}$ and get the set of private variables solution as \\ $M^{i}_{1_{x}}$ and set of public variables solution as $M^{i}_{1_{y}}$.}
+            \\
+            \item [2.] \texttt{Check and solve the statement equations:}
+            \item [] \texttt{Set a solvers $S_{2} \in S$.}
+            \item [] \texttt{Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $y_{1}^{i}$, $y_{2}^{i}$ to $S_{2}$.}
+            \item [] \texttt{Solve $S_{2}$ and get the set of private variables solution as \\ $M^{i}_{2_{x}}$ and set of public variables solution as $M^{i}_{2_{y}}$.}
+            \\
+            \item [3.] \texttt{Output $v_{x}^{i} \in M^{i}_{1_{x}}$ \textit{AND} $v_{x}^{i} \in M^{i}_{2_{x}}$ \textit{AND} $v_{y}^{i} \in M^{i}_{1_{y}}$ \textit{AND} $v_{y}^{i} \in M^{i}_{2_{y}}$.}
+            
+        \end{enumerate}
+    }%
+		}
+}%
+}
+&
+&
+\tiny{
+\fbox{%
+    \parbox{\linewidth}{%
+		{\fussy
+        \textbf{(d) Domain comparison.\\}
+        \texttt{INPUTS: $E_{1}$, $E_{2}$, $S$, $O$.\\}
+        \texttt{OUTPUTS: Boolean result of domain comparison.}
+        \begin{enumerate}
+            \item [1.] \texttt{Comparing upper and lower bond:}
+            \item [] \texttt{Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $x_{2}^{i}$ to $O$.}
+            \item [] \texttt{Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $y_{1}^{i}$, $y_{2}^{i}$ to $O$.}
+            \item [] \texttt{Solve the upper bond $u_{1}$ and lower bond $l_{1}$ from $O$}
+            \item [] \texttt{Solve the upper bond $u_{2}$ and lower bond $l_{2}$ from $O$}
+            \\
+            \item [2.] \texttt{Check if R1CS is valid outside statement domain:}
+            \item [] \texttt{Add $\textit{NOT}(\textit{AND}($range of $x_{1}^{i}$, $x_{2}^{i}))$ to $S$.}
+            \item [] \texttt{Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $x_{2}^{i}$, $y_{2}^{i}$ to $S$.}
+            \item [] \texttt{Check if $S$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c$.}
+            \\
+            \item [3.] \texttt{Output ($c == $ \textit{UNSAT} \textit{AND} $u_{1} == u_{2}$ \textit{AND} $l_{1} == l_{2}$).}
+            \\
+            \\\\\\
+        \end{enumerate}
+    }%
+		}
+}
+}
+\end{tabular}
+%}
+
+
+% \\
+% \noindent\fbox{%
+%     \parbox{\linewidth}{%
+%         \textbf{(e) Extra domain comparison.}
+%         \texttt{INPUTS: $E_{2}$, $S$, $t$}\\
+%         \texttt{OUTPUTS: Boolean result of domain comparison.}
+%         \begin{enumerate}
+%             \item [] \texttt{Generate $t$ set of auxiliary input from random number generator or plugin as $a_{i}^{j}$ where $i \in [1,m]$ and $j \in [1,t]$.}
+%             \\
+%             \item [] \texttt{Set $t$ Solvers $S_{i}$ where $i \in [1,t]$.}
+%             \\
+%             \item [] \texttt{Add $e_{1}^{i} \in E_{1}$ and $e_{2}^{i} \in E_{1}$ with range of $x_{1}^{i}$, $x_{2}^{i}$, $y_{1}^{i}$, $y_{2}^{i}$ to $S_{i}$.}
+%             \\
+%             \item [] \texttt{Add $x_{1}^{i} == x_{2}^{i}$, $y_{1}^{i} == y_{2}^{i}$, and $a_{j}^{i} == x_{1}^{i}$ to $S_{i}$ to $S_{i}$.}
+%             \\
+%             \item [] \texttt{Check if $S_{i}$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c_{i}$ where $i \in [1,t]$.}
+%             \\
+%             \item [] \texttt{Output ($c_{i} == $ \textit{SAT}).}
+%         \end{enumerate}
+%     }%
+% }
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Example \ConstraintChecker}
+\label{app:snarkprobe-checkerexample}
+
+For the interested reader, we provide an example of our \ConstraintChecker to show how a developer can run the tool. More examples can be found in our code.
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{lstlisting}
+x = z3.Int("x")
+## Indicate the public variables and private variables
+allocate = ["x"]
+variables = [x]
+## Indicate the statement of a proof
+statement = [x < 60]
+## Provide the snark program to automatically extract the R1CS matrix
+## Developer can also manually provide the R1CS matrix
+path = os.path.join(currentdir, "range")
+## Call the functions in ConstraintChecker to evaluate the correctness
+fcmp = FunctionComparison(path)
+fcmp.allocate(allocate)
+fcmp.set_input_sizes(0)
+fcmp.addVariables(variables)
+fcmp.addStatement(statement)
+fcmp.addGadget(gadget1.comparison_gadget("max")) ## Optional
+fcmp.addRange(x, z3.And(x < 60))
+fcmp.runComparisonTests()
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Domain Gap Issues}
+\label{app:snarkprobe-domaingap}
+The same upper bound and lower bound does not guarantee that statement equations and R1CS gates have the same range. Figure \ref{subfig:snarkprobe-domainc} and \ref{subfig:snarkprobe-domaind} shows an example of an unmatched domain with the same upper bound and lower bound.
+
+\subsubsection*{Domain Gap in Statement Equations}
+The ground truth domain of statement equations is known and provided by the user (which means we know the domain gap in the statement equations), the \ConstraintChecker can use the SMT solver to find if the R1CS gates have solution(s) outside the domain of statement equations (e.g. in the gap). If the SMT solver returns \texttt{SAT}, then the domains' of the statement equations and R1CS gates do not match and thus they are not equivalent.  This example corresponds to Figure \ref{subfig:snarkprobe-domaind}.
+
+\subsubsection*{Domain Gap in R1CS Gates}
+Since the domain of the R1CS gates is unknown, the \ConstraintChecker cannot use the SMT solver to detect an unmatched domain as in the previous example.
+However, in this instance, the prover likely will not be able to generate a proof for a secret value in the gap because these secret values are not in the domain of R1CS Gates even though they are valid solutions to the original statement equations.   That is, the set of allowable input values for the implemented R1CS matrix is a subset of the set of input values for the desired proof statement.  Therefore, while this leads to undesirable behavior as the prover cannot generate proofs for the entire valid input range, it does not lead to any exploits or ``fake'' proofs (i.e., the ability to generate a valid proof without knowledge of the secret value).
+This example corresponds to Figure \ref{subfig:snarkprobe-domainc}.
+
+We believe this type of gap is very rare, but we still try to find this issue by producing a set of uniform random numbers as input for statement equations and R1CS gates. If the R1CS gates do not have a solution but the statement equations do have a valid solution for an input number, then there is a gap in the statement equations, which is not equivalent to the statement equations' domain. This test does not guarantee finding an existing domain gap, but a larger set of numbers has higher confidence in finding any existing gaps.
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{0.4\textwidth}
+  \includegraphics[width=2in]{ch-snarkprobe/figure/domain-a.jpg}
+%   \vspace{-0.5cm}
+  \caption{Upper Bound and Lower Bound Do Not Match}
+  \label{subfig:snarkprobe-domaina}
+\end{subfigure}
+\hspace{0.7cm}
+\vspace{0.5cm}
+\begin{subfigure}{0.4\textwidth}
+  \includegraphics[width=2in]{ch-snarkprobe/figure/domain-b.jpg}
+%   \vspace{-0.5cm}
+  \caption{Upper Bound and Lower Bound Match}
+  \label{subfig:snarkprobe-domainb}
+\end{subfigure}
+\begin{subfigure}{0.4\textwidth}
+  \includegraphics[width=2in]{ch-snarkprobe/figure/domain-c.jpg}
+%   \vspace{-0.5cm}
+  \caption{R1CS Gates Has Gap Between Bound}
+  \label{subfig:snarkprobe-domainc}
+\end{subfigure}
+\hspace{0.7cm}
+\begin{subfigure}{0.4\textwidth}
+  \includegraphics[width=2in]{ch-snarkprobe/figure/domain-d.jpg}
+%   \vspace{-0.5cm}
+  \caption{Statement Equations Has Gap Between Bound}
+  \label{subfig:snarkprobe-domaind}
+\end{subfigure}
+\caption{Examples of Domain Comparison}
+\label{fig:snarkprobe-domain}
+%%\vspace{-3mm}
+\end{figure}
+
+%\newpage
+
+%%%%%%%%%%
+
+%\section{Comparison Between Standard Fuzzing and \SnarkFuzzer}
+%
+%\begin{figure}[h]
+%\centering
+%%\captionsetup{justification=centering}
+%\begin{subfigure}{0.4\textwidth}
+  %\includegraphics[width=3in]{imgs/fuzzing-a.jpg}
+  %\vspace{-0.5cm}
+  %\caption{Standard Fuzzing Test Procedure}
+  %\label{subfig:snarkprobe-fuzzing1}
+%\end{subfigure}
+%\begin{subfigure}{0.4\textwidth}
+  %\includegraphics[width=3in]{imgs/fuzzing-b.jpg}
+  %\vspace{-0.5cm}
+  %\caption{\SnarkFuzzer Procedure}
+  %\label{subfig:snarkprobe-fuzzing2}
+%\end{subfigure}
+%\vspace{-0.2cm}
+%\caption{Procedure Differences Between Standard Fuzzing Test and \SnarkFuzzer}
+%\label{fig:snarkprobe-fuzzing}
+%%%\vspace{-3mm}
+%\end{figure}
+
+%\newpage
+
+%%%%%%%%%%
+
+\section{Additional Information for \SnarkFuzzer}
+
+\subsection{Example Ideal Model Files}
+\label{app:snarkprobe-idealfiles}
+
+%\vspace*{-1cm}
+\begin{figure}[H]
+\begin{tcolorbox}
+\begin{verbatim}
+Relative Path: knowledge_commitment/kc_multiexp.tcc
+FUNCTION,2,99,127,kc_batch_exp_internal,IMPORTANT
+CONDITION,4,117,124,2,IMPORTANT
+CONDITION,5,119,123,2,IMPORTANT
+RETURN,2,126,126,2,IMPORTANT
+\end{verbatim}
+\end{tcolorbox}
+\caption{Example file for the ideal branch file}
+\end{figure}
+\vspace*{-1cm}
+\begin{figure}[H]
+\begin{tcolorbox}
+\begin{verbatim}
+tau,Fr,t,zk_proof_systems/.../r1cs_ppzksnark.tcc,252
+rhoA,Fr,rA,zk_proof_systems/.../r1cs_ppzksnark.tcc,300
+rhoB,Fr,rB,zk_proof_systems/.../r1cs_ppzksnark.tcc,301
+\end{verbatim}
+\end{tcolorbox}
+\caption{Example file for the ideal value file}
+\end{figure}
+
+%\vspace*{-1cm}
+
+%%%%%%%%%%
+
+\subsection{PrettyPrint Example}
+\label{app:snarkprobe-prettyprint-app}
+
+\vspace{-15pt}
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-a.jpg}
+  \vspace{-0.5cm}
+  \caption{Content without PrettyPrint in \libsnark}
+  \label{subfig:snarkprobe-prettyprint_a}
+\end{subfigure}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-b.jpg}
+  \vspace{-0.5cm}
+  \caption{Content without PrettyPrint in \bellman}
+  \label{subfig:snarkprobe-prettyprint_b}
+\end{subfigure}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-c.jpg}
+  \vspace{-0.5cm}
+  \caption{Content without PrettyPrint in \arkworks}
+  \label{subfig:snarkprobe-prettyprint_c}
+\end{subfigure}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-d.jpg}
+  \vspace{-0.5cm}
+  \caption{Content with PrettyPrint in any library}
+  \label{subfig:snarkprobe-prettyprint_d}
+\end{subfigure}
+\caption{Content of variable type G1}
+\label{fig:snarkprobe-prettyprint}
+%\vspace{-3mm}
+\end{figure}
+
+%%%%%%%%%%
+
+\vspace{-0.4cm}
+
+%%%%%%%%%%
+
+\section{Equations \texttt{comparison\_gadget} Represents}
+\label{app:snarkprobe-comparison}
+
+\small{
+\[ \begin{cases} 
+(w_{14} * (1 + (p - 1) * w_{14})) \bmod p = 0 \\
+(1024 + w_{3} + 2 * w_{4} + 4 * w_{5} + 8 * w_{6} + 16 * w_{7} + 32 * w_{8} + \\\quad\quad 64 * w_{9} + 128 * w_{10} + 256 * w_{11} + 512 * w_{12}) \bmod p = w_{13} \\
+(w_{3} * (1 + (p - 1) * w_{3})) \bmod p = 0 \\
+(w_{4} * (1 + (p - 1) * w_{4})) \bmod p = 0 \\
+(w_{5} * (1 + (p - 1) * w_{5})) \bmod p = 0 \\
+(w_{6} * (1 + (p - 1) * w_{6})) \bmod p = 0 \\
+(w_{7} * (1 + (p - 1) * w_{7})) \bmod p = 0 \\
+(w_{8} * (1 + (p - 1) * w_{8})) \bmod p = 0 \\
+(w_{9} * (1 + (p - 1) * w_{9})) \bmod p = 0 \\
+(w_{10} * (1 + (p - 1) * w_{10})) \bmod p = 0 \\
+(w_{11} * (1 + (p - 1) * w_{11})) \bmod p = 0 \\
+(w_{12} * (1 + (p - 1) * w_{12})) \bmod p = 0 \\
+(1024 - 1 * w_{1} + w_{2}) \bmod p = w_{13} \\
+(w_{15} * (w_{3} + w_{4} + w_{5} + w_{6} + w_{7} + w_{8} + w_{9} + w_{10} + w_{11} + \\\quad\quad w_{12})) \bmod p = w_{14} \\
+((1 + (p - 1) * w_{14}) * (w_{3} + w_{4} + w_{5} + w_{6} + w_{7} + w_{8} + w_{9} + \\\quad\quad w_{10} + w_{11} + w_{12})) \bmod p = 0 \\
+w_{14} \bmod p = 1
+\end{cases} \]
+}
+
+%\newpage
+
+%%%%%%%%%%
+
+%%%%%%%%%%
+
+% \section{Additional Performance Results}
+% \label{app:snarkprobe-additionalgraphs}
+
+% \parhead{Performance of the \inputgenerator.}
+% Unlike a mutation-based or generation-based fuzzer for an invalid matrix (which are very quick since they only require straightforward operations), generating a valid R1CS matrix with our generation-based fuzzer requires the SMT solver to produce a matrix based on the random witness array. Thus the processing time depends on the matrix size and random value(s) in the witness list, which generally results in a larger matrix taking longer to process.
+% To validate this, we used our various fuzzers to produce matrices of varying sizes (remember that the rows represent the number of constraints and columns the number of variables). In Table \ref{tab:gen-invalid}, we present the processing time for each method (generally under one second for most methods), which confirms our general intuition.
+% We also note that the \inputgenerator must compile the input matrix (proof) and source code into a binary program, which can require substantial time that is outside of our control.
+% %Some \zksnark libraries may require longer compiling time, and we have no control to the library compiling time cost, which will increase our \inputgenerator total runtime.
+% %\delete{ Although a larger matrix usually takes a longer time to generate, a ``smaller'' R1CS matrix may also require greater computational resources depending on the random numbers chosen in the witness and R1CS relations, as this can cause simplified relations in R1CS matrix and witness, thus requiring the SMT solver to take less time to calculate a valid R1CS matrix.\yuquan{Might need better explanation for this line?}  For example, we can see that matrix three and matrix seven in the 10 × 200 category only take roughly ten seconds to generate, which is similar to generating a matrix of size 20 × 40.} \fanyo{(summary)}
+
+% %\begin{figure}[t]
+%   %\centering
+%   %%\captionsetup{justification=centering}
+%   %\includegraphics[width=0.9\linewidth]{imgs/gen-invalid.jpg}
+%   %\caption{Runtime of the \inputgenerator to produce R1CS matrices of different sizes.}
+%   %\label{fig:snarkprobe-gen-invalid}
+% %\end{figure}
+
+% \begin{table}[h]
+% %\captionsetup{justification=centering}
+% \hspace*{0.15in}
+% \begin{minipage}{\textwidth}
+% \centering
+% {\origfootnotesize
+% \begin{tabular}{ll||c|c|c|c}
+% \hline
+% \multicolumn{2}{l||}{Matrix Size} & 5 × 10 & 20 × 40 & 50 × 100 & 50 × 200 \\ \hline\hline
+% \multicolumn{1}{l||}{\multirow{2}{*}{}Generation Based} & Invalid Matrix & \textless{}0.01 & \textless{}0.01 & \textless{}0.01 & 0.02 \\ \cline{2-6}
+% \multicolumn{1}{l||}{} & Valid Matrix & 0.16 & 2.06 & 23.02 & 51.27 \\ \hline
+% \multicolumn{1}{l||}{\multirow{2}{*}{}Mutation Based} & Invalid Matrix & 0.38 & 0.49 & 0.65 & 0.77 \\ \cline{2-6}
+% \multicolumn{1}{l||}{} & Valid Matrix & \textless{}0.01 & \textless{}0.01 & \textless{}0.01 & 0.02 \\ \hline
+% \end{tabular}
+% }
+% \end{minipage}
+% \caption{Runtime (in seconds) of the \inputgenerator to produce R1CS matrices of different sizes.}
+% \label{tab:snarkprobe-gen-invalid}
+% \vspace*{-14pt}
+% \end{table}
+
+% %%%%
+
+% \parhead{Performance of the \branchmodel.}
+% Next, we explore the coverage ability of the \branchmodel in terms of breadth, as well as how quickly we achieve a high percentage of branch coverage.  We ran 50 iterations of the \branchmodel with \libsnark, which covers more than 85\% of all branches.  We stopped our experiments after 50 iterations as \SnarkFuzzer did not reach any new branches over the previous 10 prior iterations.  Even with this, we note that after roughly 30 iterations we see the breadth of our coverage begin to taper off.
+% A graph can be found in Figure \ref{fig:coverage}.
+% %\fanyo{Even the \tool have covered most pf the branches in the target libraries, the fuzzer should not be stopped in order to generate more different inputs to test a same branch. The fuzzer should not be stopped until most of the branches have been tested for at least one time. As more inputs are generated, \tool has higher chance to find the potential issues in the target library or higher confidence to say (need a better word) that the target library is safe. }
+% %There are a number of factors that can affect our coverage results. First, we can encounter situations where the generation-based fuzzer cannot produce enough diverse input sets to cover all branches, which is where the seeds of the mutation-based fuzzer can play an important role in coverage.  Second, \SnarkFuzzer allows a user to configure the proportion of matrices generated by each sub-fuzzing method, which can also affect the coverage result. In our experiment, we had the generation-based fuzzer produce 5\% invalid and 45\% valid matrices, and the mutation-based fuzzer produce 40\% invalid and 10\% valid matrices. Increasing the fuzzing time and/or adding extra seeds for the mutation-based fuzzer can improve the coverage of a target source library.
+
+% \begin{figure}[h]
+%   \centering
+%   %\captionsetup{justification=centering}
+%   \includegraphics[width=0.70\linewidth]{imgs/coverage.jpg}
+%   \vspace*{-10pt}
+%   \caption{Percentage (breadth) of library coverage after a given number of iterations}
+%   \label{fig:snarkprobe-coverage}
+%   %\vspace*{-8pt}
+% \end{figure}
+
+% %%%%%%%%%%

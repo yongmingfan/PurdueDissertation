@@ -1,0 +1,190 @@
+\section{Analysis framework for open-source detection tools}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:cryptobinary-framework}
+
+Previous tools have been evaluated only with certain basic cryptographic algorithms, and often seem to lack evaluation for false positives, real world applications, and large scale projects. Therefore, as the first step in our replication study, we build a new benchmarking framework with a number of evaluation metrics, which will not only encompass all evaluations conducted by previous tools but also establish a unified more comprehensive evaluation benchmark moving forward.
+
+\fanyo{add transaction}
+
+\vspace*{-10pt}
+\begin{multicols}{3}
+\begin{itemize}[noitemsep,topsep=0pt]
+\item Aligot \cite{calvet2012aligot}
+\item CryptoHunt \cite{xu2017cryptographic}
+\item CryptoKnight \cite{hill2018cryptoknight}
+\item DRACA \cite{draca}
+\item FindCrypt2 \cite{findcrypt2}
+\item HCD \cite{hcd}
+\item PEiD KANAL \cite{kanal}
+\item SignSrch \cite{signsrch}
+\item Where's Crypto \cite{meijer2021s}
+\end{itemize}
+\end{multicols}
+\vspace*{-10pt}
+
+\subsection{Benchmarking Framework}
+\label{subsec:cryptobinary-framework}
+%%%%%%%%%%%%%%%%%%%
+During our study, we identified a significant gap in the field: the absence of a standardized method for evaluating existing tools and their efficacy.
+We believe that to do a fair evaluation in any domain requires a standard
+benchmark. We propose a benchmarking framework that will help us understand the scalability
+and effectiveness of any given detection approach. We have four categories in our framework: i) basic cryptographic functions, ii) microbenchmarks, iii) libraries, and iv) large projects.
+Our framework is flexible and can be easily updated as the field of cryptography advances. 
+
+\parhead{Basic cryptographic functions.} The basic cryptographic functions category contains cryptographic algorithms from various standard classes within the cryptographic space. A single cryptographic algorithm may have multiple versions, or may use non-standard implementations, so we may select many different implementations or versions for certain algorithms. The cryptographic algorithms we select are:
+
+\vspace*{-10pt}
+\begin{multicols}{3}
+\begin{itemize}[noitemsep,topsep=0pt]
+\item AES256
+\item DES
+\item ECC
+\item MD5
+\item RC4 
+\item RC5
+\item RSA
+\item SHA1
+\item SHA256
+\item TEA
+\item XTEA
+\item XXTEA
+\end{itemize}
+\end{multicols}
+\vspace*{-10pt}
+
+We have chosen these algorithms for several reasons. First, we have included those recommended by the National Institute of Standards and Technology (NIST) \cite{nist}, as they are widely utilized and cover a broad range of real-world applications. Second, we have incorporated algorithms like TEA and MD5, which, although once popular, are now considered unsafe or outdated, but still might have historical significance in applications like malware. Last, we have selected various variants of a single cryptographic algorithm to assess a tool's ability to handle different implementations effectively.
+
+\parhead{Microbenchmarks.} Our microbenchmarks category contains small programs on file
+manipulation, networking, I/O heavy programs, math heavy programs, matrix and array, and so-called ``golden
+implementations'' of well-known cryptographic algorithms. We have chosen small
+programs such as I/O heavy and math-heavy programs since they have similar
+instruction sets or behavior patterns as cryptographic functions.  This allows us to test for false positives in a detection framework.
+
+\parhead{Libraries.} We have chosen cryptographic libraries as well as encoding and
+compression libraries that have similar behavior to cryptographic
+functions including:
+\vspace*{-10pt}
+\begin{multicols}{2}
+\begin{itemize}[noitemsep,topsep=0pt]
+\item openssl (3.3.1)
+\item libgcrypt (1.8.11)
+\item libsodium (1.0.20)
+\item mbedTLS (3.6.1)
+\item gnuTLS (3.8.6)
+\item bzip2 (1.0.8)
+\item zlib (1.3.1)
+\item ffmpeg (7.0.2)
+\item libgsm (1.0.17)
+\item libjpeg (6b)
+\item libpng (1.6.43)
+\end{itemize}
+\end{multicols}
+\vspace*{-10pt}
+This allows us to again test for false positives, but also to test for a variety of different cryptographic algorithms implemented in different ways.
+We select open source libraries only, so that we are able to compile them based on our evaluation metrics. For each tool, we used the latest version available at the time of evaluation. Our selection includes a diverse range of libraries, from those with frequent recent updates, such as OpenSSL, to those that are a bit older, such as libjpeg.
+
+\parhead{Large projects.} We also select Signal, an application designed for encrypted messaging, to evaluate a tool's ability to both scale for large codebases as well as still detect cryptography within them.  We believe that to understand the scalability of a mechanism, it is crucial to determine that the tool performs well irrespective of the code size and its applications.
+Signal was selected because it both utilizes multiple (modern) cryptographic schemes and is open source.  This again means we can recompile Signal with our evaluation metrics, plus establish ground truth for testing. However, as our framework is open-source, one could easily extend it to include any future desired large-scale open-source projects, such as Tor.
+
+\subsection{Evaluation Metrics}
+\label{subsec:cryptobinary-metrics}
+To ensure a thorough exploration of current tools (and to provide rigorous and fair evaluation metrics for the future), we have meticulously crafted a series of evaluation experiments. These experiments are thoughtfully designed to align with the challenges we discuss in Section \ref{subsec:cryptobinary-challenges}, maximizing our ability to uncover the current state of these tools and elucidate their strengths and weaknesses.  Our evaluation metrics are as follows:
+ 
+\begin{itemize}
+\item \textbf{Based on optimization levels:} Evaluate based on different compiler optimizations including -O0, -O1, -O2, -O3, -Os, and -Ofast
+
+\item \textbf{Based on different combinations of obfuscation mechanisms:}
+
+\begin{itemize}
+\item \textbf{Control-flow obfuscation:} Adding bogus control-flow, control-flow flattening, substitution of instructions, polymorphism
+
+\item \textbf{Data-flow obfuscation:} Data aggregation, data-splitting, variable transformation
+
+\item \textbf{Modified versions of algorithms:} For example, modified TEA (Russian TEA) used in malware as suggested in \cite{xu2017cryptographic}
+
+\item \textbf{Layout Obfuscation:} Address obfuscation, obfuscating debug information, address layout/memory layout randomization 
+
+\item \textbf{Combination of all prior techniques}
+\end{itemize}
+% \item \textbf{Based on type of the algorithm:} Some approaches can work better on stream ciphers, some others can work better on block ciphers
+
+\item \textbf{Based on different compilers:} Evaluate based on different compilers, including GCC, CLANG, MSVC
+% \item \textbf{Based on algorithm versions:} A single cryptograhic algorithm may have multiple variant versions, and some malware do not use standard algorithm implementation.
+
+\end{itemize}
+
+The full list of optimizations, obfuscations, and their combinations we select for our evaluation can be found in Appendix \ref{app:cryptobinary-metrics}.
+
+%\section{Identiifcation techniques}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{figure}[ht]
+%\centering{
+%  \subfigure[Evaluation of DRACA based on performance metrics]{%
+%    \includegraphics[width=\columnwidth, keepaspectratio]{./images/draca.pdf}
+%    \label{fig:draca}}
+%  \subfigure[Evaluation of Signsrch based on performance metrics]{%
+%    \includegraphics[width=\columnwidth, keepaspectratio]{./images/signsrch.pdf}
+%    \label{fig:signsrch}}
+%    %\caption{}
+%}
+%\end{figure}
+
+% \begin{figure}[ht]
+% \centering
+% \begin{minipage}{.45\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{./images/draca.pdf}
+%   \caption{Evaluation of DRACA based on performance metrics}
+%   \label{fig:draca}
+% \end{minipage}%
+% \qquad
+% \begin{minipage}{.45\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{./images/signsrch.pdf}
+%   \caption{Evaluation of Signsrch based on performance metrics}
+%   \label{fig:signsrch}
+% \end{minipage}
+% \end{figure}
+
+
+
+We assessed each tool with these benchmarks and metrics to thoroughly explore accuracy and detection capabilities when handling binary programs subjected to specific compiler or optimization/obfuscation techniques.\footnote{All benchmarks and metrics we evaluate are available at https://github.com/BARC-Purdue/CryptoBinary.} For instance, a tool \textbf{A} might successfully detect MD5 when all optimization flags are applied but fail to do so in the presence of obfuscation. Conversely, a tool \textbf{B} may be able to detect TEA when compiled with GCC but not when compiled with CLANG. This exploration provides us with a more comprehensive understanding of the current state of cryptographic function detection tools, revealing their weaknesses and indicating areas for future development from various perspectives.
+
+
+% Then based on our metric, we give tool \textbf{A}
+% score of 7 in unkeyed category. \autoref{fig:draca} and \autoref{fig:signsrch}
+% shows the performance of the two tools namely DRACA and Signsrch based on
+% the above mentioned metrics.
+
+
+
+
+
+% \subsection{A Benchmark Framework}
+% % For large scale project, we have chosen signal given its large code base and
+% % wide spread usage. \autoref{benchmarks} shows the analysis of two tools DRACA
+% % and signsrch across all the three categories of the benchmarks as well as with
+% % different compilation and obfuscation flags.
+
+% We categorized our framework in couple of directions. We can categorize them based on size to understand the scalability of each of the investigated tools. Then, we can categorize based on the type of the suite. Here are four possible categorizations: 
+
+% \textbf{i. In accordance to size:} We can evaluate different types of projects based on size to understand  the effectiveness of tool 
+
+% a. Micro-benchmarks  
+
+% b. Small/ medium sized projects
+
+% c. Large projects
+
+% \textbf{ii. In accordance to type:} We can develop a number of test-suites which shows crypto like behavior. Possible options are: network-heavy test-suite, mathematics-heavy suite, binary packing, suite with extraction operations.
+
+% \textbf{iii. Real world open-source projects:} We can select a good number of real world open source projects to understand the effectiveness of investigated tools.
+
+% \textbf{iv. Real malware samples:} Possible malware: wannacry (Windows encryption API), petya, not-petya, locky (RSA-2048 + AES-128 cipher with ECB mode), Annabele (AES256 CBC with a hardcoded key and IV). Petya and NotPetya both read the MBR and encrypt it using a simple XOR key. The only difference is that Petya uses 0x37 as a key, while NotPetya uses 0x07.
+
+
+%algorithm vs functionalities 
+

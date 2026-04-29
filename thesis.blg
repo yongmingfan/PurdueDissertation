@@ -1,0 +1,22 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'thesis.blg'
+[27] biber-darwin:340> INFO - === Wed Apr 29, 2026, 05:53:01
+[34] Biber.pm:419> INFO - Reading 'thesis.bcf'
+[79] Biber.pm:979> INFO - Found 126 citekeys in bib section 0
+[84] Biber.pm:4419> INFO - Processing section 0
+[88] Biber.pm:4610> INFO - Looking for bibtex file 'all-biblatex.bib' for section 0
+[89] bibtex.pm:1713> INFO - LaTeX decoding ...
+[90] bibtex.pm:1519> INFO - Found BibTeX data source 'all-biblatex.bib'
+[107] Biber.pm:4610> INFO - Looking for bibtex file 'all-biblatex-cryptobinary.bib' for section 0
+[108] bibtex.pm:1713> INFO - LaTeX decoding ...
+[122] bibtex.pm:1519> INFO - Found BibTeX data source 'all-biblatex-cryptobinary.bib'
+[200] Biber.pm:4610> INFO - Looking for bibtex file 'all-biblatex-snarkprobe.bib' for section 0
+[201] bibtex.pm:1713> INFO - LaTeX decoding ...
+[214] bibtex.pm:1519> INFO - Found BibTeX data source 'all-biblatex-snarkprobe.bib'
+[317] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[317] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[317] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[317] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[344] bbl.pm:660> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[344] bbl.pm:661> INFO - Converting UTF-8 to TeX macros on output to .bbl
+[376] bbl.pm:763> INFO - Output to thesis.bbl

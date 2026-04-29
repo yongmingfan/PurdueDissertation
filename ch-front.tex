@@ -1,0 +1,197 @@
+\ProvidesFile{ch-front.tex}[2024-09-12 front matter chapter]
+%
+%  This is the ``front matter'' for the thesis.
+%
+%  REFERENCES
+%
+%    TCMOS17
+%      The Chicago Manual of Style Online, 17th edition.
+%      https://www.chicagomanualofstyle.org/home.html
+%      retrieved on 2020-02-29
+%
+%    TEMPL
+%      Thesis and Disertation Office Templates.
+%      https://www.purdue.edu/gradschool/research/thesis/templates.html
+%      retrieved on 2020-02-29
+%
+%    WNNCD
+%    Webster's Ninth New Collegiate Dictionary.
+%
+
+%
+%   Only Purdue University uses this page
+%
+%   Comment out \begin{statement} through \end{statement}
+%   if you are not at Purdue University.
+%
+% Statement of Thesis/Dissertation Approval Page
+% This page is REQUIRED.  The page should be numbered "2"
+% and should NOT be listed in your TABLE OF CONTENTS.
+\begin{statement}
+  % Delete or add \entry commands as needed for all committe members.
+  \entry{Dr.~Christina Garman, Chair}{Department of Computer Science}
+  \entry{Dr.~Jeremiah Blocki}{Department of Computer Science}
+  \entry{Dr.~Dave (Jing) Tian}{Department of Computer Science}
+  \entry{Dr.~Antonio Bianchi}{Department of Computer Science}
+  % There should be one \approvedby command containing the
+  % "FORM 9 THESIS FORM HEAD NAME HERE" (from TEMPL, retrieved on 2020-03-01).
+  \approvedby{Dr.~Petros Drineas}
+\end{statement}
+
+% Dedication page is optional.
+% A name and often a message in tribute to a person or cause.
+% References: WEB9 332.
+\begin{dedication}
+  To graduate students
+\end{dedication}
+
+% Acknowledgements page is optional but most theses include
+% a brief statement of appreciation or recognition of special
+% assistance.
+\begin{acknowledgments}
+  Purdue University's Engineering Computer Network
+  (now part of Purdue IT)
+  and Graduate School helped fund \PurdueThesisLogo\ development.
+\end{acknowledgments}
+
+% The preface is optional.
+% References: TCMOS17 1.49, WEB9 927.
+% \begin{preface}
+%   This is the preface.
+% \end{preface}
+
+% The Table of Contents is required.
+% The Table of Contents will be automatically created for you
+% using information you supply in
+%     \chapter
+%     \section
+%     \subsection
+%     \subsubsection
+%     commands.
+\pdfbookmark{TABLE OF CONTENTS}{Contents}
+\tableofcontents
+
+% If your thesis has tables, a list of tables is required.
+% The List of Tables will be automatically created for you using
+% information you supply in
+%     \begin{table} ... \end{table}
+% environments.
+\listoftables
+
+% If your thesis has figures, a list of figures is required.
+% The List of Figures will be automatically created for you using
+% information you supply in
+%     \begin{figure} ... \end{figure}
+% environments.
+\listoffigures
+
+% If your thesis has listings, a list of listings is required.
+% The List of Listings will be automatically created for you using
+% information you supply in
+%     \begin{ZZlisting} ... \end{ZZlisting}
+% environments.
+\ZZlistoflistings
+
+% If your thesis has protocols, you may want to do a list of protocols.
+% The List of Protocols will be automatically created for you using
+% information you supply in
+%     \begin{protocol} ... \end{protocol}
+% environments.
+\listofprotocols
+
+% If your thesis has schemes, you may want to do a list of schemes.
+% The List of Schemes will be automatically created for you using
+% information you supply in
+%     \begin{scheme} ... \end{scheme}
+% environments.
+\listofschemes
+
+% List of Symbols is optional.
+\begin{symbols}
+  \(m\)& mass\cr
+  \(v\)& velocity\cr
+\end{symbols}
+
+% List of Abbreviations is optional.
+\begin{abbreviations}
+  abbr& abbreviation\cr
+  bcf& billion cubic feet\cr
+  BMOC& big man on campus\cr
+\end{abbreviations}
+
+% Nomenclature is optional.
+% \begin{nomenclature}
+%   alanine& 2-Aminopropanoic acid\\
+%   gasoline& a transparent,
+%     petroleum-derived flammable liquid that is used primarily
+%     as a fuel in most spark-ignited internal combustion engines\\
+%   valine& 2-Amino-3-methylbutanoic acid\\
+%   Valvoline& Valvoline Inc.~is an American manufacturer
+%     and distributor of Valvoline-brand automotive oil,
+%     additives,
+%     and lubricants.
+%     It also owns the Valvoline Instant Oil Change
+%     and Valvoline Express Care chains of car repair centers.
+%     As of 2016,
+%     it is the second largest oil change service provider in the United States
+%     with 10\% market share
+%     and 1,050 locations.\\
+%   \mbox{}\\
+%   \rlap{you can divide these into categories if you want}\\
+%   \mbox{}\\
+%   \rlap{\bfseries Biology}\\
+%   alanine& 2-Aminopropanoic acid\\
+%   valine& 2-Amino-3-methylbutanoic acid\\
+%   \rlap{\bfseries Transportation}\\
+%   gasoline& a transparent,
+%     petroleum-derived flammable liquid that is used primarily
+%     as a fuel in most spark-ignited internal combustion engines\\
+%   Valvoline& Valvoline Inc.~is an American manufacturer
+%     and distributor of Valvoline-brand automotive oil,
+%     additives,
+%     and lubricants.
+%     It also owns the Valvoline Instant Oil Change
+%     and Valvoline Express Care chains of car repair centers.
+%     As of 2016,
+%     it is the second largest oil change service provider in the United States
+%     with 10\% market share
+%     and 1,050 locations.\\
+% \end{nomenclature}
+
+% Glossary is optional.
+\begin{glossary}
+  Cryptographic Primitive & Cryptographic primitive (also called cryptographic function or cryptographic algorithm) refers to the entirety of a specific scheme or class of algorithms such as AES or RSA, used to generate ciphertext and support encryption and decryption processes for securing information.
+\\
+  Binary Analysis & Binary analysis is the examination of compiled executables without source code to understand program structure, behavior, and embedded functionality at the machine instruction level.
+\\
+  Cryptographic Logic Error & An error or bug that causes a program to produce an incorrect result due to errors in the cryptographic protocol implementation, such as incorrect mathematical operations or disregarding the specification.
+\\
+  Zero Knwoledge Proof & A cryptographic protocol that allows a user (the prover) proves a statement to another party (the veriﬁer) without revealing anything about the statement other than that it is true.
+\\
+  zk-SNARKs & Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge are a non-interactive zero-knowledge proof system with short proofs size and efficient verification, enabling practical deployment in cryptographic systems.
+\\
+  White-box Fuzzing & A testing approach where inputs are generated using full knowledge of the program’s internal structure. Code and execution paths are analyzed to systematically explore behaviors and improve test coverage.
+\\
+  Black-box Fuzzing & A testing approach where inputs are generated without any knowledge of the program’s internal structure. The system is treated as opaque, and only external behaviors such as crashes or errors are observed.\\
+
+\end{glossary}
+
+% Abstract is required.
+% Reference:
+%       author    = {Thesis and Dissertation Office},
+%       pages     = {9},
+%       publisher = {Purdue University},
+%       url       = {https://www.purdue.edu/gradschool/research/thesis/templates.html},
+%       urldate   = {2022-10-24},
+% Choose:
+%     Microsoft Word
+%     West Lafayette
+%     College of Engineering
+\begin{abstract}
+  \PurdueThesisLogo\ is a \LaTeX\ document class used for
+  master's bypass reports,
+  master's theses,
+  PhD dissertations,
+  and PhD preliminary reports.
+  This template demonstrates how to use \PurdueThesisLogo.
+\end{abstract}

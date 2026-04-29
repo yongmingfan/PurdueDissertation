@@ -1,0 +1,196 @@
+\section{List of Optimizations, Obfuscations, and their Combinations for Our Evaluation Metrics}
+\label{app:cryptobinary-metrics}
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item No identification
+\item Identification with optimization flag -O0
+\item Identification with optimization  flag -O1
+\item Identification with optimization flag -O2
+\item Identification with optimization flag -O3
+\item Identification with optimization  flag –Os
+\item Identification with optimization flag: -Ofast
+\item Identification with instruction substitution obfuscation: -obs\textunderscore sub
+\item Identification with control-flow flattening: -obs\textunderscore fla
+\item Identification with bogus control-flow: -obs\textunderscore bcf
+\item Identification with combination of obfuscation: -obs\textunderscore sub, obs\textunderscore fla, obs\textunderscore bcf
+\item Identification with combination of obfuscation and optimization: -obs\textunderscore sub, obs\textunderscore fla, obs\textunderscore bcf, -O3
+\end{enumerate}
+
+\section{Procedure for R+R Evaluation}
+
+\subsection{Steps in our Reproduction Evaluation}
+\label{app:cryptobinary-repro_procedure}
+\begin{enumerate}
+\item Obtain access to each tool; compile the tool if required, following the provided instructions.
+\item Set up the environment to replicate the tool's original configuration (follows the same operating conditions).
+\item Obtain the original test cases for each tool. If unavailable, the reproduction evaluation will be skipped (follows the same measuring system).
+\item Execute each tool with the provided test cases to reproduce the results (follows the same measurement procedure).
+\end{enumerate}
+
+\subsection{Steps in our Replication Evaluation}
+\label{app:cryptobinary-repli_procedure}
+\begin{enumerate}
+\item Obtain access to each tool; recompile the tool on our system if the source code is available.
+\item Build and run each tool on Windows 10, Ubuntu 18.04, and macOS Sonoma (follows the different measuring system).
+\item Compile our custom benchmarks with the evaluation metrics into binaries for testing.
+\item Execute each tool with our benchmarks to assess replication capability (follows the different location on multiple trials).
+\end{enumerate}
+
+\section{Tools}
+\label{app:cryptobinary-tools}
+We provide introductions to the tools analyzed in this work.  For each tool, we give a high level overview, highlight key features for a user, and provide a discussion on its strengths and weaknesses, as relevant.
+
+\subsection{Aligot} 
+
+\parhead{Summary.} Aligot \cite{calvet2012aligot}  is based on the assumption that the input-output relations in a cryptographic function remain unchanged
+even if there is obfuscation. It performs an interloop data-flow analysis to identify cryptographic parameters and then performs a comparison
+with a reference implementation. The authors successfully evaluated the tool to identify four different cryptographic functions: TEA, RC4, AES and MD5.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item Requires the user to compile the tool with Intel Pin
+  \item Requires an earlier version of Intel Pin and Python library \textit{networkx} (latest does not work)
+\end{itemize}
+
+\parhead{Other Discussion.}
+\begin{itemize}
+  \item Aligot has not been updated to accommodate the latest dependency changes. Specifically, the Python library "networkx" uses different data types that cause crashes in Aligot
+  \item Additionally, the Aligot tracer has not been adapted to the latest version of Intel Pin, and the tested version appears to be discontinued
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{CryptoHunt} 
+\parhead{Summary.} CryptoHunt \cite{xu2017cryptographic} introduces the \textit{bit-precise symbolic loop mapping} technique to identify cryptographic functions. Using this technique the tool captures the semantics of possible cryptographic algorithms within a loop and then performs guided fuzzing to efficiently match boolean formulas with known reference implementations. It shows its efficacy on commonly used cryptographic functions such as TEA, AES, RC4, MD5, and RSA under different control and data obfuscation scheme combinations.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item Requires the user to compile the tool with Intel Pin (2.13, 3.2, and 3.28 are tested)
+  \item Requires the user to indicate the reference loop
+  \item Higher accuracy rate and detection results in obfuscated binaries
+\end{itemize}
+
+\parhead{Other Discussion.}
+\begin{itemize}
+  \item Depending on the binary program size, CryptoHunt may find 10,000 loops in the binary, which needs to be compared with the reference one by one. The long analysis time may not suitable for a large program.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{CryptoKnight}
+\parhead{Summary.} CryptoKnight \cite{hill2018cryptoknight} employs a Dynamic Convolutional Neural Network (DCNN)
+to learn from variable-length control flow diagnostics output obtained from a dynamic trace, and
+is able to detect AES, RC4, Blowfish, MD5, and RSA.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item Can easily integrate new samples through the scalable synthesis of customizable cryptographic algorithms
+  \item Automated and limits user interaction
+  \item High accuracy rate (96\%)
+\end{itemize}
+
+\parhead{Other Discussion.}
+\begin{itemize}
+  \item Has been evaluated on GnuPG and a real-world ransomware binary 'GonnaCry' and can successfully identify the use of AES and RSA
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Draft Crypto Analyzer (DRACA)}
+\parhead{Summary.} DRACA ~\cite{draca} targets preliminary detection and analysis of cryptographic algorithms within executables.
+Although DRACA is implemented as a command line utility for x86/Win32, it can also analyze Unix ELF binaries,
+Java applets, as well as 16- and 32-bit DOS Windows executables.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item No compiling is needed
+  \item Can be directly run by passing the target binary program
+\end{itemize}
+
+\parhead{Other Discussion.}
+\begin{itemize}
+  \item DRACA can only provide a rough idea of what kind of algorithms to look at without actual spending time on decompilation and code analysis.
+  \item Detection result cannot be used without further analysis.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{FindCrypt2} 
+\parhead{Summary.} FindCrypt2 \cite{findcrypt2} has been implemented as a plug-in support for IDA Pro~\cite{IDA_pro} which searches constants used in the initialization of cryptographic algorithms. It can detect commonly used encryption algorithms.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item Requires IDA Pro, a commercial disassembler software, which is not free
+\end{itemize}
+
+
+\subsection{HCD} 
+\parhead{Summary.} HCD \cite{hcd} detects roughly 90 hash and cryptographic algorithms and compiles for portable executable files with a GUI interface and Shell integration, Command line support.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item No compiling is needed
+  \item Can be directly run by passing the target binary program
+\end{itemize}
+
+\parhead{Other Discussion.}
+\begin{itemize}
+    \item Can only detect cryptographic functions in executable file for Microsoft Windows (.exe). This tool does not support the analysis of Unix based binary programs.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{PEiD KANAL} 
+\parhead{Summary.} PEiD KANAL \cite{kanal} is a plug-in for PEiD, searching for cryptographic algorithms with a specific signature such as fixed s-boxes, permutation tables, and initialization values. It searches for connections to identified code or data and find its associated address.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item No compiling is needed
+  \item Can be directly run by passing the target binary program
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Signsrch} 
+\parhead{Summary.}  Signsrch \cite{signsrch}  is another IDA Pro plug-in which aims to detect not just encryption algorithms, but also compression algorithms, multimedia, etc. The tool searches for known signatures as well as allows a user to add their own signature.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item No compiling is needed
+  \item Can be directly run by passing the target binary program
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Where's Crypto} 
+\parhead{Summary.} Where's Crypto \cite{meijer2021s} is an IDA SDK based tool, aiming to automatically identify cryptographic primitives in binaries. Where's Crypto can detect cryptographic functions that has as-of-yet unknown primitives if it falls within a taxonomical class of well-defined primitives.
+
+\parhead{Highlights for User.}
+\begin{itemize}
+  \item Requires IDA Pro, a commercial disassembler software, which is not free
+  \item Supports unknown cryptographic primitives
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+
+% \section{Unavailable Tools}
+% \label{subsec:unavailable}
+% \fanyo{Move to RR}
+
+% While working on this systematization of the space, we discovered that certain tools were rendered inoperable due to unavailable dependencies, missing documentation, or alterations in CPU architectures since they were first developed. 
+
+% \parhead{Aligot} is a cryptographic function identification tool developed based on Pin, a dynamic binary instrumentation framework developed by Intel. Aligot was tested with Pin 2.10 and Pin 2.12 by its developer, but unfortunately, these versions are no longer available. Consequently, we attempted to use an older version of Pin (3.22) but we were unable to execute Aligot correctly. We believe this to be due to the fact that these tool do not support and cannot be executed on recent CPU architectures.
+
+% \parhead{CryptoHunt} has been successfully executed, but we are unable to provide the complete benchmarking framework and performance metric evaluation results. CryptoHunt detects cryptographic functions in binary code through a bit-precise symbolic loop mapping approach. However, depending on the binary's size, CryptoHunt may identify up to 10,000 loops within the binary. Without additional filtering, the process of comparing each of these loops with reference loops becomes exceedingly time-consuming and infeasible.
+
+% \parhead{CryptoSearcher} is a cryptographic function detection tool developed in 2004, and was evaluated previously in \cite{xu2017cryptographic}. However, we cannot find the tool's source code or documentation about how to use this tool. We only found the cryptographic signature files such as Blowfish, RC2, RC4, RC5, RC6, CAST-256, etc. Currently, we cannot evaluate this tool due to the lack of tool's source program and its documentation.
+
+% \parhead{Kerckhoff} cannot be evaluated in this paper due to the lack of tool's source code or documentation.
+
+
+\section{Additional Tables}
+\label{app:cryptobinary-addltables}
+%\input{tab_comparativestudy}
+
+This appendix contains the complete results of all of our replication and reproduction studies.
+
+\input{ch-cryptobinary/tab_percentages}
+\input{ch-cryptobinary/tab_detection}
+%\input{tab_evaluation}
+\input{ch-cryptobinary/tab_fullevaluation}
+%\input{tab_fullevaluation_old}
