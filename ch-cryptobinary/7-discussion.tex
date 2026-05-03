@@ -19,7 +19,7 @@ We now provide a discussion backed by our evaluation results and examination of 
 
 We start by discussing the detection results of a single tool for different algorithms. We opted to evaluate 12 distinct algorithms (AES, DES, ECC, MD5, RC4, RC5, RSA, SHA-1, SHA-256, TEA, XTEA, and XXTEA) along with our microbenchmarks, various libraries, and a large-scale project.
 
-Based on our evaluation (see Table \ref{tab:cryptobinary-benchmarks}), we found that PEiD KANAL, SignSrch, and Where's Crypto can detect most algorithms we selected. This was somewhat expected as Where's Crypto is a more modern detection tool. HCD demonstrated average performance in our evaluation results.
+Based on our evaluation (see \autoref{tab:cryptobinary-benchmarks}), we found that PEiD KANAL, SignSrch, and Where's Crypto can detect most algorithms we selected. This was somewhat expected as Where's Crypto is a more modern detection tool. HCD demonstrated average performance in our evaluation results.
 %but it is the only tool that can detect ECC. 
 Nonetheless, we came across cases where tools did not detect cryptographic functions they were expected to identify, indicating potential need to enhance detection accuracy.
 
@@ -53,15 +53,13 @@ As the prevalence of applications adopting ECC continues to rise, the ongoing de
 %\emph{R3: Are some algorithms easier to detect compared to others?}
 
 % \end{figure}
-Our evaluation helps provides insights from an algorithmic perspective on how well different tools can detect the same cryptographic algorithm. In our evaluation, we test the tools' abilities to find cryptographic functions in different settings (optimization flags, compilers, etc.).  Figure \ref{fig:cryptobinary-algo_easy} shows the percentage of algorithms that can be successfully detected by a tool across all evaluation experiments that we ran.
+Our evaluation helps provides insights from an algorithmic perspective on how well different tools can detect the same cryptographic algorithm. In our evaluation, we test the tools' abilities to find cryptographic functions in different settings (optimization flags, compilers, etc.). \autoref{fig:cryptobinary-algo_easy} shows the percentage of algorithms that can be successfully detected by a tool across all evaluation experiments that we ran.
 We can see that TEA, RC5, and SHA can be successfully detected in most experiments. However, AES, and MD5 can only be found in a few experiments, with algorithms like RC4 and ECC not even being detected at all.
 
 \begin{figure}[t]
     \centering
-  \includegraphics[width=0.9\linewidth,keepaspectratio]{ch-cryptobinary/figure/algoeasy.png}
-	\vspace*{-8pt}
+  \includegraphics[width=0.95\linewidth,keepaspectratio]{ch-cryptobinary/figure/algoeasy.png}
   \caption{Detection percentage by algorithm across all tools}
-	\vspace*{-10pt}
   \label{fig:cryptobinary-algo_easy}
 \end{figure}
 
@@ -211,12 +209,12 @@ Hence, even if a detection approach can find an ideal implementation of an algor
 guarantee it can also detect all the implementation variations
 of the same algorithm. 
 %We believe it is valuable (but challenging) to be able to identify both intended implementation variations, as well as as incorrect (but close) ones.
-Our evaluations in this space are discussed in Sections \ref{subsec:cryptobinary-algo-version} and \ref{subsec:cryptobinary-algo-version1}.
+Our evaluations in this space are discussed in \autoref{subsec:cryptobinary-algo-version} and \autoref{subsec:cryptobinary-algo-version1}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \parhead{Differences in Cryptographic Functions.} There are fundamental differences in different classes of cryptographic algorithms.
-Cryptographic features (see Section \ref{sec:cryptobinary-features}) present in one algorithm may not be present in others.
+Cryptographic features (see \autoref{sec:cryptobinary-features}) present in one algorithm may not be present in others.
 For instance, the data avalanche effect~\cite{li2012cipherxray} which says that an insignificant change in the input parameters can
 make significant differences in the output, works well for identifying block ciphers. In the case of stream ciphers, there are
 no such observations like data avalanching. Tools must be designed to account for these differences if they wish to identify broad classes of algorithms.

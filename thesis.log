@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)  (format=lualatex 2024.12.5)  29 APR 2026 05:53
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)  (format=lualatex 2024.12.5)  3 MAY 2026 01:31
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/Users/fanyo/Documents/Writing/PurdueThesis/thesis.tex
@@ -1925,55 +1925,157 @@ File: upzd.fd 2001/06/04 font definitions for U/pzd.
 LaTeX Font Info:    Trying to load font information for U+psy on input line 64.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/upsy.fd
 File: upsy.fd 2001/06/04 font definitions for U/psy.
-))
-Package translations Info: No language package found. I am going to use `english' as default language. on input line 1042.
-\@quotelevel=\count692
-\@quotereset=\count693
- (./thesis.aux (./ch-front.aux) (./ch-introduction.aux) (./ch-cryptobinary.aux) (./ch-snarkprobe.aux) (./ch-greybox.aux) (./ch-summary.aux) (./ap-appendices.aux))
+)) (/usr/local/texlive/2024/texmf-dist/tex/latex/mdframed/mdframed.sty
+Package: mdframed 2013/07/01 1.9b: mdframed
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/zref/zref-abspage.sty
+Package: zref-abspage 2023-09-14 v2.35 Module abspage for zref (HO)
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/zref/zref-base.sty
+Package: zref-base 2023-09-14 v2.35 Module base for zref (HO)
+Package zref Info: New property list: main on input line 767.
+Package zref Info: New property: default on input line 768.
+Package zref Info: New property: page on input line 769.
+)
+\c@abspage=\count692
+Package zref Info: New property: abspage on input line 67.
+) (/usr/local/texlive/2024/texmf-dist/tex/latex/needspace/needspace.sty
+Package: needspace 2010/09/12 v1.3d reserve vertical space
+)
+\mdf@templength=\skip170
+\c@mdf@globalstyle@cnt=\count693
+\mdf@skipabove@length=\skip171
+\mdf@skipbelow@length=\skip172
+\mdf@leftmargin@length=\skip173
+\mdf@rightmargin@length=\skip174
+\mdf@innerleftmargin@length=\skip175
+\mdf@innerrightmargin@length=\skip176
+\mdf@innertopmargin@length=\skip177
+\mdf@innerbottommargin@length=\skip178
+\mdf@splittopskip@length=\skip179
+\mdf@splitbottomskip@length=\skip180
+\mdf@outermargin@length=\skip181
+\mdf@innermargin@length=\skip182
+\mdf@linewidth@length=\skip183
+\mdf@innerlinewidth@length=\skip184
+\mdf@middlelinewidth@length=\skip185
+\mdf@outerlinewidth@length=\skip186
+\mdf@roundcorner@length=\skip187
+\mdf@footenotedistance@length=\skip188
+\mdf@userdefinedwidth@length=\skip189
+\mdf@needspace@length=\skip190
+\mdf@frametitleaboveskip@length=\skip191
+\mdf@frametitlebelowskip@length=\skip192
+\mdf@frametitlerulewidth@length=\skip193
+\mdf@frametitleleftmargin@length=\skip194
+\mdf@frametitlerightmargin@length=\skip195
+\mdf@shadowsize@length=\skip196
+\mdf@extratopheight@length=\skip197
+\mdf@subtitleabovelinewidth@length=\skip198
+\mdf@subtitlebelowlinewidth@length=\skip199
+\mdf@subtitleaboveskip@length=\skip256
+\mdf@subtitlebelowskip@length=\skip257
+\mdf@subtitleinneraboveskip@length=\skip258
+\mdf@subtitleinnerbelowskip@length=\skip259
+\mdf@subsubtitleabovelinewidth@length=\skip260
+\mdf@subsubtitlebelowlinewidth@length=\skip261
+\mdf@subsubtitleaboveskip@length=\skip262
+\mdf@subsubtitlebelowskip@length=\skip263
+\mdf@subsubtitleinneraboveskip@length=\skip264
+\mdf@subsubtitleinnerbelowskip@length=\skip265
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/mdframed/md-frame-0.mdf
+File: md-frame-0.mdf 2013/07/01\ 1.9b: md-frame-0
+)
+\mdf@frametitlebox=\box180
+\mdf@footnotebox=\box181
+\mdf@splitbox@one=\box182
+\mdf@splitbox@two=\box183
+\mdf@splitbox@save=\box184
+\mdfsplitboxwidth=\skip266
+\mdfsplitboxtotalwidth=\skip267
+\mdfsplitboxheight=\skip268
+\mdfsplitboxdepth=\skip269
+\mdfsplitboxtotalheight=\skip270
+\mdfframetitleboxwidth=\skip271
+\mdfframetitleboxtotalwidth=\skip272
+\mdfframetitleboxheight=\skip273
+\mdfframetitleboxdepth=\skip274
+\mdfframetitleboxtotalheight=\skip275
+\mdffootnoteboxwidth=\skip276
+\mdffootnoteboxtotalwidth=\skip277
+\mdffootnoteboxheight=\skip278
+\mdffootnoteboxdepth=\skip279
+\mdffootnoteboxtotalheight=\skip280
+\mdftotallinewidth=\skip281
+\mdfboundingboxwidth=\skip282
+\mdfboundingboxtotalwidth=\skip283
+\mdfboundingboxheight=\skip284
+\mdfboundingboxdepth=\skip285
+\mdfboundingboxtotalheight=\skip286
+\mdf@freevspace@length=\skip287
+\mdf@horizontalwidthofbox@length=\skip288
+\mdf@verticalmarginwhole@length=\skip289
+\mdf@horizontalspaceofbox=\skip290
+\mdfsubtitleheight=\skip291
+\mdfsubsubtitleheight=\skip292
+\c@mdfcountframes=\count694
+
+****** mdframed patching \endmdf@trivlist
+
+****** -- success******
+
+\mdf@envdepth=\count695
+\c@mdf@env@i=\count696
+\c@mdf@env@ii=\count697
+\c@mdf@zref@counter=\count698
+Package zref Info: New property: mdf@pagevalue on input line 895.
+)
+Package translations Info: No language package found. I am going to use `english' as default language. on input line 1080.
+\@quotelevel=\count699
+\@quotereset=\count700
+ (./thesis.aux (./ch-front.aux) (./ch-introduction.aux) (./ch-cryptobinary.aux) (./ch-snarkprobe.aux) (./ap-appendices.aux))
 \openout1 = thesis.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 1042.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1042.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 1080.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1080.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 1042.
-LaTeX Font Info:    ... okay on input line 1042.
-LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 1042.
-LaTeX Font Info:    Trying to load font information for LGR+cmr on input line 1042.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 1080.
+LaTeX Font Info:    ... okay on input line 1080.
+LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 1080.
+LaTeX Font Info:    Trying to load font information for LGR+cmr on input line 1080.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/cbfonts-fd/lgrcmr.fd
 File: lgrcmr.fd 2017/07/29 v1.2 Greek European Computer Regular
 )
-LaTeX Font Info:    ... okay on input line 1042.
+LaTeX Font Info:    ... okay on input line 1080.
  (/usr/local/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count694
+\scratchcounter=\count701
 \scratchdimen=\dimen422
-\scratchbox=\box180
-\nofMPsegments=\count695
-\nofMParguments=\count696
+\scratchbox=\box185
+\nofMPsegments=\count702
+\nofMParguments=\count703
 \everyMPshowfont=\toks90
-\MPscratchCnt=\count697
+\MPscratchCnt=\count704
 \MPscratchDim=\dimen423
-\MPnumerator=\count698
-\makeMPintoPDFobject=\count699
+\MPnumerator=\count705
+\makeMPintoPDFobject=\count706
 \everyMPtoPDFconversion=\toks91
 ) (/usr/local/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1981,7 +2083,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/local/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring ON on input line 1042.
+Package hyperref Info: Link coloring ON on input line 1080.
  (./thesis.out) (./thesis.out)
 \@outlinefile=\write9
 
@@ -1989,7 +2091,7 @@ Package hyperref Info: Link coloring ON on input line 1042.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl
 File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 1042.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 1080.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
@@ -2030,7 +2132,7 @@ Package caption Info: End \AtBeginDocument code.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-Package todonotes Warning: The length marginparwidth is less than 2cm and will most likely cause issues with the appearance of inserted todonotes. The issue can be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to loading the todonotes package. on input line 1042.
+Package todonotes Warning: The length marginparwidth is less than 2cm and will most likely cause issues with the appearance of inserted todonotes. The issue can be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to loading the todonotes package. on input line 1080.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/notoccite/notoccite.sty
 Package: notoccite 2000/07/20
@@ -2049,11 +2151,11 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'thesis.bbl' found.
  (./thesis.bbl)
-Package biblatex Info: Reference section=0 on input line 1042.
-Package biblatex Info: Reference segment=0 on input line 1042.
-\c@lstlisting=\count700
+Package biblatex Info: Reference section=0 on input line 1080.
+Package biblatex Info: Reference segment=0 on input line 1080.
+\c@lstlisting=\count707
 
-Package chemgreek Info: Activating mapping `fontspec' on line 1042.
+Package chemgreek Info: Activating mapping `fontspec' on line 1080.
 
 \Etoc@tf=\read7
  (/usr/local/texlive/2024/texmf-dist/tex/latex/pdflscape/pdflscape.sty
@@ -2062,10 +2164,10 @@ Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
 Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-<graphics/gr-pu-seal-vector.pdf, id=423, 527.62581pt x 516.24864pt>
+<graphics/gr-pu-seal-vector.pdf, id=378, 527.62581pt x 516.24864pt>
 File: graphics/gr-pu-seal-vector.pdf Graphic file (type pdf)
 <use graphics/gr-pu-seal-vector.pdf>
-Package luatex.def Info: graphics/gr-pu-seal-vector.pdf  used on input line 1051.
+Package luatex.def Info: graphics/gr-pu-seal-vector.pdf  used on input line 1089.
 (luatex.def)             Requested size: 224.7766pt x 219.93448pt.
  [1
 
@@ -2075,11 +2177,11 @@ Package luatex.def Info: graphics/gr-pu-seal-vector.pdf  used on input line 1051
 File: ch-front.tex 2024-09-12 front matter chapter
  [2
 
-] [3]
+]
 \tf@toc=\write10
 
 \openout10 = thesis.toc
- [4
+ [3
 
 ]
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 73.
@@ -2127,69 +2229,65 @@ File: lgrlmr.fd 2017/07/29 v1.2 Scalable Greek Latin Modern Regular
 LaTeX Font Info:    Trying to load font information for U+wasy on input line 73.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
-) [5
+) [4
 
 ]
 Overfull \hbox (4.42165pt too wide) in paragraph at lines 73--73
  [][] []\T1/lmr/m/n/12 SNARKPROBE: AN AU-TO-MATED SE-CU-RITY ANAL-Y-SIS FRAME-WORK FOR 
  []
 
-[6] [7]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 73.
+[5] [6] (./thesis.lot
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 10.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [8] (./thesis.lot)
+))
 \tf@lot=\write11
 
 \openout11 = thesis.lot
- [9
+ [7
 
 ] (./thesis.lof)
 \tf@lof=\write12
 
 \openout12 = thesis.lof
- [10
+ [8
 
 ] (./thesis.lol)
 \tf@lol=\write13
 
 \openout13 = thesis.lol
- [11
+ [9
 
 ] (./thesis.lop)
 \tf@lop=\write14
 
 \openout14 = thesis.lop
- [12
+ [10
 
 ] (./thesis.los)
 \tf@los=\write15
 
 \openout15 = thesis.los
- [13
+ [11
 
-] [14
+] [12
 
-] [15
+] [13
 
 ]
 Underfull \hbox (badness 7981) in paragraph at lines 177--177
 []|\T1/lmr/m/n/12 Zero-Knowledge Suc-cinct Non-Interactive Ar-gu-ments of
  []
 
-[16
+[14
 
-
-Missing character: There is no ﬁ (U+FB01) in font ec-lmr12!
-Missing character: There is no ’ (U+2019) in font ec-lmr12!
-Missing character: There is no ’ (U+2019) in font ec-lmr12!
-]) [17
+]) [15
 
 ]
 \openout2 = ch-introduction.aux
  (./ch-introduction.tex
 Chapter 1.
-) [18
+) [16
 
 
 
@@ -2205,386 +2303,220 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 4.
 (./ch-cryptobinary/1-introduction.tex
-<ch-cryptobinary/figure/Crypto_timeline.png, id=824, 1217.54875pt x 323.2075pt>
+<ch-cryptobinary/figure/Crypto_timeline.png, id=754, 1217.54875pt x 323.2075pt>
 File: ch-cryptobinary/figure/Crypto_timeline.png Graphic file (type png)
 <use ch-cryptobinary/figure/Crypto_timeline.png>
-Package luatex.def Info: ch-cryptobinary/figure/Crypto_timeline.png  used on input line 33.
-(luatex.def)             Requested size: 469.75502pt x 124.69911pt.
- [19
+Package luatex.def Info: ch-cryptobinary/figure/Crypto_timeline.png  used on input line 34.
+(luatex.def)             Requested size: 446.26582pt x 118.4654pt.
+ [17
 
 
 
 
-] [20<./ch-cryptobinary/figure/Crypto_timeline.png>]) (./ch-cryptobinary/2-background.tex [21]
-<ch-cryptobinary/figure/timeline.png, id=861, 1601.985pt x 430.60875pt>
+] [18<./ch-cryptobinary/figure/Crypto_timeline.png>]) (./ch-cryptobinary/2-background.tex [19]
+<ch-cryptobinary/figure/timeline.png, id=791, 1601.985pt x 430.60875pt>
 File: ch-cryptobinary/figure/timeline.png Graphic file (type png)
 <use ch-cryptobinary/figure/timeline.png>
-Package luatex.def Info: ch-cryptobinary/figure/timeline.png  used on input line 11.
-(luatex.def)             Requested size: 469.75502pt x 126.26628pt.
- [22<./ch-cryptobinary/figure/timeline.png>] [23] [24] [25]) (./ch-cryptobinary/3-overview.tex [26] [27]
-<ch-cryptobinary/figure/algo_percentage.png, id=998, 517.935pt x 199.728pt>
+Package luatex.def Info: ch-cryptobinary/figure/timeline.png  used on input line 12.
+(luatex.def)             Requested size: 446.26582pt x 119.95198pt.
+ [20<./ch-cryptobinary/figure/timeline.png>] [21] [22] [23]) (./ch-cryptobinary/3-overview.tex [24]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 40.
+
+[25] [26]
+<ch-cryptobinary/figure/algo_percentage.png, id=935, 517.935pt x 199.728pt>
 File: ch-cryptobinary/figure/algo_percentage.png Graphic file (type png)
 <use ch-cryptobinary/figure/algo_percentage.png>
-Package luatex.def Info: ch-cryptobinary/figure/algo_percentage.png  used on input line 45.
-(luatex.def)             Requested size: 469.75502pt x 181.15541pt.
- [28<./ch-cryptobinary/figure/algo_percentage.png>]
-Overfull \hbox (44.06226pt too wide) in paragraph at lines 121--121
- [][] 
- []
-
-
-LaTeX Warning: Float too large for page by 7.83322pt on input line 122.
-
-) (./ch-cryptobinary/4-framework.tex [29] [30
-Missing character: There is no ’ (U+2019) in font ec-lmr10!
-]
-Overfull \vbox (5.54744pt too high) has occurred while \output is active []
-
- [31] [32]
-Underfull \hbox (badness 10000) in paragraph at lines 154--154
-[][][][][][]$\OMS/lmsy/m/n/10 "$[][][][][][][][][][][][][][]\T1/lmr/m/n/10 All bench-marks and met-rics we eval-u-ate are avail-able at https://github.com/BARC-
+Package luatex.def Info: ch-cryptobinary/figure/algo_percentage.png  used on input line 97.
+(luatex.def)             Requested size: 446.26582pt x 172.09795pt.
+ [27<./ch-cryptobinary/figure/algo_percentage.png>]) (./ch-cryptobinary/4-framework.tex [28] [29] [30] [31] [32]
+Underfull \hbox (badness 4060) in paragraph at lines 168--168
+[][][][][][]$\OMS/lmsy/m/n/10 "$[][][][][][][][][][][][][][]\T1/lmr/m/n/10 All bench-marks and met-rics we eval-u-ate are avail-able at [][][][]$https://github.com/BARC-[]Purdue/
  []
 
 ) (./ch-cryptobinary/5-reproduction.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[33] [34
-Missing character: There is no ’ (U+2019) in font ec-lmr12!
-]) (./ch-cryptobinary/6-replication.tex [35]
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 70.
-
-[36] [37] [38]
-<ch-cryptobinary/figure/evaluate_compiler_new.png, id=1113, 595.023pt x 241.776pt>
+[33]) (./ch-cryptobinary/6-replication.tex [34] (./ch-cryptobinary/tab_fullevaluation.tex) [35] [36] [37] [38] [39]
+<ch-cryptobinary/figure/evaluate_compiler_new.png, id=1074, 595.023pt x 241.776pt>
 File: ch-cryptobinary/figure/evaluate_compiler_new.png Graphic file (type png)
 <use ch-cryptobinary/figure/evaluate_compiler_new.png>
-Package luatex.def Info: ch-cryptobinary/figure/evaluate_compiler_new.png  used on input line 188.
-(luatex.def)             Requested size: 375.80544pt x 152.70334pt.
- [39
-Missing character: There is no ’ (U+2019) in font ec-lmr12!
-<./ch-cryptobinary/figure/evaluate_compiler_new.png>] [40] [41] [42] [43]) (./ch-cryptobinary/7-discussion.tex [44] [45]
-<ch-cryptobinary/figure/algoeasy.png, id=1185, 645.393pt x 232.797pt>
+Package luatex.def Info: ch-cryptobinary/figure/evaluate_compiler_new.png  used on input line 223.
+(luatex.def)             Requested size: 446.26582pt x 181.33522pt.
+ [40] [41<./ch-cryptobinary/figure/evaluate_compiler_new.png>] [42] [43]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[44]) (./ch-cryptobinary/7-discussion.tex [45] [46]
+<ch-cryptobinary/figure/algoeasy.png, id=1144, 645.393pt x 232.797pt>
 File: ch-cryptobinary/figure/algoeasy.png Graphic file (type png)
 <use ch-cryptobinary/figure/algoeasy.png>
 Package luatex.def Info: ch-cryptobinary/figure/algoeasy.png  used on input line 61.
-(luatex.def)             Requested size: 422.77664pt x 152.49911pt.
- [46<./ch-cryptobinary/figure/algoeasy.png>] [47] [48]) (./ch-cryptobinary/8-conclusion.tex)) [49] [50]
+(luatex.def)             Requested size: 446.26582pt x 160.97466pt.
+ [47] [48<./ch-cryptobinary/figure/algoeasy.png>] [49] [50]) (./ch-cryptobinary/8-conclusion.tex)) [51]
 \openout2 = ch-snarkprobe.aux
  (./ch-snarkprobe.tex
 Chapter 3.
-(./ch-snarkprobe/1-introduction.tex [51
+(./ch-snarkprobe/1-introduction.tex [52
 
 
 
 
-] [52] [53] [54]) (./ch-snarkprobe/2-background.tex [55] [56]
+] [53] [54] [55]) (./ch-snarkprobe/2-background.tex [56] [57]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 54.
- [57] [58]) (./ch-snarkprobe/3-overview.tex [59]
-<ch-snarkprobe/figure/workflow_cc.png, id=1427, 575.094pt x 549.909pt>
+ [58] [59]) (./ch-snarkprobe/3-overview.tex [60]
+<ch-snarkprobe/figure/workflow_cc.png, id=1389, 575.094pt x 549.909pt>
 File: ch-snarkprobe/figure/workflow_cc.png Graphic file (type png)
 <use ch-snarkprobe/figure/workflow_cc.png>
 Package luatex.def Info: ch-snarkprobe/figure/workflow_cc.png  used on input line 54.
 (luatex.def)             Requested size: 151.15309pt x 144.54pt.
-<ch-snarkprobe/figure/workflow_sf.png, id=1428, 1203.405pt x 549.909pt>
+<ch-snarkprobe/figure/workflow_sf.png, id=1390, 1203.405pt x 549.909pt>
 File: ch-snarkprobe/figure/workflow_sf.png Graphic file (type png)
 <use ch-snarkprobe/figure/workflow_sf.png>
 Package luatex.def Info: ch-snarkprobe/figure/workflow_sf.png  used on input line 61.
 (luatex.def)             Requested size: 316.29333pt x 144.54pt.
- [60<./ch-snarkprobe/figure/workflow_cc.png><./ch-snarkprobe/figure/workflow_sf.png>] [61]) (./ch-snarkprobe/4-design-impl.tex [62] [63] [64] [65] [66] [67] [68] [69] [70] [71]) (./ch-snarkprobe/6-evaluation.tex [72] [73]
-<ch-snarkprobe/figure/time.jpg, id=1587, 492.75pt x 286.89pt>
-File: ch-snarkprobe/figure/time.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/time.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/time.jpg  used on input line 55.
-(luatex.def)             Requested size: 375.80544pt x 218.81348pt.
- [74] [75<./ch-snarkprobe/figure/time.jpg>]
-<ch-snarkprobe/figure/coverage.jpg, id=1605, 489.684pt x 316.017pt>
-File: ch-snarkprobe/figure/coverage.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/coverage.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/coverage.jpg  used on input line 120.
-(luatex.def)             Requested size: 328.82707pt x 212.2173pt.
- [76<./ch-snarkprobe/figure/coverage.jpg>]) (./ch-snarkprobe/7-case-study.tex [77]
-Underfull \hbox (badness 10000) in paragraph at lines 48--48
-
+ [61<./ch-snarkprobe/figure/workflow_cc.png><./ch-snarkprobe/figure/workflow_sf.png>] [62]) (./ch-snarkprobe/4-design-impl.tex [63] (/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/02/21 1.10 listings language file
+)
+Package hyperref Info: bookmark level for unknown ZZlisting defaults to 0 on input line 70.
+ [64]
+Overfull \hbox (1.4253pt too wide) in paragraph at lines 112--113
+[][] 
  []
 
 
-LaTeX Warning: Float too large for page by 7.83322pt on input line 49.
+Overfull \hbox (1.4253pt too wide) in paragraph at lines 133--134
+[][] 
+ []
 
-[78] [79]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 62.
- [80] [81]
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 113.
+
+Overfull \hbox (1.4253pt too wide) in paragraph at lines 171--172
+[][] 
+ []
+
+
+Overfull \hbox (1.4253pt too wide) in paragraph at lines 224--225
+[][] 
+ []
+
+
+Overfull \hbox (1.4253pt too wide) in paragraph at lines 264--265
+[][] 
+ []
+
+Package hyperref Info: bookmark level for unknown protocol defaults to 0 on input line 269.
+[65] [66] [67] [68] [69] [70] [71] [72] [73]
+<ch-snarkprobe/figure/prettyprint-a.jpg, id=1567, 711.65875pt x 268.00125pt>
+File: ch-snarkprobe/figure/prettyprint-a.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/prettyprint-a.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/prettyprint-a.jpg  used on input line 639.
+(luatex.def)             Requested size: 422.77664pt x 159.21121pt.
+<ch-snarkprobe/figure/prettyprint-b.jpg, id=1568, 711.65875pt x 53.19875pt>
+File: ch-snarkprobe/figure/prettyprint-b.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/prettyprint-b.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/prettyprint-b.jpg  used on input line 645.
+(luatex.def)             Requested size: 422.77664pt x 31.60371pt.
+<ch-snarkprobe/figure/prettyprint-c.jpg, id=1569, 711.65875pt x 90.3375pt>
+File: ch-snarkprobe/figure/prettyprint-c.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/prettyprint-c.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/prettyprint-c.jpg  used on input line 651.
+(luatex.def)             Requested size: 422.77664pt x 53.66669pt.
+<ch-snarkprobe/figure/prettyprint-d.jpg, id=1570, 711.65875pt x 27.10126pt>
+File: ch-snarkprobe/figure/prettyprint-d.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/prettyprint-d.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/prettyprint-d.jpg  used on input line 657.
+(luatex.def)             Requested size: 422.77664pt x 16.1pt.
+ [74] [75<./ch-snarkprobe/figure/prettyprint-a.jpg><./ch-snarkprobe/figure/prettyprint-b.jpg><./ch-snarkprobe/figure/prettyprint-c.jpg><./ch-snarkprobe/figure/prettyprint-d.jpg>]) (./ch-snarkprobe/6-evaluation.tex [76] [77]
+<ch-snarkprobe/figure/time.jpg, id=1611, 492.75pt x 286.89pt>
+File: ch-snarkprobe/figure/time.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/time.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/time.jpg  used on input line 54.
+(luatex.def)             Requested size: 399.29463pt x 232.48904pt.
+ [78] [79<./ch-snarkprobe/figure/time.jpg>]
+<ch-snarkprobe/figure/coverage.jpg, id=1629, 489.684pt x 316.017pt>
+File: ch-snarkprobe/figure/coverage.jpg Graphic file (type jpg)
+<use ch-snarkprobe/figure/coverage.jpg>
+Package luatex.def Info: ch-snarkprobe/figure/coverage.jpg  used on input line 116.
+(luatex.def)             Requested size: 328.82707pt x 212.2173pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[80]) (./ch-snarkprobe/7-case-study.tex [81<./ch-snarkprobe/figure/coverage.jpg>] [82] [83] [84] [85] [86]
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 154.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [82] [83]) (./ch-snarkprobe/8-conclusion.tex)) [84]
-\openout2 = ch-greybox.aux
- (./ch-greybox.tex
-Chapter 4.
-) [85
-
-
-
-
-]
-\openout2 = ch-summary.aux
- (./ch-summary.tex
-Chapter 5.
-[86
-
-
-
-
-]
-Chapter 6.
-) [87
-
-]
+) [87] [88] [89]) (./ch-snarkprobe/8-conclusion.tex)) [90]
 changed \interlinepenalty  to 10000
 Code for \ZZbibstyle 'ieee' found.
-[88
+[91
 
 
 
-] [89] [90] [91]
-Overfull \hbox (2.47026pt too wide) in paragraph at lines 1117--1117
+] [92] [93] [94]
+Overfull \hbox (2.47026pt too wide) in paragraph at lines 1155--1155
 []\T1/lmr/m/n/12 NSA, \T1/lmr/m/it/12 Patch crit-i-cal cryp-to-graphic vul-ner-a-bil-ity in mi-crosoft win-dows clients and servers\T1/lmr/m/n/12 ,
  []
 
-[92]
-Overfull \hbox (0.31647pt too wide) in paragraph at lines 1117--1117
+[95]
+Overfull \hbox (0.31647pt too wide) in paragraph at lines 1155--1155
 []\T1/lmr/m/n/12 P. Gode-froid, H. Pe-leg, and R. Singh, ``Learn&fuzz: Ma-chine learn-ing for in-put fuzzing,''
  []
 
-[93] [94]
-Overfull \hbox (12.86534pt too wide) in paragraph at lines 1117--1117
+[96] [97]
+Overfull \hbox (12.86534pt too wide) in paragraph at lines 1155--1155
 []\T1/lmr/m/n/12 D. Kupser, C. Mainka, J. Schwenk, and J. So-morovsky, ``How to break $\OMS/lmsy/m/n/12 f$\T1/lmr/m/n/12 xml$\OMS/lmsy/m/n/12 g$ \T1/lmr/m/n/12 encryption--
  []
 
-[95]
+[98]
 \openout2 = ap-appendices.aux
  (./ap-appendices.tex
 Appendices A.
-(./ch-cryptobinary/9-appendix.tex [96
+(./ch-cryptobinary/9-appendix.tex [99
 
 
-
-Missing character: There is no – (U+2013) in font ec-lmr12!
-] [97] [98] [99] [100] (./ch-cryptobinary/tab_percentages.tex) (./ch-cryptobinary/tab_detection.tex
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1.
-
-) (./ch-cryptobinary/tab_fullevaluation.tex
-Overfull \hbox (32.16887pt too wide) in paragraph at lines 8--100
- [] 
- []
-
-)) [101] [102] [103
-Missing character: There is no ’ (U+2019) in font ec-lmr12!
-] [104]
+] [100] [101] [102]) [103]
 Appendices B.
-(./ch-snarkprobe/9-appendix.tex [105
+(./ch-snarkprobe/9-appendix.tex [104
 
 ]
-
-Package enumitem Warning: Negative labelwidth. This does not make much
-(enumitem)                sense, on input line 72.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Overfull \hbox (4.24263pt too wide) in paragraph at lines 72--72
-[]\T1/lmtt/m/n/6 A set of equations $\OML/lmm/m/it/6 E[]$ \T1/lmtt/m/n/6 converted from R1CS gates in size $\OML/lmm/m/it/6 q$ \T1/lmtt/m/n/6 where $\OT1/lmr/m/n/6 e[] \OMS/lmsy/m/n/6 2 \OML/lmm/m/it/6 E[]$
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Overfull \hbox (1.04988pt too wide) in paragraph at lines 72--72
-[]$\OML/lmm/m/it/6 k$ \T1/lmtt/m/n/6 public variables $\OML/lmm/m/it/6 y[]$ \T1/lmtt/m/n/6 in $\OML/lmm/m/it/6 E[]$ \T1/lmtt/m/n/6 and $\OML/lmm/m/it/6 k$ \T1/lmtt/m/n/6 public variables $\OML/lmm/m/it/6 y[]$ \T1/lmtt/m/n/6 in $\OML/lmm/m/it/6 E[]$ \T1/lmtt/m/n/6 where $\OT1/lmr/m/n/6 i \OMS/lmsy/m/n/6 2
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-
- []
-
-
-Overfull \hbox (9.29999pt too wide) in paragraph at lines 72--74
-[]|[]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--105
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--105
-
- []
-
-
-Overfull \hbox (9.29999pt too wide) in paragraph at lines 105--106
-[]|[]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-
- []
-
-
-Overfull \hbox (9.29999pt too wide) in paragraph at lines 130--132
-[]|[]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 159--159
-
- []
-
-
-Overfull \hbox (9.29999pt too wide) in paragraph at lines 159--161
-[]|[]| 
- []
-
-
-Overfull \hbox (53.99998pt too wide) in paragraph at lines 52--163
-[]| [] 
- []
-
-[106] [107]
-Overfull \vbox (92.90404pt too high) has occurred while \output is active []
-
- [108] (/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2024/02/21 1.10 listings language file
-) [109]
-<ch-snarkprobe/figure/domain-a.jpg, id=2004, 451.578pt x 77.088pt>
+<ch-snarkprobe/figure/domain-a.jpg, id=1935, 451.578pt x 77.088pt>
 File: ch-snarkprobe/figure/domain-a.jpg Graphic file (type jpg)
 <use ch-snarkprobe/figure/domain-a.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/domain-a.jpg  used on input line 259.
+Package luatex.def Info: ch-snarkprobe/figure/domain-a.jpg  used on input line 51.
 (luatex.def)             Requested size: 144.54pt x 24.67453pt.
-<ch-snarkprobe/figure/domain-b.jpg, id=2005, 453.549pt x 77.088pt>
+<ch-snarkprobe/figure/domain-b.jpg, id=1936, 453.549pt x 77.088pt>
 File: ch-snarkprobe/figure/domain-b.jpg Graphic file (type jpg)
 <use ch-snarkprobe/figure/domain-b.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/domain-b.jpg  used on input line 267.
+Package luatex.def Info: ch-snarkprobe/figure/domain-b.jpg  used on input line 59.
 (luatex.def)             Requested size: 144.54pt x 24.56631pt.
-<ch-snarkprobe/figure/domain-c.jpg, id=2006, 451.578pt x 77.088pt>
+<ch-snarkprobe/figure/domain-c.jpg, id=1937, 451.578pt x 77.088pt>
 File: ch-snarkprobe/figure/domain-c.jpg Graphic file (type jpg)
 <use ch-snarkprobe/figure/domain-c.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/domain-c.jpg  used on input line 273.
+Package luatex.def Info: ch-snarkprobe/figure/domain-c.jpg  used on input line 65.
 (luatex.def)             Requested size: 144.54pt x 24.67453pt.
 
-Underfull \hbox (badness 1616) in paragraph at lines 275--275
+Underfull \hbox (badness 1616) in paragraph at lines 67--67
 []\T1/lmr/m/n/10.95 (c) |R1CS Gates Has Gap Be-tween
  []
 
-<ch-snarkprobe/figure/domain-d.jpg, id=2007, 451.578pt x 77.088pt>
+<ch-snarkprobe/figure/domain-d.jpg, id=1938, 451.578pt x 77.088pt>
 File: ch-snarkprobe/figure/domain-d.jpg Graphic file (type jpg)
 <use ch-snarkprobe/figure/domain-d.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/domain-d.jpg  used on input line 280.
+Package luatex.def Info: ch-snarkprobe/figure/domain-d.jpg  used on input line 72.
 (luatex.def)             Requested size: 144.54pt x 24.67453pt.
-[110]
-<ch-snarkprobe/figure/prettyprint-a.jpg, id=2016, 711.65875pt x 268.00125pt>
-File: ch-snarkprobe/figure/prettyprint-a.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/prettyprint-a.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/prettyprint-a.jpg  used on input line 362.
-(luatex.def)             Requested size: 422.77664pt x 159.21121pt.
-<ch-snarkprobe/figure/prettyprint-b.jpg, id=2017, 711.65875pt x 53.19875pt>
-File: ch-snarkprobe/figure/prettyprint-b.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/prettyprint-b.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/prettyprint-b.jpg  used on input line 368.
-(luatex.def)             Requested size: 422.77664pt x 31.60371pt.
-<ch-snarkprobe/figure/prettyprint-c.jpg, id=2018, 711.65875pt x 90.3375pt>
-File: ch-snarkprobe/figure/prettyprint-c.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/prettyprint-c.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/prettyprint-c.jpg  used on input line 374.
-(luatex.def)             Requested size: 422.77664pt x 53.66669pt.
-<ch-snarkprobe/figure/prettyprint-d.jpg, id=2019, 711.65875pt x 27.10126pt>
-File: ch-snarkprobe/figure/prettyprint-d.jpg Graphic file (type jpg)
-<use ch-snarkprobe/figure/prettyprint-d.jpg>
-Package luatex.def Info: ch-snarkprobe/figure/prettyprint-d.jpg  used on input line 380.
-(luatex.def)             Requested size: 422.77664pt x 16.1pt.
- [111<./ch-snarkprobe/figure/domain-a.jpg><./ch-snarkprobe/figure/domain-b.jpg><./ch-snarkprobe/figure/domain-c.jpg><./ch-snarkprobe/figure/domain-d.jpg>] [112<./ch-snarkprobe/figure/prettyprint-a.jpg><./ch-snarkprobe/figure/prettyprint-b.jpg><./ch-snarkprobe/figure/prettyprint-c.jpg><./ch-snarkprobe/figure/prettyprint-d.jpg>])) (/usr/local/texlive/2024/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
+)) (/usr/local/texlive/2024/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (/usr/local/texlive/2024/texmf-dist/tex/generic/stringenc/se-utf32be.def
 File: se-utf32be.def 2019/11/29 v1.12 stringenc: UTF-32BE
-) [113] (./thesis.ind)
+) [105<./ch-snarkprobe/figure/domain-a.jpg><./ch-snarkprobe/figure/domain-b.jpg><./ch-snarkprobe/figure/domain-c.jpg><./ch-snarkprobe/figure/domain-d.jpg>] (./thesis.ind)
 \tf@thm=\write16
 
 \openout16 = thesis.thm
- (./thesis.aux (./ch-front.aux) (./ch-introduction.aux) (./ch-cryptobinary.aux) (./ch-snarkprobe.aux) (./ch-greybox.aux) (./ch-summary.aux) (./ap-appendices.aux))
+ (./thesis.aux (./ch-front.aux) (./ch-introduction.aux) (./ch-cryptobinary.aux) (./ch-snarkprobe.aux) (./ap-appendices.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -2810,6 +2742,11 @@ makecell.sty    2009/08/03 V0.1e Managing of Tab Column Heads and Cells
   pifont.sty    2020/03/25 PSNFSS-v9.3 Pi font support (SPQR) 
     upzd.fd    2001/06/04 font definitions for U/pzd.
     upsy.fd    2001/06/04 font definitions for U/psy.
+mdframed.sty    2013/07/01 1.9b: mdframed
+zref-abspage.sty    2023-09-14 v2.35 Module abspage for zref (HO)
+zref-base.sty    2023-09-14 v2.35 Module base for zref (HO)
+needspace.sty    2010/09/12 v1.3d reserve vertical space
+md-frame-0.mdf    2013/07/01\ 1.9b: md-frame-0
   ts1cmr.fd    2023/04/13 v2.5m Standard LaTeX font definitions
   lgrcmr.fd    2017/07/29 v1.2 Greek European Computer Regular
 supp-pdf.mkii
@@ -2847,6 +2784,7 @@ ch-cryptobinary/figure/algo_percentage.png
 ch-cryptobinary/4-framework.tex
 ch-cryptobinary/5-reproduction.tex
 ch-cryptobinary/6-replication.tex
+ch-cryptobinary/tab_fullevaluation.tex
 ch-cryptobinary/figure/evaluate_compiler_new.png
 ch-cryptobinary/7-discussion.tex
 ch-cryptobinary/figure/algoeasy.png
@@ -2858,87 +2796,82 @@ ch-snarkprobe/3-overview.tex
 ch-snarkprobe/figure/workflow_cc.png
 ch-snarkprobe/figure/workflow_sf.png
 ch-snarkprobe/4-design-impl.tex
+lstlang1.sty    2024/02/21 1.10 listings language file
+ch-snarkprobe/figure/prettyprint-a.jpg
+ch-snarkprobe/figure/prettyprint-b.jpg
+ch-snarkprobe/figure/prettyprint-c.jpg
+ch-snarkprobe/figure/prettyprint-d.jpg
 ch-snarkprobe/6-evaluation.tex
 ch-snarkprobe/figure/time.jpg
 ch-snarkprobe/figure/coverage.jpg
 ch-snarkprobe/7-case-study.tex
   t1lmss.fd    2015/05/01 v1.6.1 Font defs for Latin Modern
 ch-snarkprobe/8-conclusion.tex
-ch-greybox.tex
-ch-summary.tex
 ap-appendices.tex
 ch-cryptobinary/9-appendix.tex
-ch-cryptobinary/tab_percentages.tex
-ch-cryptobinary/tab_detection.tex
-ch-cryptobinary/tab_fullevaluation.tex
 ch-snarkprobe/9-appendix.tex
-lstlang1.sty    2024/02/21 1.10 listings language file
 ch-snarkprobe/figure/domain-a.jpg
 ch-snarkprobe/figure/domain-b.jpg
 ch-snarkprobe/figure/domain-c.jpg
 ch-snarkprobe/figure/domain-d.jpg
-ch-snarkprobe/figure/prettyprint-a.jpg
-ch-snarkprobe/figure/prettyprint-b.jpg
-ch-snarkprobe/figure/prettyprint-c.jpg
-ch-snarkprobe/figure/prettyprint-d.jpg
 se-pdfdoc.def    2019/11/29 v1.12 stringenc: PDFDocEncoding
 se-utf32be.def    2019/11/29 v1.12 stringenc: UTF-32BE
   thesis.ind
  ***********
 
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: E04B216E68613829B506200007CFEC17;17874.
+(rerunfilecheck)             Checksum: 5EB97CFABB4C26B584E103A5E7AF50DC;15172.
 Package logreq Info: Writing requests to 'thesis.run.xml'.
 
 \openout1 = thesis.run.xml
 )
 
 Here is how much of LuaTeX's memory you used:
- 83704 strings out of 476447
- 6940529,4921788 words of node,token memory allocated
- 1850 words of node memory still in use:
-   25 hlist, 2 vlist, 10 rule, 21 glue, 4 kern, 1 glyph, 107 attribute, 115 glue_spec, 107 attribute_list, 6 write, 16 pdf_literal, 2 pdf_dest, 21 pdf_action, 16 pdf_colorstack nodes
-   avail lists: 1:17,2:439090,3:435131,4:450,5:1505,6:141,7:233633,8:122,9:139035,10:29,11:648
- 103304 multiletter control sequences out of 65536+600000
- 133 fonts using 9228727 bytes
- 111i,20n,110p,1574b,3644s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84372 strings out of 476447
+ 8675542,4921788 words of node,token memory allocated
+ 2098 words of node memory still in use:
+   25 hlist, 2 vlist, 10 rule, 22 glue, 4 kern, 1 glyph, 114 attribute, 154 glue_spec, 114 attribute_list, 6 write, 16 pdf_literal, 2 pdf_dest, 24 pdf_action, 16 pdf_colorstack nodes
+   avail lists: 1:19,2:434598,3:580168,4:670,5:6382,6:180,7:300875,8:110,9:180096,10:29,11:789
+ 103994 multiletter control sequences out of 65536+600000
+ 122 fonts using 8529375 bytes
+ 111i,20n,110p,1577b,3648s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.122'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.178'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.120'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.176'
+
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.164'
+
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.152'
+
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.147'
 
 warning  (pdf backend): unreferenced destination with name 'Hfootnote.110'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.101'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.108'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.96'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.91'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.94'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.88'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.92'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.86'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.75'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.83'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.72'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.57'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.70'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.52'
 
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.67'
-
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.43'
-
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.38'
-
-warning  (pdf backend): unreferenced destination with name 'Hfootnote.35'
+warning  (pdf backend): unreferenced destination with name 'Hfootnote.49'
 
 warning  (pdf backend): unreferenced destination with name 'Hfootnote.18'
 
 warning  (pdf backend): unreferenced destination with name 'Hfootnote.16'
-{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb>
-Output written on thesis.pdf (113 pages, 3746182 bytes).
+{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtt12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb>
+Output written on thesis.pdf (105 pages, 3708448 bytes).
 
-PDF statistics: 2160 PDF objects out of 2487 (max. 8388607)
- 1584 compressed objects within 16 object streams
- 447 named destinations out of 1000 (max. 131072)
- 977 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 2062 PDF objects out of 2073 (max. 8388607)
+ 1520 compressed objects within 16 object streams
+ 446 named destinations out of 1000 (max. 131072)
+ 889 words of extra memory for PDF output out of 10000 (max. 100000000)
 

@@ -41,7 +41,7 @@ We also evaluated \tool's ability to detect potential inconsistencies or differe
 While we did not find any new exploitable errors, we did find a number of issues across the various libraries that we consider to be potentially unsafe or that might require special care by a developer to navigate correctly.
 
 % \parhead{Our contributions.} In this paper we make the following contributions:
-\subsection{Our contributions}
+\subsection{Our Contributions}
 In this paper we make the following contributions:
 
 %\vspace*{-5pt}
@@ -49,14 +49,14 @@ In this paper we make the following contributions:
     \setlength{\itemsep}{0pt}
     \setlength{\parskip}{0pt}
 		\item We design \tool, a tool that can automatically check for potential software errors and cryptographic logic errors, as well as for consistency in the implemented proof statement, in R1CS-based zkSNARK libraries.
-		\item We implement and build \tool\footnote{https://github.com/BARC-Purdue/SNARKProbe} for two zkSNARK protocols, \pinocchio~\cite{parno2013pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}, to demonstrate its flexibility and extensibility.
+		\item We implement and build \tool\footnote{\url{https://github.com/BARC-Purdue/SNARKProbe}} for two zkSNARK protocols, \pinocchio~\cite{parno2013pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}, to demonstrate its flexibility and extensibility.
 		\item To the best of our knowledge, we are the first to explore applying fuzzing and other analysis techniques to zkSNARKs specifically.
 	  \item We evaluate the performance of \tool in an extensive set of experiments, demonstrating its acceptable performance for real world applications.
 		\item We demonstrate and discuss \tool's ability to \emph{automatically} catch different types of errors in \zksnark libraries, finding seven inconsistencies and successfully locating a prior CVE.
 \end{itemize}
 
 \subsection{Chapter Organization}
-In Section~\ref{sec:snarkprobe-background}, we discuss the necessary background and related work.  In Section~\ref{sec:snarkprobe-overview}, we provide a brief overview of \tool, as well as its intended use cases.  In Section~\ref{sec:snarkprobe-design}, we introduce the high level design and goals for each component of our tool with the concrete tools and techniques that allow us to realize these design goals.  In Section~\ref{sec:snarkprobe-evaluation}, we evaluate the performance of \tool, and in Section~\ref{sec:snarkprobe-errorcatching} we discuss its ability to detect known errors.  Finally, we conclude in Section~\ref{sec:snarkprobe-conclusion}.
+In \autoref{sec:snarkprobe-background}, we discuss the necessary background and related work.  In \autoref{sec:snarkprobe-overview}, we provide a brief overview of \tool, as well as its intended use cases.  In \autoref{sec:snarkprobe-design}, we introduce the high level design and goals for each component of our tool with the concrete tools and techniques that allow us to realize these design goals.  In \autoref{sec:snarkprobe-evaluation}, we evaluate the performance of \tool, and in \autoref{sec:snarkprobe-errorcatching} we discuss its ability to detect known errors.  Finally, we conclude in \autoref{sec:snarkprobe-conclusion}.
 
 \vspace{1em}
 \parhead{Possible ethical considerations.}

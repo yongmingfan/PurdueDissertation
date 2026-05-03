@@ -68,7 +68,6 @@ and \item Security engineers that want to automatically scan a library/applicati
 
 \caption{Workflow of \tool. White boxes represent subcomponents universal for all zkSNARK libraries, forward diagonal stripes represent those designed for a specific library, and backward diagonal stripes represent those designed for a specific programming language.}
 \label{fig:snarkprobe}
-\vspace{-12pt}
 \end{figure}
 
 
@@ -80,10 +79,10 @@ Recall that at a high level, a \zksnark proof is generated in two main phases.  
 \textit{R1CS} is a specific form of this that we focus on in this work.  Second (\textit{\proofgen}), a \zksnark library takes the circuit (R1CS) as input and produces a proving key, verification key, and a \textit{proof}.
 
 
-The first step verifies the consistency of a user-specified set of proof statement equations with the actual R1CS matrix used in the application, to ensure that the \circuitgen process generates the same proof as the developer states. The \ConstraintChecker uses an SMT solver to compare the input values, output values, domain, and range of the given statement equations with R1CS matrix to find any errors in the conversion. Figure \ref{subfig:snarkprobe-workflow_cc} shows the internal steps of the \ConstraintChecker, which we discuss in detail in Section~\ref{subsec:snarkprobe-constraintchecker}.
+The first step verifies the consistency of a user-specified set of proof statement equations with the actual R1CS matrix used in the application, to ensure that the \circuitgen process generates the same proof as the developer states. The \ConstraintChecker uses an SMT solver to compare the input values, output values, domain, and range of the given statement equations with R1CS matrix to find any errors in the conversion. \autoref{subfig:snarkprobe-workflow_cc} shows the internal steps of the \ConstraintChecker, which we discuss in detail in \autoref{subsec:snarkprobe-constraintchecker}.
 
 
-The second step checks the correctness of the library and \proofgen process. Figure \ref{subfig:snarkprobe-workflow_sf} shows the steps of \SnarkFuzzer, which we discuss in detail in Section~\ref{subsec:snarkprobe-snarkfuzzer}.
+The second step checks the correctness of the library and \proofgen process. \autoref{subfig:snarkprobe-workflow_sf} shows the steps of \SnarkFuzzer, which we discuss in detail in \autoref{subsec:snarkprobe-snarkfuzzer}.
 %%\fanyo{The \framework can evaluate the correctness of \zksnark library implementation.} 
 First, the \inputgenerator produces an R1CS matrix (i.e., proof) using a variety of fuzzing techniques and compiles this into an executable proof program with the selected library, which serves as the input for the \branchmodel. Then, the \branchmodel investigates the visitation status for each branch during execution and provides feedback to the \inputgenerator to determine if another input is needed. This coverage feedback fuzzing helps improve the coverage rate of \SnarkFuzzer, which improves the chance of catching errors in the target library. Finally, the \valuemodel re-evaluates the protocol calculations to detect any potential cryptographic logic errors and looks for inconsistencies caused by unexpected value changes or implementation errors.
 %%\fanyo{Since in the dynamic analysis, a single \framework evaluation cannot cover the entire library implementation. The \SnarkFuzzer will generates extra input seeds to execute multiple \framework check until the entire library has been fully evaluated.}

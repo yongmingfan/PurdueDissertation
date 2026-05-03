@@ -2,7 +2,7 @@
 \label{sec:snarkprobe-errorcatching}
 
 Our second set of evaluations demonstrates \tool's ability to \emph{automatically} catch different types of errors in \zksnark libraries.  We test \tool on \libsnark, \bellman, \arkworks, and \texttt{playsnark}, as well as on the circuit generator \circom.  Additionally, we show how \tool would have caught a previous CVE in the \zksnark component of Zcash, a popular privacy-preserving cryptocurrency.  In total, \tool detected seven inconsistencies in current \zksnark libraries, successfully \textit{automatically} located the previous vulnerability, and could potentially detect two additional types of errors. % (which we discuss in Appendix~\ref{app:potentialerrors} due to space constraints as these were not found in any high profile applications at this time). 
-We summarize our results in Table~\ref{tab:snarkprobe-error_summary}.%, including the type of error, which component of \tool is able to detect the error, and what exactly the error affects.
+We summarize our results in \autoref{tab:snarkprobe-error_summary}.%, including the type of error, which component of \tool is able to detect the error, and what exactly the error affects.
 
 %\fanyo{The main goals of our evaluations of \tool are to show that 1) out tools can detect errors or vulnerabilities especially \logicerror{} in \zksnark libraries with improved performance comparing to other tools; 2) our tools have can detect these errors in a reasonable runtime with real \zksnark libraries and applications.}
 
@@ -11,13 +11,15 @@ We summarize our results in Table~\ref{tab:snarkprobe-error_summary}.%, includin
 %\fanyo{We firstly evaluated \tool with three major, widely used \zksnark libraries and its circuit generator including \libsnark, \bellman, and \arkworks. Meanwhile, we also evaluate some other libraries and circuit generator from recent projects and academic papers such as playsnark, LegoSNARK, and Circom. To better show the ability of our \tool, we also evaluate our \tool with previous \zksnark library versions, and the evaluation results shows that our \tool can also detect. In total, \tool found 7 issues or bugs in current \zksnark libraries plus 1 vulnerability in previous version \zksnark library and table \ref{tab:error_summary} contains the summary information for each bug \tool found.}
 
 
-\begin{table}[p]
+\begin{table}[!htp]
 \centering
+\makebox[\textwidth][c]{%
 \rotatebox{90}{
+\begin{adjustbox}{max width=0.9\textheight, max totalheight=0.9\textwidth, keepaspectratio}
 \begin{minipage}{\textheight}
+\centering
 \footnotesize
-{
-\renewcommand{\arraystretch}{1.5}
+\renewcommand{\arraystretch}{1.75}
 \begin{tabular*}{\textheight}{@{\extracolsep{\fill}}|lllll|}
 \hline
 \multicolumn{1}{|c||}{\textbf{Error/Vulnerability}} &
@@ -41,10 +43,12 @@ We summarize our results in Table~\ref{tab:snarkprobe-error_summary}.%, includin
 \multicolumn{5}{|c|}{\textit{Found in Previous Versions of Libraries}} \\ \hline
 \multicolumn{1}{|l||}{CVE-2019-7167} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{PGHR13 Protocol} & \multicolumn{1}{l|}{libsnark (2018)} & SnarkFuzzer \\ \hline
 \end{tabular*}
-}
+
 \caption{Summary of the current potential errors and inconsistencies, and previous vulnerabilities, that \tool is able to catch and locate.}
 \label{tab:snarkprobe-error_summary}
 \end{minipage}
+\end{adjustbox}%
+}%
 }
 \end{table}
 
@@ -56,29 +60,30 @@ There is always a possibility that a developer may generate an incorrect R1CS ma
 While we did not find any examples of this in the few applications we tested, consider the following scenario.
 Take a statement equation like $x^3 + x + 5 = y$ which the developer will typically flatten into \texttt{R1CS\_gates} with private input $x = 3$ and public input $y = 35$.  This set of equations is then equal to $x^3 + x + 5 = 35$. However, the developer \emph{may} incorrectly flatten the statement equation into \texttt{R1CS\_gates\_2}.
 
-% \vspace*{-6pt}
-\noindent\begin{minipage}{0.5\linewidth}
-{\small
-\[ \texttt{R1CS\_gates} =
+\vspace*{5pt}
+\begin{equation}
+\label{eq:r1cs-gates}
+\begin{aligned}
+\texttt{R1CS\_gates}
+&=
 \begin{cases}
 x * x = w_{1} \\
 w_{1} * x = w_{2} \\
 w_{2} + x = w_{3} \\
 w_{3} + 5 = y
-\end{cases} \]
-}
-\end{minipage}%
-\begin{minipage}{0.5\linewidth}
-{\small
-\[ \texttt{R1CS\_gates\_2} := \begin{cases} 
+\end{cases}
+\qquad
+\texttt{R1CS\_gates\_2}
+&:=
+\begin{cases}
 x * x = w_{1} \\
 w_{1} * x = w_{2} \\
 w_{2} + 2 * x = w_{3} \\
 w_{3} + 2 = y
-\end{cases} \]
-}
-\end{minipage}
-%\vspace*{-6pt}
+\end{cases}
+\end{aligned}
+\end{equation}
+\vspace*{5pt}
 
 While \texttt{R1CS\_gates\_2} still satisfies the private input $x = 3$ and public input $y = 35$, causing the underlying library to output an acceptable proof, this flattening does not in fact equal the statement equation $x^3 + x + 5 = y$.
 Although the statement equation and \texttt{R1CS\_gates\_2} satisfy the witness, and their domains have the same upper and lower bounds, they have a different output range, which our \ConstraintChecker will catch and flag as an error.
@@ -97,7 +102,43 @@ Multiple gadgets may also be combined to create a single proof.  Gadgets are gen
 Gadgets may be implemented incorrectly, causing inconsistencies between the original (desired) statement equation and the R1CS gates generated. Our \ConstraintChecker is able to find these inconsistencies in its checks for equivalence, regardless of whether a gadget was used or not. %The \ConstraintChecker found two different types of potential gadget issues in \libsnark.  While neither of these issues are critical flaws, and both can be prevented by a conscientious developer, it is good for even an experienced developer to be aware of potential implementation pitfalls and what is (and is not) handled by a library.
 %\fanyo{Some gadgets in \libsnark require the developer to provide the size in bits of the integer value(s) in their proof. If an incorrect bit size is provided, then one can build a ``fake proof''\footnote{One that will verify even though the prover does not actually have a valid witness.}, and \libsnark will not block this behavior nor raise any warning messages to the verifier or implementer. A concrete example located by our \ConstraintChecker can be found in the \texttt{comparison\_gadget}. (delete)}
 
-The \texttt{comparison\_gadget} in \libsnark uses bit shifting to compare two variables $A$ and $B$ by calculating $2^n + B - A$ and then counting the number of 0s and 1s in the resulting bit array (the corresponding R1CS constraints are shown in Appendix \ref{app:snarkprobe-comparison}). If the developer incorrectly specifies a bit length smaller than the size of $A$ or $B$, the \texttt{comparison\_gadget} will not generate the correct R1CS, which may result in a ``fake proof''\footnote{One that will verify even though the prover does not actually have a valid witness.}.  \libsnark will not block this behavior or raise any warning messages. Consider a developer that uses the \texttt{comparison\_gadget} to generate the statement equation $x < 60$ where $x \in \mathbb F_{p}$.  The R1CS should then only have a valid solution in $[0, 60)$. However, if an incorrect bit length is provided, we found that all numbers in the range $(\seqsplit{21888242871839275222246405745257275088548364400416034343698204186575808494653}, p)$ still satisfy this incorrect R1CS, allowing a dishonest prover to generate a valid proof without knowledge of a correct secret value.
+The \texttt{comparison\_gadget} in \libsnark uses bit shifting to compare two variables $A$ and $B$ by calculating $2^n + B - A$ and then counting the number of 0s and 1s in the resulting bit array. The corresponding R1CS constraints are shown below, and $w_n$ represents the $n^{\text{th}}$ witness in the R1CS.
+
+
+\vspace{5pt}
+\begin{equation}
+\label{eq:comparison_gadget}
+\begin{cases}
+(w_{14} * (1 + (p - 1) * w_{14})) \bmod p = 0 \\
+\begin{aligned}
+&(1024 + w_{3} + 2 * w_{4} + 4 * w_{5} + 8 * w_{6} + 16 * w_{7} + 32 * w_{8} \\
+&\quad\quad + 64 * w_{9} + 128 * w_{10} + 256 * w_{11} + 512 * w_{12}) \bmod p = w_{13}
+\end{aligned} \\
+(w_{3} * (1 + (p - 1) * w_{3})) \bmod p = 0 \\
+(w_{4} * (1 + (p - 1) * w_{4})) \bmod p = 0 \\
+(w_{5} * (1 + (p - 1) * w_{5})) \bmod p = 0 \\
+(w_{6} * (1 + (p - 1) * w_{6})) \bmod p = 0 \\
+(w_{7} * (1 + (p - 1) * w_{7})) \bmod p = 0 \\
+(w_{8} * (1 + (p - 1) * w_{8})) \bmod p = 0 \\
+(w_{9} * (1 + (p - 1) * w_{9})) \bmod p = 0 \\
+(w_{10} * (1 + (p - 1) * w_{10})) \bmod p = 0 \\
+(w_{11} * (1 + (p - 1) * w_{11})) \bmod p = 0 \\
+(w_{12} * (1 + (p - 1) * w_{12})) \bmod p = 0 \\
+(1024 - 1 * w_{1} + w_{2}) \bmod p = w_{13} \\
+\begin{aligned}
+&(w_{15} * (w_{3} + w_{4} + w_{5} + w_{6} + w_{7} + w_{8} + w_{9} + w_{10} + w_{11} \\
+&\quad\quad + w_{12})) \bmod p = w_{14}
+\end{aligned} \\
+\begin{aligned}
+&((1 + (p - 1) * w_{14}) * (w_{3} + w_{4} + w_{5} + w_{6} + w_{7} + w_{8} \\
+&\quad\quad + w_{9} + w_{10} + w_{11} + w_{12})) \bmod p = 0
+\end{aligned} \\
+w_{14} \bmod p = 1
+\end{cases}
+\end{equation}
+\vspace{5pt}
+
+If the developer incorrectly specifies a bit length smaller than the size of $A$ or $B$, the \texttt{comparison\_gadget} will not generate the correct R1CS, which may result in a ``fake proof''\footnote{One that will verify even though the prover does not actually have a valid witness.}.  \libsnark will not block this behavior or raise any warning messages. Consider a developer that uses the \texttt{comparison\_gadget} to generate the statement equation $x < 60$ where $x \in \mathbb F_{p}$.  The R1CS should then only have a valid solution in $[0, 60)$. However, if an incorrect bit length is provided, we found that all numbers in the range $(\seqsplit{21888242871839275222246405745257275088548364400416034343698204186575808494653}, p)$ still satisfy this incorrect R1CS, allowing a dishonest prover to generate a valid proof without knowledge of a correct secret value.
 After our tool flagged this potential issue, on further manual investigation we did see that the \libsnark source code contains a comment about using the correct bit size, though this could go unnoticed by a novice user or be abused by a malicious one to forge proofs.
 
 %Since manually flattening statement equations can be difficult in most real world examples, and many types of statements are often reused, gadgets are widely used by developers.  Many existing libraries also recommend to newcomers in their tutorials that they use gadgets~\cite{arkworks}.  Because of this widespread usage, we feel that developers need to be aware of gadget subtleties, and as such \SnarkFuzzer can help increase the security of zkSNARK deployments.

@@ -36,7 +36,7 @@ In addition, most general purpose fuzzing tools cannot detect \textit{\logicerro
 We consider a \logicerror to be one that causes a deviation from the expected protocol flow or an incorrect output, without causing an error message or crash.
 To the best of our knowledge, we are the first to build such fuzzing techniques for zkSNARKs.
 
-We provide a comparison of \tool and the most relevant existing fuzzing tools in Table \ref{tab:snarkprobe-fuzzer_comparison}, focusing on the types of errors they are able to catch, if they can precisely locate such errors, and their adaptability to \zksnark{s}.  Currently, most fuzzing tools are limited to identifying software errors. While some tools such as CDF and SHA-3 Test have the capability to identify \logicerror{s}, their functionality is restricted and cannot be easily extended.
+We provide a comparison of \tool and the most relevant existing fuzzing tools in \autoref{tab:snarkprobe-fuzzer_comparison}, focusing on the types of errors they are able to catch, if they can precisely locate such errors, and their adaptability to \zksnark{s}.  Currently, most fuzzing tools are limited to identifying software errors. While some tools such as CDF and SHA-3 Test have the capability to identify \logicerror{s}, their functionality is restricted and cannot be easily extended.
 Presently, our \SnarkFuzzer stands as the only fuzzing tool capable of detecting both software and \logicerror{s} for \zksnark{s}, accompanied by source code references and protocol location information.
 
 \begin{table}[t]
@@ -56,7 +56,6 @@ TLS-Attacker \cite{somorovsky2016systematic} & \Circle & \multicolumn{1}{c|}{\CI
 \end{adjustbox}
 \caption{Comparison of \tool and a selection of cryptographic and generic fuzzing tools. A \LEFTcircle~ means achieves in select instances.}
 \label{tab:snarkprobe-fuzzer_comparison}
-\vspace*{-18pt}
 \end{table}
 
 %\subsubsection{Comparing with Existing Cryptography Evaluation Tool}
@@ -66,7 +65,7 @@ TLS-Attacker \cite{somorovsky2016systematic} & \Circle & \multicolumn{1}{c|}{\CI
 Additionally, an important part of many fuzzers is how they handle code coverage analysis.
 While off-the-shelf tools like LLVM might seem to fit well for this, as it natively provides a source code line coverage data report~\cite{llvmcoverage}, this is insufficient for our desired application.  Our fuzzer focuses specifically on branch coverage and coverage of critical cryptographic components, not generic line coverage.  Additionally, we found that many existing zkSNARK libraries may not work well (or even compile) with LLVM.  This motivates our development of the \branchmodel and its use of GDB, as existing tools do not suffice.
 
-There has also been prior work on automating the development of cryptographic attacks.  Much of this work has focused on side-channels~\cite{phan2017synthesis,pasareanu2016multi,bang2018online}, though it has also seen other applications~\cite{beck2020automating}.  Prior work has also sought to automatically deploy existing, known attacks~\cite{kupser2015break}.
+There has also been prior work on automating the development of cryptographic attacks. Much of this work has focused on side-channels~\cite{phan2017synthesis,pasareanu2016multi,bang2018online}, though it has also seen other applications~\cite{beck2020automating}. Prior work has also sought to automatically deploy existing, known attacks~\cite{kupser2015break}.
 These are largely orthogonal and do not extend to existing zkSNARK systems.
 Such attack models work to model timing results by combining a fixed secret input with many other inputs that are chosen by an attacker and often employ SAT solvers.
 Recent work has provided a more general framework for such techniques and extended them to automate format oracle attacks~\cite{beck2020automating}.
@@ -74,7 +73,7 @@ This also extends work which sought to automatically deploy existing, known atta
 
 There is a growing trend towards computer aided cryptography and formal verification of implementations (see \cite{barbosa2021sok} for a detailed discussion).  Project Everest~\cite{projecteverest} contains a variety of formally verified software components.  While we are seeing increasingly complex protocols being formally verified~\cite{protzenko2019formally}, we have not yet seen these techniques applied to zkSNARKs.  We see our work both as a step towards a formally verified zkSNARK implementation, bridging the current gap through the use of heuristic techniques like fuzzing, as well as a complement to it.  A formally verified implementation could be used to provide a trustworthy ground truth for our fuzzing techniques, for example.  In addition, formal verification is typically targeted at a single implementation, which necessitates re-running the often complicated process for each new application.  \tool is designed to streamline the process and make it easy for a user to check a variety of applications or libraries, with little manual effort.
 
-\subsection{Challenges and motivation}
+\subsection{Challenges and Motivation}
 Based on the prior work and current techquies, there are following challenges to evaluate the security of a \zksnark library, which are also our motivation to develop our \tool.
 \begin{itemize}[leftmargin=*]
     \setlength{\itemsep}{0pt}

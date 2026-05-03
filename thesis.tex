@@ -964,6 +964,22 @@
 \usepackage{pifont}
 \usepackage{rotating}
 \usepackage{tabularx}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{xstring}
+
+
+\newcommand{\protocolblock}[1]{%
+\fbox{%
+\begin{minipage}[t]{0.455\textwidth}
+\scriptsize
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.25em}
+#1
+\end{minipage}%
+}%
+}
+
 
 % newcommand
 \newcommand{\fanyo}[1]{\textcolor{orange}{\textbf{Yongming:} #1}}
@@ -982,6 +998,28 @@
 \newcommand*{\tabSQUARE}{\raisebox{-0.2ex}{\tikz{\filldraw[draw=black,fill=black] (0,0) rectangle (0.2cm,0.2cm);}}}
 \newcommand*{\tabSquare}{\raisebox{-0.2ex}{\tikz{\filldraw[draw=black,fill=white] (0,0) rectangle (0.2cm,0.2cm);}}}
 \newcommand*{\tabsquare}{\raisebox{-0.2ex}{\tikz{\filldraw[draw=black,fill=white,dash pattern=on 0.75pt off 0.75pt] (0,0) rectangle (0.2cm,0.2cm);}}}
+
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+\renewcommand{\chapterautorefname}{Chapter}
+\makeatletter
+\let\OriginalAutoref\autoref
+\renewcommand{\autoref}[1]{%
+  \IfBeginWith{#1}{app:}{%
+    \begingroup
+      \renewcommand{\chapterautorefname}{Appendix}%
+      \renewcommand{\sectionautorefname}{Appendix}%
+      \renewcommand{\subsectionautorefname}{Appendix}%
+      \renewcommand{\subsubsectionautorefname}{Appendix}%
+      \OriginalAutoref{#1}%
+    \endgroup
+  }{%
+    \OriginalAutoref{#1}%
+  }%
+}
+\makeatother
+
 
 \newcommand*{\drawEva}[3]{%
     % First parameter for Circle
@@ -1008,8 +1046,8 @@
     right=0pt,
     boxsep=2pt,
     arc=0pt,
-    before=\vspace{1pt}\par\noindent,
-		after=\vspace{-1pt},
+    before=\vspace{10pt}\par\noindent,
+		after=\vspace{0pt},
     #1,
 }
 
@@ -1071,8 +1109,8 @@
 \include{ch-introduction}
 \include{ch-cryptobinary}
 \include{ch-snarkprobe}
-\include{ch-greybox}
-\include{ch-summary}
+% \include{ch-greybox}
+% \include{ch-summary}
 
 
 

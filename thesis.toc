@@ -1,93 +1,83 @@
 \@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
-\contentsline {chapter}{LIST OF TABLES}{9}{chapter*.4}%
-\contentsline {chapter}{LIST OF FIGURES}{10}{chapter*.5}%
-\contentsline {chapter}{LIST OF LISTINGS}{11}{chapter*.6}%
-\contentsline {chapter}{LIST OF PROTOCOLS}{12}{chapter*.7}%
-\contentsline {chapter}{LIST OF SCHEMES}{13}{chapter*.8}%
-\contentsline {chapter}{LIST OF SYMBOLS}{14}{chapter*.9}%
-\contentsline {chapter}{ABBREVIATIONS}{15}{chapter*.10}%
-\contentsline {chapter}{GLOSSARY}{16}{chapter*.11}%
-\contentsline {chapter}{ABSTRACT}{17}{chapter*.12}%
-\contentsline {chapter}{\numberline {1}{INTRODUCTION}}{18}{chapter.13}%
-\contentsline {chapter}{\numberline {2}{A SYSTEMATIC STUDY OF CRYPTOGRAPHIC FUNCTION IDENTIFICATION APPROACHES IN BINARIES}}{19}{chapter.14}%
-\contentsline {section}{\numberline {2.1}Introduction}{19}{section.19}%
-\contentsline {section}{\numberline {2.2}Background}{21}{section.21}%
-\contentsline {subsection}{\numberline {2.2.1}Categorization of detection approaches}{22}{subsection.23}%
-\contentsline {subsection}{\numberline {2.2.2}Cryptographic Features}{24}{subsection.24}%
-\contentsline {subsection}{\numberline {2.2.3}Applications with Modern Cryptographic Algorithms}{26}{subsection.25}%
-\contentsline {section}{\numberline {2.3}Overview}{26}{section.26}%
-\contentsline {subsection}{\numberline {2.3.1}Cryptographic Algorithm Detection Tools}{26}{subsection.27}%
-\contentsline {subsection}{\numberline {2.3.2}Categorization of Cryptographic Algorithm Detection Tools}{28}{subsection.29}%
-\contentsline {section}{\numberline {2.4}Analysis framework for open-source detection tools}{29}{section.31}%
-\contentsline {subsection}{\numberline {2.4.1}Benchmarking Framework}{29}{subsection.32}%
-\contentsline {subsection}{\numberline {2.4.2}Evaluation Metrics}{32}{subsection.33}%
-\contentsline {section}{\numberline {2.5}Reproduction}{33}{section.36}%
-\contentsline {subsection}{\numberline {2.5.1}Non-Reproducible Tools}{34}{subsection.40}%
-\contentsline {section}{\numberline {2.6}Replication}{35}{section.41}%
-\contentsline {subsection}{\numberline {2.6.1}Non-Replicable Tools}{36}{subsection.44}%
-\contentsline {subsection}{\numberline {2.6.2}Unexpected Detection Results}{36}{subsection.45}%
-\contentsline {subsection}{\numberline {2.6.3}Operating System Limitations}{38}{subsection.47}%
-\contentsline {subsection}{\numberline {2.6.4}Impact of Compiler Variations}{38}{subsection.49}%
-\contentsline {subsection}{\numberline {2.6.5}Impact of Optimization Flags}{41}{subsection.51}%
-\contentsline {subsection}{\numberline {2.6.6}Impact of Different Algorithm Versions}{42}{subsection.52}%
-\contentsline {subsection}{\numberline {2.6.7}Impact of Intentional Evasion Tactics}{43}{subsection.54}%
-\contentsline {section}{\numberline {2.7}Discussion}{44}{section.56}%
-\contentsline {subsection}{\numberline {2.7.1}Approaches to Algorithm Detection in Tools}{44}{subsection.57}%
-\contentsline {subsection}{\numberline {2.7.2}AI/ML Approach}{45}{subsection.58}%
-\contentsline {subsection}{\numberline {2.7.3}Lack of Support for Modern Cryptographic Algorithms}{45}{subsection.59}%
-\contentsline {subsection}{\numberline {2.7.4}Comparative Detection of Similar Algorithms Across Various Tools}{46}{subsection.60}%
-\contentsline {subsection}{\numberline {2.7.5}User Experience}{47}{subsection.62}%
-\contentsline {subsection}{\numberline {2.7.6}Challenges for Future Research}{48}{subsection.63}%
-\contentsline {section}{\numberline {2.8}Conclusion}{50}{section.64}%
-\contentsline {chapter}{\numberline {3}{SNARKPROBE: AN AUTOMATED SECURITY ANALYSIS FRAMEWORK FOR ZKSNARK IMPLEMENTATIONS}}{51}{chapter.65}%
-\contentsline {section}{\numberline {3.1}Introduction}{51}{section.68}%
-\contentsline {subsection}{\numberline {3.1.1}Our contributions}{54}{subsection.73}%
-\contentsline {subsection}{\numberline {3.1.2}Chapter Organization}{54}{subsection.76}%
-\contentsline {section}{\numberline {3.2}Background and Related Work}{55}{section.77}%
-\contentsline {subsection}{\numberline {3.2.1}Background}{55}{subsection.78}%
-\contentsline {subsection}{\numberline {3.2.2}Related Works}{56}{subsection.79}%
-\contentsline {subsection}{\numberline {3.2.3}Challenges and motivation}{59}{subsection.81}%
-\contentsline {section}{\numberline {3.3}Overview}{59}{section.82}%
-\contentsline {subsection}{\numberline {3.3.1}Users and Use Cases}{59}{subsection.83}%
-\contentsline {subsection}{\numberline {3.3.2}Workflow}{60}{subsection.88}%
-\contentsline {section}{\numberline {3.4}Design and Implementation}{62}{section.89}%
-\contentsline {subsection}{\numberline {3.4.1}Constraint Checker\xspace }{63}{subsection.90}%
-\contentsline {subsection}{\numberline {3.4.2}SnarkFuzzer\xspace }{65}{subsection.97}%
-\contentsline {section}{\numberline {3.5}Performance Evaluation}{72}{section.105}%
-\contentsline {subsection}{\numberline {3.5.1}Performance of the Constraint Checker\xspace }{73}{subsection.106}%
-\contentsline {subsection}{\numberline {3.5.2}Performance of SnarkFuzzer\xspace }{74}{subsection.108}%
-\contentsline {section}{\numberline {3.6}Error Catching Evaluation}{78}{section.115}%
-\contentsline {subsection}{\numberline {3.6.1}Potentially Locatable in Current Libraries}{78}{subsection.117}%
-\contentsline {subsection}{\numberline {3.6.2}Found in Current Libraries}{80}{subsection.118}%
-\contentsline {subsection}{\numberline {3.6.3}Found in Previous Versions of Libraries}{84}{subsection.123}%
-\contentsline {section}{\numberline {3.7}Conclusion}{84}{section.124}%
-\contentsline {chapter}{\numberline {4}{GREY-BOX DIFFERENTIAL FUZZING FOR ZERO-KNOWLEDGE PROOF BINARY APPLICATIONS}}{85}{chapter.125}%
-\contentsline {chapter}{\numberline {5}{ETHICS}}{86}{chapter.126}%
-\contentsline {chapter}{\numberline {6}{CONCLUSION \& FUTURE WORK}}{87}{chapter.127}%
-\contentsline {chapter}{REFERENCES}{88}{chapter*.128}%
-\contentsline {chapter}{\numberline {A}{Appendix for Chapter \ref {ch:cryptobinary}}}{96}{chapter.129}%
-\contentsline {section}{\numberline {A.1}List of Optimizations, Obfuscations, and their Combinations for Our Evaluation Metrics}{96}{section.130}%
-\contentsline {section}{\numberline {A.2}Procedure for R+R Evaluation}{96}{section.143}%
-\contentsline {subsection}{\numberline {A.2.1}Steps in our Reproduction Evaluation}{96}{subsection.144}%
-\contentsline {subsection}{\numberline {A.2.2}Steps in our Replication Evaluation}{97}{subsection.149}%
-\contentsline {section}{\numberline {A.3}Tools}{97}{section.154}%
-\contentsline {subsection}{\numberline {A.3.1}Aligot}{97}{subsection.155}%
-\contentsline {subsection}{\numberline {A.3.2}CryptoHunt}{98}{subsection.156}%
-\contentsline {subsection}{\numberline {A.3.3}CryptoKnight}{99}{subsection.157}%
-\contentsline {subsection}{\numberline {A.3.4}Draft Crypto Analyzer (DRACA)}{99}{subsection.158}%
-\contentsline {subsection}{\numberline {A.3.5}FindCrypt2}{100}{subsection.159}%
-\contentsline {subsection}{\numberline {A.3.6}HCD}{100}{subsection.160}%
-\contentsline {subsection}{\numberline {A.3.7}PEiD KANAL}{100}{subsection.161}%
-\contentsline {subsection}{\numberline {A.3.8}Signsrch}{101}{subsection.162}%
-\contentsline {subsection}{\numberline {A.3.9}Where's Crypto}{101}{subsection.163}%
-\contentsline {section}{\numberline {A.4}Additional Tables}{101}{section.164}%
-\contentsline {chapter}{\numberline {B}{Appendix for Chapter \ref {ch:snarkprobe}}}{105}{chapter.168}%
-\contentsline {section}{\numberline {B.1}Additional Information for Constraint Checker\xspace }{106}{section.169}%
-\contentsline {subsection}{\numberline {B.1.1}An optimization for the SMT solver}{106}{subsection.170}%
-\contentsline {subsection}{\numberline {B.1.2}Protocol of the Constraint Checker\xspace by the SMT Solver}{108}{subsection.171}%
-\contentsline {subsection}{\numberline {B.1.3}Example Constraint Checker\xspace }{109}{subsection.172}%
-\contentsline {subsection}{\numberline {B.1.4}Domain Gap Issues}{109}{subsection.192}%
-\contentsline {section}{\numberline {B.2}Additional Information for SnarkFuzzer\xspace }{111}{section.196}%
-\contentsline {subsection}{\numberline {B.2.1}Example Ideal Model Files}{111}{subsection.197}%
-\contentsline {subsection}{\numberline {B.2.2}PrettyPrint Example}{112}{subsection.200}%
-\contentsline {section}{\numberline {B.3}Equations \texttt {comparison\_gadget} Represents}{113}{section.202}%
+\contentsline {chapter}{LIST OF TABLES}{7}{chapter*.4}%
+\contentsline {chapter}{LIST OF FIGURES}{8}{chapter*.5}%
+\contentsline {chapter}{LIST OF LISTINGS}{9}{chapter*.6}%
+\contentsline {chapter}{LIST OF PROTOCOLS}{10}{chapter*.7}%
+\contentsline {chapter}{LIST OF SCHEMES}{11}{chapter*.8}%
+\contentsline {chapter}{LIST OF SYMBOLS}{12}{chapter*.9}%
+\contentsline {chapter}{ABBREVIATIONS}{13}{chapter*.10}%
+\contentsline {chapter}{GLOSSARY}{14}{chapter*.11}%
+\contentsline {chapter}{ABSTRACT}{15}{chapter*.12}%
+\contentsline {chapter}{\numberline {1}{INTRODUCTION}}{16}{chapter.13}%
+\contentsline {chapter}{\numberline {2}{A SYSTEMATIC STUDY OF CRYPTOGRAPHIC FUNCTION IDENTIFICATION APPROACHES IN BINARIES}}{17}{chapter.14}%
+\contentsline {section}{\numberline {2.1}Introduction}{17}{section.19}%
+\contentsline {subsection}{\numberline {2.1.1}Our Contributions}{19}{subsection.21}%
+\contentsline {section}{\numberline {2.2}Background}{20}{section.22}%
+\contentsline {subsection}{\numberline {2.2.1}Categorization of Detection Approaches}{20}{subsection.24}%
+\contentsline {subsection}{\numberline {2.2.2}Cryptographic Features}{22}{subsection.25}%
+\contentsline {subsection}{\numberline {2.2.3}Applications with Modern Cryptographic Algorithms}{24}{subsection.26}%
+\contentsline {section}{\numberline {2.3}Overview}{24}{section.27}%
+\contentsline {subsection}{\numberline {2.3.1}Cryptographic Algorithm Detection Tools}{25}{subsection.28}%
+\contentsline {subsection}{\numberline {2.3.2}Categorization of Cryptographic Algorithm Detection Tools}{27}{subsection.31}%
+\contentsline {section}{\numberline {2.4}Analysis Framework for Open-Source Detection Tools}{28}{section.33}%
+\contentsline {subsection}{\numberline {2.4.1}Benchmarking Framework}{28}{subsection.34}%
+\contentsline {subsection}{\numberline {2.4.2}Evaluation Metrics}{31}{subsection.35}%
+\contentsline {section}{\numberline {2.5}Reproduction}{33}{section.50}%
+\contentsline {subsection}{\numberline {2.5.1}Non-Reproducible Tools}{34}{subsection.54}%
+\contentsline {section}{\numberline {2.6}Replication}{35}{section.55}%
+\contentsline {subsection}{\numberline {2.6.1}Non-Replicable Tools}{35}{subsection.59}%
+\contentsline {subsection}{\numberline {2.6.2}Unexpected Detection Results}{37}{subsection.60}%
+\contentsline {subsection}{\numberline {2.6.3}Operating System Limitations}{39}{subsection.63}%
+\contentsline {subsection}{\numberline {2.6.4}Impact of Compiler Variations}{40}{subsection.65}%
+\contentsline {subsection}{\numberline {2.6.5}Impact of Optimization Flags}{42}{subsection.67}%
+\contentsline {subsection}{\numberline {2.6.6}Impact of Different Algorithm Versions}{43}{subsection.68}%
+\contentsline {subsection}{\numberline {2.6.7}Impact of Intentional Evasion Tactics}{44}{subsection.70}%
+\contentsline {section}{\numberline {2.7}Discussion}{45}{section.72}%
+\contentsline {subsection}{\numberline {2.7.1}Approaches to Algorithm Detection in Tools}{45}{subsection.73}%
+\contentsline {subsection}{\numberline {2.7.2}AI/ML Approach}{46}{subsection.74}%
+\contentsline {subsection}{\numberline {2.7.3}Lack of Support for Modern Cryptographic Algorithms}{47}{subsection.75}%
+\contentsline {subsection}{\numberline {2.7.4}Comparative Detection of Similar Algorithms Across Various Tools}{47}{subsection.76}%
+\contentsline {subsection}{\numberline {2.7.5}User Experience}{48}{subsection.78}%
+\contentsline {subsection}{\numberline {2.7.6}Challenges for Future Research}{49}{subsection.79}%
+\contentsline {section}{\numberline {2.8}Conclusion}{51}{section.80}%
+\contentsline {chapter}{\numberline {3}{SNARKPROBE: AN AUTOMATED SECURITY ANALYSIS FRAMEWORK FOR ZKSNARK IMPLEMENTATIONS}}{52}{chapter.81}%
+\contentsline {section}{\numberline {3.1}Introduction}{52}{section.84}%
+\contentsline {subsection}{\numberline {3.1.1}Our Contributions}{55}{subsection.89}%
+\contentsline {subsection}{\numberline {3.1.2}Chapter Organization}{55}{subsection.92}%
+\contentsline {section}{\numberline {3.2}Background and Related Work}{56}{section.93}%
+\contentsline {subsection}{\numberline {3.2.1}Background}{56}{subsection.94}%
+\contentsline {subsection}{\numberline {3.2.2}Related Works}{57}{subsection.95}%
+\contentsline {subsection}{\numberline {3.2.3}Challenges and Motivation}{60}{subsection.97}%
+\contentsline {section}{\numberline {3.3}Overview}{60}{section.98}%
+\contentsline {subsection}{\numberline {3.3.1}Users and Use Cases}{60}{subsection.99}%
+\contentsline {subsection}{\numberline {3.3.2}Workflow}{61}{subsection.104}%
+\contentsline {section}{\numberline {3.4}Design and Implementation}{63}{section.105}%
+\contentsline {subsection}{\numberline {3.4.1}Constraint Checker\xspace }{64}{subsection.106}%
+\contentsline {subsection}{\numberline {3.4.2}SnarkFuzzer\xspace }{68}{subsection.148}%
+\contentsline {section}{\numberline {3.5}Performance Evaluation}{76}{section.159}%
+\contentsline {subsection}{\numberline {3.5.1}Performance of the Constraint Checker\xspace }{77}{subsection.160}%
+\contentsline {subsection}{\numberline {3.5.2}Performance of SnarkFuzzer\xspace }{78}{subsection.162}%
+\contentsline {section}{\numberline {3.6}Error Catching Evaluation}{82}{section.169}%
+\contentsline {subsection}{\numberline {3.6.1}Potentially Locatable in Current Libraries}{82}{subsection.171}%
+\contentsline {subsection}{\numberline {3.6.2}Found in Current Libraries}{85}{subsection.173}%
+\contentsline {subsection}{\numberline {3.6.3}Found in Previous Versions of Libraries}{89}{subsection.179}%
+\contentsline {section}{\numberline {3.7}Conclusion}{90}{section.180}%
+\contentsline {chapter}{REFERENCES}{91}{chapter*.181}%
+\contentsline {chapter}{\numberline {A}{Appendix for Chapter~\ref {ch:cryptobinary}}}{99}{chapter.182}%
+\contentsline {section}{\numberline {A.1}Procedure for R+R Evaluation}{99}{section.183}%
+\contentsline {subsection}{\numberline {A.1.1}Steps in our Reproduction Evaluation}{99}{subsection.184}%
+\contentsline {subsection}{\numberline {A.1.2}Steps in our Replication Evaluation}{99}{subsection.189}%
+\contentsline {section}{\numberline {A.2}Tools}{99}{section.194}%
+\contentsline {subsection}{\numberline {A.2.1}Aligot}{100}{subsection.195}%
+\contentsline {subsection}{\numberline {A.2.2}CryptoHunt}{100}{subsection.196}%
+\contentsline {subsection}{\numberline {A.2.3}CryptoKnight}{101}{subsection.197}%
+\contentsline {subsection}{\numberline {A.2.4}Draft Crypto Analyzer (DRACA)}{101}{subsection.198}%
+\contentsline {subsection}{\numberline {A.2.5}FindCrypt2}{102}{subsection.199}%
+\contentsline {subsection}{\numberline {A.2.6}HCD}{102}{subsection.200}%
+\contentsline {subsection}{\numberline {A.2.7}PEiD KANAL}{103}{subsection.201}%
+\contentsline {subsection}{\numberline {A.2.8}Signsrch}{103}{subsection.202}%
+\contentsline {subsection}{\numberline {A.2.9}Where's Crypto}{103}{subsection.203}%
+\contentsline {chapter}{\numberline {B}{Appendix for Chapter \ref {ch:snarkprobe}}}{104}{chapter.204}%
+\contentsline {section}{\numberline {B.1}Additional Information for Constraint Checker\xspace }{104}{section.205}%
+\contentsline {subsection}{\numberline {B.1.1}An Optimization for the SMT Solver}{104}{subsection.206}%
+\contentsline {subsection}{\numberline {B.1.2}Domain Gap Issues}{104}{subsection.207}%

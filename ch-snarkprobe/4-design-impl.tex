@@ -10,21 +10,283 @@ In this section, we introduce both the high level goals and concrete implementat
 
 \parhead{Design.}%
 The first step in generating a \zksnark proof is converting the desired proof statement equations into R1CS.  These R1CS gates should have the same domain, range, and output value as input statement equations.
-To check this, we developed our \ConstraintChecker, which leverages an SMT solver and associated techniques to verify the equivalence of R1CS gates to the specified proof statement functions\footnote{We work around the general undecidability of function equality by operating in the more constrained setting (over the finite fields) and adding special rules for primary variables and auxiliary variables.}. To run the tool, the user only needs to write a short script to define the statement function, primary inputs, and auxiliary inputs in their zkSNARK proof, and everything else then happens automatically. Figure \ref{subfig:snarkprobe-workflow_cc} shows the key steps in the \ConstraintChecker, and we also provide an example in Appendix \ref{app:snarkprobe-checkerexample}. We note that our SMT solver could be replaced by any other techniques that allow one to check for function equality and fit the desired goals.
+To check this, we developed our \ConstraintChecker, which leverages an SMT solver and associated techniques to verify the equivalence of R1CS gates to the specified proof statement functions\footnote{We work around the general undecidability of function equality by operating in the more constrained setting (over the finite fields) and adding special rules for primary variables and auxiliary variables.}. To run the tool, the user only needs to write a short script to define the statement function, primary inputs, and auxiliary inputs in their zkSNARK proof, and everything else then happens automatically. \autoref{subfig:snarkprobe-workflow_cc} shows the key steps in the \ConstraintChecker, and we also provide an example in Listing \autoref{list:constraintchecker} of our \ConstraintChecker to show how a developer can run the tool. More examples can be found in our code. We note that our SMT solver could be replaced by any other techniques that allow one to check for function equality and fit the desired goals.
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\parhead{Implementation.} The \ConstraintChecker contains two major components---the Circuit Extractor and a three step equivalence check---which we discuss now.  We discuss optimizations in Appendix~\ref{app:snarkprobe-constraintopt}.
+\lstset{
+  frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  breakindent=0pt,
+  breakautoindent=false,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  framexleftmargin=5pt,
+  framexrightmargin=0pt,
+  tabsize=3
+}
+
+\begin{ZZlisting}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{CenteredBox}
+\begin{minipage}{0.96\textwidth}
+\begin{lstlisting}
+x = z3.Int("x")
+## Indicate the public variables and private variables
+allocate = ["x"]
+variables = [x]
+## Indicate the statement of a proof
+statement = [x < 60]
+## Provide the snark program to automatically extract the R1CS matrix
+## Developer can also manually provide the R1CS matrix
+path = os.path.join(currentdir, "range")
+## Call the functions in ConstraintChecker to evaluate the correctness
+fcmp = FunctionComparison(path)
+fcmp.allocate(allocate)
+fcmp.set_input_sizes(0)
+fcmp.addVariables(variables)
+fcmp.addStatement(statement)
+fcmp.addGadget(gadget1.comparison_gadget("max")) ## Optional
+fcmp.addRange(x, z3.And(x < 60))
+fcmp.runComparisonTests()
+\end{lstlisting}
+\end{minipage}
+\end{CenteredBox}
+\end{adjustbox}
+\caption{An example of \ConstraintChecker}
+\label{list:constraintchecker}
+\end{ZZlisting}
+\parhead{Implementation.} The \ConstraintChecker contains two major components: the Circuit Extractor and a three-step equivalence check. We discuss these components in detail below. \autoref{pro:constraintchecker} presents the detailed procedure for each component. We discuss optimizations in \autoref{app:snarkprobe-constraintopt}.
+
+
+\begin{protocol}[!htbp]
+\centering
+\begingroup
+\makeatletter
+\let\oldscriptsize\scriptsize
+\renewcommand{\scriptsize}{\oldscriptsize\setlength{\baselineskip}{11.5pt}}
+\makeatother
+
+\setlength{\fboxsep}{6pt}
+\setlength{\fboxrule}{0.35pt}
+
+\vspace*{\fill}
+
+\begin{adjustbox}{max width=\textwidth, max totalheight=0.92\textheight, keepaspectratio}
+\begin{minipage}[t]{0.48\textwidth}
+
+% ---------- (a) Parameters ----------
+\fbox{%
+\begin{minipage}[t]{0.95\textwidth}
+\scriptsize
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\textbf{(a) Parameters.}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.6em,topsep=0.25em,parsep=0.5em]
+\item A set of statement equations $E_{1}$ in size $p$ where equation $e_{1}^{i} \in E_{1}$ and $i \in [1,p]$.
+\item A set of equations $E_{2}$ converted from R1CS gates in size $q$ where $e_{2}^{i} \in E_{2}$ and $i \in [1,q]$.
+\item $m$ private variables $x_{1}^{i}$ in $E_{1}$ where $i \in [1,m]$ and $n$ private variables $x_{2}^{i}$ in $E_{2}$ where $i \in [1,n]$ and $n \geq m$. A set of auxiliary input $v_{x}^{i}$.
+\item $k$ public variables $y_{1}^{i}$ in $E_{1}$ and $k$ public variables $y_{2}^{i}$ in $E_{2}$ where $i \in [1,k]$. A set of primary input $v_{y}^{i}$.
+\item A SMT Pro Solver $S$ and Optimizer $O$ with modulus $P$. $0 \leq x_{1} < P$, $0 \leq x_{2} < P$, $0 \leq y_{1} < P$, and $0 \leq y_{2} < P$ without optimization.
+
+\vspace{0.5em}
+\end{enumerate}
+\end{minipage}%
+}
+
+\vspace{0.9em}
+
+% ---------- SMT Solver ----------
+
+\fbox{%
+\begin{minipage}[t]{0.95\textwidth}
+\scriptsize
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\textbf{SMT Solver:} The solver $S$ and optimizer $O$ are designed based on the Z3 theorem prover. Other SMT solvers may provide different solving interfaces.
+
+\vspace{0.4em}
+
+\textbf{Z3 Theorem Prover:} Z3 cannot directly model numbers as finite-field elements, so the modulus must be specified manually for each witness in the statement.
+
+\vspace{0.5em}
+\end{minipage}%
+}
+
+\vspace{0.9em}
+
+% ---------- (b) Function valid check ----------
+\fbox{%
+\begin{minipage}[t]{0.95\textwidth}
+\scriptsize
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\textbf{(b) Function valid check.}
+
+INPUTS: $E_{1}$, $E_{2}$, $S$.
+
+OUTPUTS: Boolean result of function validation.
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.6em,topsep=0.25em,parsep=0.5em]
+\item Check and solve the R1CS gates:
+
+Set a solvers $S_{1} \in S$.
+
+Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $x_{2}^{i}$ to $S_{1}$.
+
+Solve $S_{1}$ and get the set of private variables solution as $M^{i}_{1_{x}}$ and set of public variables solution as $M^{i}_{1_{y}}$.
+\item Check and solve the statement equations:
+
+Set a solvers $S_{2} \in S$.
+
+Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $y_{1}^{i}$, $y_{2}^{i}$ to $S_{2}$.
+
+Solve $S_{2}$ and get the set of private variables solution as $M^{i}_{2_{x}}$ and set of public variables solution as $M^{i}_{2_{y}}$.
+\item Output $v_{x}^{i} \in M^{i}_{1_{x}}$ \textit{AND} $v_{x}^{i} \in M^{i}_{2_{x}}$ \textit{AND} $v_{y}^{i} \in M^{i}_{1_{y}}$ \textit{AND} $v_{y}^{i} \in M^{i}_{2_{y}}$.
+
+\vspace{0.5em}
+\end{enumerate}
+\end{minipage}%
+}
+\end{minipage}
+\hspace{0.7em}
+\begin{minipage}[t]{0.48\textwidth}
+
+% ---------- (c) Equivalent comparison ----------
+\fbox{%
+\begin{minipage}[t]{0.95\textwidth}
+\scriptsize
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\textbf{(c) Equivalent comparison.}
+
+INPUTS: $E_{1}$, $E_{2}$, $S$.
+
+OUTPUTS: Boolean result of function equality.
+
+Set two solvers $S_{1}$ and $S_{2} \in S$.
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.6em,topsep=0.25em,parsep=0.5em]
+\item Comparing with public variables:
+
+Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $y_{1}^{i}$ to $S_{1}$.
+
+Add $e_{2}^{i} \in E_{2}$ where $i \in [1,q]$ and range of $x_{2}^{i}$, $y_{2}^{i}$ to $S_{1}$.
+
+Add $x_{1}^{i} == x_{2}^{i}$ where $i \in [1,m]$ to $S_{1}$.
+
+Add $y_{1}^{i} \neq y_{2}^{i}$ where $i \in [1,k]$ to $S_{1}$.
+
+Check if $S_{1}$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c_1$.
+\item Comparing with Boolean variables:
+
+Set $b_1$ and $b_2 \in$ BOOLEAN.
+
+Add $b_1 = \textit{AND}(E_{1})$ to $S_{2}$.
+
+Add $b_2 = \textit{AND}(E_{2})$ to $S_{2}$.
+
+Add $x_{1}^{i} == x_{2}^{i}$ where $i \in [1,m]$ to $S_{2}$.
+
+Add $y_{1}^{i} == y_{2}^{i}$ where $i \in [1,k]$ to $S_{2}$.
+
+Add $b_1 \neq b_2$ to $S_{2}$.
+
+Check if $S_2$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c_2$.
+\item Output ($c_1 ==$ \textit{UNSAT} \textit{AND} $c_2 ==$ \textit{UNSAT}).
+
+\vspace{0.5em}
+\end{enumerate}
+\end{minipage}%
+}
+
+\vspace{0.75em}
+
+% ---------- (d) Domain comparison ----------
+\fbox{%
+\begin{minipage}[t]{0.95\textwidth}
+\scriptsize
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\textbf{(d) Domain comparison.}
+
+INPUTS: $E_{1}$, $E_{2}$, $S$, $O$.
+
+OUTPUTS: Boolean result of domain comparison.
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=0.6em,topsep=0.25em,parsep=0.5em]
+\item Comparing upper and lower bond:
+
+Add $e_{1}^{i} \in E_{1}$ where $i \in [1,p]$ and range of $x_{1}^{i}$, $x_{2}^{i}$ to $O$.
+
+Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $y_{1}^{i}$, $y_{2}^{i}$ to $O$.
+
+Solve the upper bond $u_{1}$ and lower bond $l_{1}$ from $O$.
+
+Solve the upper bond $u_{2}$ and lower bond $l_{2}$ from $O$.
+\item Check if R1CS is valid outside statement domain:
+
+Add $\textit{NOT}(\textit{AND}(\text{range of }x_{1}^{i}, x_{2}^{i}))$ to $S$.
+
+Add $e_{2}^{i} \in E_{1}$ where $i \in [1,q]$ and range of $x_{2}^{i}$, $y_{2}^{i}$ to $S$.
+
+Check if $S$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c$.
+\item Output ($c ==$ \textit{UNSAT} \textit{AND} $u_{1} == u_{2}$ \textit{AND} $l_{1} == l_{2}$).
+
+\vspace{0.5em}
+\end{enumerate}
+\end{minipage}%
+}
+\end{minipage}
+\end{adjustbox}
+
+\vspace{0.5em}
+\caption{Protocol of the \ConstraintChecker Using an SMT Solver}
+\label{pro:constraintchecker}
+
+\vspace*{\fill}
+
+\endgroup
+\end{protocol}
+
 
 \parheadit{Circuit Extractor.} The Circuit Extractor can extract R1CS gates with private inputs, witness, and gadget relations from an executing zkSNARK binary program.  We do this using GDB.  We set a GDB breakpoint at the circuit declaration line, convert the circuit to an R1CS matrix when the program reaches the breakpoint, and save the formatted R1CS matrix for equivalence comparison. Automatic extraction both makes the tool more usable and reduces the potential for human errors in the equivalence comparison. Many zkSNARK libraries use Montgomery modular multiplication as an optimization. We also developed a Montgomery representation translator that can convert the Montgomery form to a standard integer format, so that our circuit extractor can produce a z3py (our SMT solver of choice) readable integer format.
 
-After extracting the circuit, the \ConstraintChecker uses the SMT solver to verify the equivalence of functions through a three step process: a function valid check, equivalence comparison, and domain comparison. If one or more tests fail, then we determine that the given statement equation is not equivalent to the produced program. Otherwise, then we can provide assurances that it is highly likely that the proof realizes the specified statement correctly\footnote{We cannot \textit{guarantee} equivalence due to the fact that the SMT solver might output \texttt{UNKNOWN}, as well as possible domain gaps (see Appendix \ref{app:snarkprobe-domaingap}).}.
+After extracting the circuit, the \ConstraintChecker uses the SMT solver to verify the equivalence of functions through a three step process: a function valid check, equivalence comparison, and domain comparison. If one or more tests fail, then we determine that the given statement equation is not equivalent to the produced program. Otherwise, then we can provide assurances that it is highly likely that the proof realizes the specified statement correctly\footnote{We cannot \textit{guarantee} equivalence due to the fact that the SMT solver might output \texttt{UNKNOWN}, as well as possible domain gaps (see \autoref{app:snarkprobe-domaingap}).}.
 
-\parheadit{Function Valid Check.} As the witness should be a solution in both the statement equations and equations built by the R1CS gates, we first create two SMT solvers $S_1$ and $S_2$ to verify that fact (see Appendix \ref{app:snarkprobe-eqalgorithm} (b)). The \ConstraintChecker considers the statement equations and R1CS gates to not be equivalent if the witness is not a valid solution for both.
+\parheadit{Function Valid Check.} As the witness should be a solution in both the statement equations and equations built by the R1CS gates, we first create two SMT solvers $S_1$ and $S_2$ to verify that fact (see \autoref{pro:constraintchecker} (b)). The \ConstraintChecker considers the statement equations and R1CS gates to not be equivalent if the witness is not a valid solution for both.
 
-\parheadit{Equivalence comparison.} The equivalence comparison verifies if the statement equations $y_1 = f(x_1)$ and R1CS gates $y_2 = f(x_2)$ have the same output for all the same inputs. First, the \ConstraintChecker creates a solver $S$, and adds $y_1 = f(x_1)$, $y_2 = f(x_2)$, $x1 = x2$ and $y_1 \ne y_2$ to the solver $S$ (see Appendix \ref{app:snarkprobe-eqalgorithm} (c)). If $S$ results in \texttt{SAT}, then the SMT solver has discovered that the statement equations and R1CS gates have a different output for at least one input and thus considers them not equivalent, and otherwise, it results in \texttt{UNSAT}. Like in many other use cases, the \ConstraintChecker cannot guarantee equivalency if the SMT solver returns \texttt{UNSAT} or \texttt{UNKNOWN}.
+
+\parheadit{Equivalence comparison.} The equivalence comparison verifies if the statement equations $y_1 = f(x_1)$ and R1CS gates $y_2 = f(x_2)$ have the same output for all the same inputs. First, the \ConstraintChecker creates a solver $S$, and adds $y_1 = f(x_1)$, $y_2 = f(x_2)$, $x1 = x2$ and $y_1 \ne y_2$ to the solver $S$ (see \autoref{pro:constraintchecker} (c)). If $S$ results in \texttt{SAT}, then the SMT solver has discovered that the statement equations and R1CS gates have a different output for at least one input and thus considers them not equivalent, and otherwise, it results in \texttt{UNSAT}. Like in many other use cases, the \ConstraintChecker cannot guarantee equivalency if the SMT solver returns \texttt{UNSAT} or \texttt{UNKNOWN}.
 Note that the SMT solver may return \texttt{UNKNOWN} for a variety of reasons, including running out of memory, or if the quantifier-free fragment is undecidable (such as nonlinear integer arithmetic) or too ``expensive'' (such as finding primes $p*q = N$ for some $N$).
 %Therefore, since the equations represented by an R1CS matrix are of the form $A * B - C = 0$, if the statement equation is not a quantifier-free formula, the SMT solver will never result in \texttt{UNKNOWN}.
 
-\parheadit{Domain comparison.} The SMT solver cannot directly calculate an equation's domain, but it can find the maximum and minimum values for an equation (Figure \ref{subfig:snarkprobe-domaina} in Appendix \ref{app:snarkprobe-domaingap} shows an example of different upper and/or lower bounds). We also use the SMT solver to find out if there is a gap between the domains' of the statement equations and R1CS gates, though we cannot guarantee to find all such gaps that may exist (see Appendix \ref{app:snarkprobe-domaingap} for a detailed discussion).
+\parheadit{Domain comparison.} The SMT solver cannot directly calculate an equation's domain, but it can find the maximum and minimum values for an equation (\autoref{subfig:snarkprobe-domaina} in \autoref{app:snarkprobe-domaingap} shows an example of different upper and/or lower bounds). We also use the SMT solver to find out if there is a gap between the domains' of the statement equations and R1CS gates, though we cannot guarantee to find all such gaps that may exist (see \autoref{app:snarkprobe-domaingap} for a detailed discussion).
 
 
 %%%%%%%%%%
@@ -121,7 +383,7 @@ Note that the SMT solver may return \texttt{UNKNOWN} for a variety of reasons, i
 
 %\fanyo{We propose a dynamic white-box framework, \SnarkFuzzer, which can automatically verify if a \zksnark library implementation follow the \zksnark protocol and its security designs to potential logic or software errors. Since a single program may not call and use all branches in the library source code, we also involved fuzzing tool to generate multiple input seeds in order to verify the security of entire library.}
 
-\SnarkFuzzer is composed of four major subcomponents: the \inputgenerator, \branchmodel, \valuemodel, and \valuemonitor. The \inputgenerator is responsible for generating an R1CS matrix and converting it to a zkSNARK program as input for the target library.  The \valuemodel and \valuemonitor are designed to detect implementation and cryptography related errors. The \branchmodel helps manage branch coverage and provides feedback to help \SnarkFuzzer decide if it needs to generate another input program. Figure \ref{subfig:snarkprobe-workflow_sf} shows the structure of \SnarkFuzzer with both its high level design as well as its implementation details.
+\SnarkFuzzer is composed of four major subcomponents: the \inputgenerator, \branchmodel, \valuemodel, and \valuemonitor. The \inputgenerator is responsible for generating an R1CS matrix and converting it to a zkSNARK program as input for the target library.  The \valuemodel and \valuemonitor are designed to detect implementation and cryptography related errors. The \branchmodel helps manage branch coverage and provides feedback to help \SnarkFuzzer decide if it needs to generate another input program. \autoref{subfig:snarkprobe-workflow_sf} shows the structure of \SnarkFuzzer with both its high level design as well as its implementation details.
 
 \subsubsection*{\underline{\SnarkFuzzer: \inputgenerator}}
 \label{subsec:snarkprobe-input-generator}
@@ -274,7 +536,21 @@ An ideal value file contains location information for all variables that must be
 We have already developed the ideal files for \pinocchio and \groth16 in \libsnark and \groth16 in \bellman, \arkworks, and \gnark.
 
 \parheadit{Ideal Branch File.}%
-By default, all branches are marked as \texttt{IMPORTANT} and thus covered.  We asked four researchers in our group (including people with experience using zkSNARKs and those with only programming experience) to label branches as \texttt{IMPORTANT} or \texttt{UNIMPORTANT}. To ensure \SnarkFuzzer does not miss any critical components, only branches labeled as \texttt{UNIMPORTANT} by all four researchers could be marked as \texttt{UNIMPORTANT} in our example ideal branch files\footnote{Incorrectly labeling \texttt{UNIMPORTANT} branches as \texttt{IMPORTANT} only increases the fuzzing time without affecting the accuracy of the analysis.}. We provide an example snippet of an ideal model file for \libsnark in Appendix~\ref{app:snarkprobe-idealfiles}.
+By default, all branches are marked as \texttt{IMPORTANT} and thus covered.  We asked four researchers in our group (including people with experience using zkSNARKs and those with only programming experience) to label branches as \texttt{IMPORTANT} or \texttt{UNIMPORTANT}. To ensure \SnarkFuzzer does not miss any critical components, only branches labeled as \texttt{UNIMPORTANT} by all four researchers could be marked as \texttt{UNIMPORTANT} in our example ideal branch files\footnote{Incorrectly labeling \texttt{UNIMPORTANT} branches as \texttt{IMPORTANT} only increases the fuzzing time without affecting the accuracy of the analysis.}. We provide an example snippet of an ideal model file for \libsnark in \autoref{fig:ideal_branch}.
+
+\begin{figure}[H]
+\begin{tcolorbox}
+\begin{verbatim}
+Relative Path: knowledge_commitment/kc_multiexp.tcc
+FUNCTION,2,99,127,kc_batch_exp_internal,IMPORTANT
+CONDITION,4,117,124,2,IMPORTANT
+CONDITION,5,119,123,2,IMPORTANT
+RETURN,2,126,126,2,IMPORTANT
+\end{verbatim}
+\end{tcolorbox}
+\caption{Example file for the ideal branch file}
+\label{fig:ideal_branch}
+\end{figure}
 
 %\textbf{Static Analysis for Call-graph:}
 % As is the case with many libraries, some zkSNARK libraries, such as \libsnark, are large and contain many extra features. As such, the library may contain some uncallable/unreachable functions that have been marked as important. For example, \libsnark has two crypto-related functions \texttt{r1cs\_to\_qap\_instance\_map} and \texttt{r1cs\_to\_qap\_instance\_map\_with\_evaluation}. These two functions were marked as important based on the previous principles. However, \texttt{r1cs\_to\_qap\_instance\_map} is not called by any other functions in the code, including the main function, so it will not be used as part of any proof. Therefore, we should exclude these kinds of functions in the ideal branch file since they cannot be exercised.
@@ -284,8 +560,22 @@ In order to find uncallable functions, we used a static analysis tool called Dox
 Doxygen can help a user generate the call graph for a library, and by using this call graph, the user can easily find unused and uncallable functions to reduce fuzzing costs.
 
 \parheadit{Ideal Value File.}%
-The ideal value file contains ``official'' variable names, variable types, and variable names, path, and line number (the final assignment location for a variable) in the library's source code. We provide an example snippet of an ideal value file for the \libsnark library in Appendix~\ref{app:snarkprobe-idealfiles}.
+The ideal value file contains ``official'' variable names, variable types, and variable names, path, and line number (the final assignment location for a variable) in the library's source code. We provide an example snippet of an ideal value file for the \libsnark library in \autoref{fig:ideal_value}.
 While line numbers might change as code is maintained, one should not need to manually create a new file often.  If there are only minor or non-cryptographic related changes, our tool will automatically match the new line numbers.
+
+
+\begin{figure}[H]
+\begin{tcolorbox}
+\begin{verbatim}
+tau,Fr,t,zk_proof_systems/.../r1cs_ppzksnark.tcc,252
+rhoA,Fr,rA,zk_proof_systems/.../r1cs_ppzksnark.tcc,300
+rhoB,Fr,rB,zk_proof_systems/.../r1cs_ppzksnark.tcc,301
+\end{verbatim}
+\end{tcolorbox}
+\caption{Example file for the ideal value file}
+\label{fig:ideal_value}
+\end{figure}
+
 
 %%%%%%%%%%
 
@@ -337,10 +627,42 @@ In the re-evaluation process, the \valuechecker will faithfully follow the proto
 \parheadit{GDB PrettyPrint.}%
 %\label{subsubsec:snarkprobe-prettyprint}%
 GDB can display both the structure and value(s) for a variable. However, for more complicated variables 
-GDB displays some unnecessary variable structure and data. Also, different libraries usually have different data structures (even for the ``same'' variables), and, as such, the \valuechecker cannot directly use the raw, unformatted variable value extracted from the library. For example, Figures \ref{subfig:snarkprobe-prettyprint_a}, \ref{subfig:snarkprobe-prettyprint_b}, and \ref{subfig:snarkprobe-prettyprint_c} in Appendix~\ref{app:snarkprobe-prettyprint-app} show a $G_1$ type variable that represents the same number in both \libsnark, \bellman, and \arkworks but has different structure and value when printed naively.
+GDB displays some unnecessary variable structure and data. Also, different libraries usually have different data structures (even for the ``same'' variables), and, as such, the \valuechecker cannot directly use the raw, unformatted variable value extracted from the library. For example, \autoref{subfig:snarkprobe-prettyprint_a}, \autoref{subfig:snarkprobe-prettyprint_b}, and \autoref{subfig:snarkprobe-prettyprint_c} show a $G_1$ type variable that represents the same number in both \libsnark, \bellman, and \arkworks but has different structure and value when printed naively.
 %without PrettyPrint in both \libsnark and \bellman, and they represent the same number in finite field but with different structure and value (due to the different finite field and elliptic curve modulus).
 
-To make the \valuechecker more universal, we developed a PrettyPrint functionality for each library to convert all data structures into the same format. The goals of PrettyPrint are twofold: $1)$ to allow the extractor to keep only the necessary values for a variable, and $2)$ to convert the same types of variables from different libraries into a common universal format that the \valuechecker can then accept.  Figure \ref{subfig:snarkprobe-prettyprint_d} in Appendix~\ref{app:snarkprobe-prettyprint-app} shows an example of the PrettyPrint result for the same $G_1$ variable as before. %Therefore, with PrettyPrint, the \valuechecker can be easily applied to any library, even in different programming languages, since PrettyPrint can consistently convert all data structures into the same, more straightforward format.
+To make the \valuechecker more universal, we developed a PrettyPrint functionality for each library to convert all data structures into the same format. The goals of PrettyPrint are twofold: $1)$ to allow the extractor to keep only the necessary values for a variable, and $2)$ to convert the same types of variables from different libraries into a common universal format that the \valuechecker can then accept. \autoref{subfig:snarkprobe-prettyprint_d} shows an example of the PrettyPrint result for the same $G_1$ variable as before. %Therefore, with PrettyPrint, the \valuechecker can be easily applied to any library, even in different programming languages, since PrettyPrint can consistently convert all data structures into the same, more straightforward format.
+
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-a.jpg}
+  \caption{Content without PrettyPrint in \libsnark}
+  \label{subfig:snarkprobe-prettyprint_a}
+\end{subfigure}
+\par\vspace{10pt}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-b.jpg}
+  \caption{Content without PrettyPrint in \bellman}
+  \label{subfig:snarkprobe-prettyprint_b}
+\end{subfigure}
+\par\vspace{10pt}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-c.jpg}
+  \caption{Content without PrettyPrint in \arkworks}
+  \label{subfig:snarkprobe-prettyprint_c}
+\end{subfigure}
+\par\vspace{10pt}
+\begin{subfigure}{0.9\textwidth}
+  \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-d.jpg}
+  \caption{Content with PrettyPrint in any library}
+  \label{subfig:snarkprobe-prettyprint_d}
+\end{subfigure}
+\caption{Content of variable type G1}
+\label{fig:snarkprobe-prettyprint}
+\end{figure}
+
+
 
 \parheadit{\valueextractor.}
 The \valueextractor extracts all variables defined in the ideal value file using GDB and PrettyPrint.  As the ideal value file contains the line number where each variable is assigned, the \valueextractor can automatically set up a breakpoint for each variable immediately after its assignment. Then, when the input program reaches this, the \valueextractor uses PrettyPrint to save the variable's formatted value. %The program will continually run until all GDB breakpoints have been hit and all variables' values have been saved.

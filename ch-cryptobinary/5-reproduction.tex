@@ -9,7 +9,7 @@
 
 We start by assessing the reproducibility of each tool by employing consistent experimental setups, procedures, and operating conditions to replicate their purported capabilities. 
 
-In our reproducibility evaluation we follow the ACM guidelines on reproducibility \cite{rar}, using the same measurement procedure, system setting, and operating conditions as the tool's original test cases\footnote{For the precise details and steps of our reproducibility evaluation see Appendix \ref{app:cryptobinary-repro_procedure}.}. This will help us to understand the basic fundamental reliability for each tool.  When tools do not pass the reproduction evaluation, we also provide a brief discussion for why.
+In our reproducibility evaluation we follow the ACM guidelines on reproducibility \cite{rar}, using the same measurement procedure, system setting, and operating conditions as the tool's original test cases\footnote{For the precise details and steps of our reproducibility evaluation see \autoref{app:cryptobinary-repro_procedure}.}. This will help us to understand the basic fundamental reliability for each tool.  When tools do not pass the reproduction evaluation, we also provide a brief discussion for why.
 \autoref{tab:cryptobinary-reproducibility} shows the reproducibility results.
 % \fanyo{We use \cmark to indicate successful reproduction of the tool with their original test cases, \xmark for failure to reproduce or when the tool is unavailable (neither source code nor compiled binary is provided), and \texttt{n/a} if the tool is executable but lacks the original test cases.}
 
@@ -20,13 +20,12 @@ In our reproducibility evaluation we follow the ACM guidelines on reproducibilit
 \hline
 Aligot & \makecell{Crypto\\Hunt} & \makecell{Crypto\\Knight}  & DRACA  & FindCrypt2  & FALKE-MC \\ \hline
 \cmark & \xmark & \cmark & \textminus & \textminus & \xmark  \\ \hline \hline
-HCD & Kerckhoff  & \makecell{PEiD \\ KANAL}  & SignSrch  & \makecell{Softmax \\ Classifier}  & \makecell{Where’s \\ Crypto}\\ \hline
+HCD & Kerckhoff  & \makecell{PEiD \\ KANAL}  & SignSrch  & \makecell{Softmax \\ Classifier}  & \makecell{Where's \\ Crypto}\\ \hline
 \textminus  & \xmark & \textminus & \textminus & \xmark & \cmark  \\ \hline
 \end{tabular}
 \end{adjustbox}
 \caption{Reproducibility outcome for each tools. \cmark~indicates a tool that has passed the reproduction evaluation, while \xmark~represents a tool that has either failed the reproduction evaluation or is not accessible. \textminus~denotes a tool that is available for use, but the developer has not provided the original test cases.}
 \label{tab:cryptobinary-reproducibility}
-\vspace{-10pt}
 \end{table}
 
 Note that for certain tools, the developers only provided the executable binary program without the accompanying source code or test cases necessary for evaluation, making a reproducibility assessment unfeasible (denoted \textminus). Some tools are not publicly available in either source code or executable binary form, making a reproducibility evaluation impossible. As a result, they are marked with a \xmark. Additionally, we encountered crashes when running Pin-based tools with the latest version of Intel Pin, indicating that the design of older cryptographic detection tools may not be compatible with newer Pin versions. However, Aligot is the one exception to this.  Aligot provides step-by-step test cases, and, based on this, we have successfully reproduced each step with the expected results. Therefore, we consider Aligot reproducible, as we were able to replicate the test results using their original measurement procedures.

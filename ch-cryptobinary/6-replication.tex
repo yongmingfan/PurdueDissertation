@@ -1,11 +1,14 @@
 \section{Replication}
 \label{sec:cryptobinary-replication}
 
-We now undertake a comprehensive replicability evaluation of existing work across different categories of cryptographic algorithms with our newly proposed analysis framework, in order to understand their consistency, robustness, and effectiveness. Our replication evaluation follows the ACM guidelines on replicability \cite{rar}. We rebuild each tool (if the source code is available) and run it across different system environments using our newly developed evaluation benchmark as the test cases\footnote{For the precise details and steps of our replicability evaluation see Appendix \ref{app:cryptobinary-repli_procedure}.}.
+We now undertake a comprehensive replicability evaluation of existing work across different categories of cryptographic algorithms with our newly proposed analysis framework, in order to understand their consistency, robustness, and effectiveness. Our replication evaluation follows the ACM guidelines on replicability \cite{rar}. We rebuild each tool (if the source code is available) and run it across different system environments using our newly developed evaluation benchmark as the test cases\footnote{For the precise details and steps of our replicability evaluation see \autoref{app:cryptobinary-repli_procedure}.}.
 This evaluation encompasses all work across this domain, allowing us to delve into their performance and potential limitations. For each cryptographic algorithm, we considered different optimization/obfuscation levels, compilers, and implementations. These experiments are designed to help us understand the consistency and robustness of existing work and techniques, the current status of cryptographic function detection performance and to explore potential future research questions, as well as to highlight existing challenges in cryptographic function detection.  We also involve micro-benchmarks, libraries, and large scale projects to examine each tool's performance in real-world applications.
-We present the full results of our evaluation in Table~\ref{tab:cryptobinary-benchmarks} in Appendix~\ref{app:cryptobinary-addltables}, and discuss a selection of the results, as well as their implications, now.
+We present the full results of our evaluation in \autoref{tab:cryptobinary-benchmarks}, and discuss a selection of the results, as well as their implications, now.
 
-Based on our replicability evaluation, we find that some tools cannot be replicated with our framework. We also highlight some interesting new results, which may help direct future research in this field. This will be addressed in both this section and in Section \ref{sec:cryptobinary-discussion}.
+Based on our replicability evaluation, we find that some tools cannot be replicated with our framework. We also highlight some interesting new results, which may help direct future research in this field. This will be addressed in both this section and in \autoref{sec:cryptobinary-discussion}.
+
+\input{ch-cryptobinary/tab_fullevaluation}
+
 
 
 \subsection{Non-Replicable Tools}
@@ -67,7 +70,7 @@ Based on our replicability evaluation, we find that some tools cannot be replica
 \subsection{Unexpected Detection Results}
 \label{subsec:cryptobinary-false}
 
-\begin{table}[]
+\begin{table}[H]
 \footnotesize
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -87,7 +90,6 @@ Where's Crypto & \cmark & \cmark & \cmark &  &  &  & \cmark & \cmark & \cmark \\
 \end{adjustbox}
 \caption{Comparative analysis of detection approaches versus stated capabilities in original documentation. Cross mark denotes inconsistencies (false positive or false negative), check mark successful replication.}
 \label{tab:cryptobinary-comparison}
-%\vspace{-20pt}
 \end{table}
 
 We begin by discussing evaluation results that were either unexpected or inconsistent based on prior stated findings.
@@ -95,8 +97,44 @@ During our evaluation, we encountered instances where certain tools yielded fals
 
 \parhead{Unreplicable cryptographic function detection.} In \autoref{tab:cryptobinary-summary}, we list the purported performance for each tool. However, our evaluation could not verify the detection capabilities for certain cryptographic functions in some of the tools. \autoref{tab:cryptobinary-comparison} presents the outcomes of our assessment relative to the detection capabilities as claimed by the respective tools' original documentation. If a tool claims to have the ability to detect a cryptographic algorithm, but we cannot reproduce the same result in any of our benchmarks or evaluation metrics, we mark it with a red exclamation mark. Otherwise, if we can confirm the detection ability, we mark it with a green circle. A blank means the tool makes no claim about the given algorithm.  Due to the unavailability of documentation for HCD and PEiD KANAL, a comparison of our evaluation results with their claimed detection capabilities was not possible.
 
+\begin{table*}[htb]
+\centering
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{cc|ccccccccc|ccccc}
+\hline
+\multicolumn{2}{c||}{\multirow{2}{*}{Tool}} & \multicolumn{9}{c|}{Cryptographic Algorithm} & \multicolumn{5}{c}{Micro-Benchmark} \\ \cline{3-16} 
+\multicolumn{2}{c||}{} & \multicolumn{1}{c|}{AES} & \multicolumn{1}{c|}{DES} & \multicolumn{1}{c|}{MD5} & \multicolumn{1}{c|}{RC4} & \multicolumn{1}{c|}{RC5} & \multicolumn{1}{c|}{RSA} & \multicolumn{1}{c|}{SHA1} & \multicolumn{1}{c|}{SHA256} & \multicolumn{1}{c|}{TEA} & \multicolumn{1}{c|}{File} & \multicolumn{1}{c|}{I/O} & \multicolumn{1}{c|}{Math} & \multicolumn{1}{c|}{Matrix} & Network\\ \hline\hline
+\multicolumn{1}{c|}{\multirow{4}{*}{DRACA}} & \multicolumn{1}{c||}{False Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{False Negative} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{69\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{28\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{31\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{72\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & 100\% \\ \hline
+\multicolumn{1}{c|}{\multirow{4}{*}{CryptoKnight}} & \multicolumn{1}{c||}{False Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{74\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{False Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Positive} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{26\%} & 100\% \\ \hline
+\multicolumn{1}{c|}{\multirow{4}{*}{Findcrypt2}} & \multicolumn{1}{c||}{False Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{False Negative} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{69\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{31\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & 100\% \\ \hline
+\multicolumn{1}{c|}{\multirow{4}{*}{Signsrch}} & \multicolumn{1}{c||}{False Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{False Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{69\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{31\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Positive} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{31\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{69\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & 100\% \\ \hline
+\multicolumn{1}{c|}{\multirow{4}{*}{Where's Crypto}} & \multicolumn{1}{c||}{False Positive} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{False Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{69\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Positive} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{31\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & 0\% \\ \cline{2-16} 
+\multicolumn{1}{c|}{} & \multicolumn{1}{c||}{True Negative} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{0\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & \multicolumn{1}{c|}{100\%} & 100\% \\ \hline
+\end{tabular}
+\end{adjustbox}
+%}
+\caption{Performance Metrics for Tool Evaluation: False Positives, False Negatives, True Positives, and True Negatives}
+\label{tab:cryptobinary-quat}
+\end{table*}
+
 \parhead{Micro-benchmark false positives.} In our micro-benchmark evaluations, we also uncovered new false positive results. None of the tools falsely considered operations like file handling, I/O, network connection, or heavy math operations as cryptographic functions. However, some tools, such as CryptoKnight and Signsrch, mistakenly identify a mathematical matrix as a cryptographic function like AES. Since AES includes the Rijndael S-box (often coded as a matrix), tools that rely on static signature searches may incorrectly recognize a matrix as an AES function. This highlights the importance of broader and more standardized test cases as well, as things like this were not considered by previous evaluations.
-To better understand these results, in Table \ref{tab:cryptobinary-quat} (Appendix~\ref{app:cryptobinary-addltables}) we present the detailed breakdown of percentage of false positives and false negatives observed for each tool across various cryptographic functions, offering a comprehensive comparison of their performance in these error metrics. This allows us to gain insight into the likelihood of a tool raising errors when attempting to detect specific cryptographic functions.
+To better understand these results, in \autoref{tab:cryptobinary-quat}, we present the detailed breakdown of percentage of false positives and false negatives observed for each tool across various cryptographic functions, offering a comprehensive comparison of their performance in these error metrics. This allows us to gain insight into the likelihood of a tool raising errors when attempting to detect specific cryptographic functions.
 
 \parhead{Undetected cryptographic functions in libraries.} Finally, besides standard stand-alone cryptographic functions, we also selected some real-world cryptographic libraries and libraries with similar behavior to cryptographic functions to test on. We find that many tools successfully detect cryptographic functions in these libraries, which is expected, as some, including openssl and libgcrypt, are indeed primarily cryptographic libraries.
 However, it is interesting to note that this is not true of all tools.  Some work fails to detect cryptographic functions in this setting.  For example, tools like DRACA, HCD, and Signsrch are unable to detect any cryptographic functions from openssl, while CryptoKnight and HCD fail to detect cryptographic functions in libgcrypt. We are not sure why this is the case, and leave this as an interesting avenue for future work.  This also points to the fact that existing work may have unreliable performance in real world (large) programs.
@@ -116,15 +154,13 @@ These inherent limitations potentially reduce the scope and depth of analysis a 
 
 %For example, most malware is designed for a specific operating system. In order to detect malware and its related cryptographic functions, a developer has to use a cryptographic detection tool that supports the target operating system, or otherwise, such analysis will be hampered.
 
-In Table \ref{tab:cryptobinary-system}, we evaluate the capability of exisiting work to analyze binaries across three different operating systems and for binaries compiled specifically for each of these operating systems. We use a \LEFTcircle \space to indicate cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ.
+In \autoref{tab:cryptobinary-system}, we evaluate the capability of exisiting work to analyze binaries across three different operating systems and for binaries compiled specifically for each of these operating systems. We use a \LEFTcircle \space to indicate cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ.
 
 \begin{takeaway}
 \textbf{Takeaway:} Ideally cryptographic function detection tools need to support all operating systems to effectively detect cryptographic functions or malware across diverse environments and improve overall detection measures.
 \end{takeaway}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-%\vspace*{-10pt}
+
 \begin{table}[t]
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -141,12 +177,11 @@ HCD                   & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}
 Kerckhoff             & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\Circle}     & \Circle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\Circle}     & \Circle     \\ \hline
 PEiD KANAL            & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\LEFTcircle}     & \LEFTcircle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\CIRCLE}     & \CIRCLE     \\ \hline
 Signsrch              & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\LEFTcircle}     & \LEFTcircle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\CIRCLE}     & \CIRCLE     \\ \hline
-Where’s Crypto        & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\Circle}     & \Circle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\CIRCLE}     & \CIRCLE     \\ \hline
+Where's Crypto        & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\Circle}     & \Circle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\CIRCLE}     & \CIRCLE     \\ \hline
 \end{tabular}
 \end{adjustbox}
-\caption{Tool compatibility with different operating systems; \CIRCLE represents a tool that supports the desired system, while \Circle indicates a tool that does not support the desired system; \LEFTcircle \space represents cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ}
+\caption{Tool compatibility with different operating systems; \CIRCLE~represents a tool that supports the desired system, while \Circle indicates a tool that does not support the desired system; \LEFTcircle \space represents cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ}
 \label{tab:cryptobinary-system}
-\vspace*{-10pt}
 \end{table}
 
 
@@ -181,11 +216,11 @@ Where’s Crypto        & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c
 
 %\emph{R1: Does the choice of compiler play a role in the detection success?}
 
-To study the impact of compilers on cryptographic function detection, we compiled each program in our benchmarking framework with GCC/G++, CLANG/CLANG++, and MSVC.  Somewhat as expected given the impact a compiler can have on the resulting binary, our evaluation shows that tools may output quite different results for different compilers.  We choose MD5 as an illustrative example, shown in Figure \ref{fig:cryptobinary-evaluate_compiler}, though we have observed the same general trends across most cryptographic schemes.
+To study the impact of compilers on cryptographic function detection, we compiled each program in our benchmarking framework with GCC/G++, CLANG/CLANG++, and MSVC.  Somewhat as expected given the impact a compiler can have on the resulting binary, our evaluation shows that tools may output quite different results for different compilers.  We choose MD5 as an illustrative example, shown in \autoref{fig:cryptobinary-evaluate_compiler}, though we have observed the same general trends across most cryptographic schemes.
 
 \begin{figure}[ht]
     \centering
-  \includegraphics[width=0.8\linewidth,keepaspectratio]{ch-cryptobinary/figure/evaluate_compiler_new.png}
+  \includegraphics[width=0.95\textwidth,keepaspectratio]{ch-cryptobinary/figure/evaluate_compiler_new.png}
 	%\vspace*{-10pt}
   \caption{Evaluation result for MD5 with different compilers. A full marker indicates that function can be detected and an empty marker that it cannot.}
   \label{fig:cryptobinary-evaluate_compiler}
@@ -195,7 +230,7 @@ To study the impact of compilers on cryptographic function detection, we compile
 
 In this example, DRACA, Findcrypt2, PEiD KANAL, Signsrch, and Where's Crypto support detecting the MD5 algorithm. However, their detection capabilities are influenced by the compiler used. All of these tools can detect the MD5 algorithm in binaries compiled with the MSVC compiler, regardless of the optimization flag. In contrast, for binaries compiled with GCC, they can only detect the MD5 algorithm when the -O0 optimization flag is applied. Furthermore, when using the Clang compiler, none of these tools were able to detect the MD5 algorithm in the binary. This suggests that differences between compilers may significantly impact a tool's analysis results. In general, we found that the MSVC compiler has less impact on detection results compared to GCC and CLANG. Specifically, if a tool can detect a certain cryptographic algorithm in a program compiled by GCC or CLANG, it will also be able to detect that algorithm in the same program compiled by MSVC.
 
-For example, Signsrch shows inconsistent performance with Clang, GCC, and MSVC, identifying the SHA-1 hash function in certain programs compiled with identical optimization flags but using a different compiler. We also observe same behaviour for DARACA when detect XXTEA algorithm (see Table \ref{tab:cryptobinary-benchmarks} for details).
+For example, Signsrch shows inconsistent performance with Clang, GCC, and MSVC, identifying the SHA-1 hash function in certain programs compiled with identical optimization flags but using a different compiler. We also observe same behaviour for DARACA when detect XXTEA algorithm (see \autoref{tab:cryptobinary-benchmarks} for details).
 
 The structure of binaries produced by different compilers, such as MSVC, GCC, and LLVM, can vary significantly due to differences in object file formats, optimization strategies, and code generation techniques. Binary analysis often relies on symbolic information, padding, and inlined data, all of which are heavily influenced by the compiler version~\cite{andriesse2017compiler}. These variations can hinder the effectiveness of cryptographic function detection tools, potentially leading to inaccurate or incomplete detection results.
 
@@ -322,7 +357,6 @@ Optimization flags significantly alter the structure and behavior of a binary pr
 We also carried out evaluations to determine whether variations in a cryptographic algorithm affects the success of its detection. As a case study, we analyzed different variants of the Tiny Encryption Algorithm (TEA), including standard TEA, XTEA, and XXTEA. While all the tools were able to successfully detect TEA binaries with any of these three variants, we observed some interesting details in the detection results.
 
 \begin{table}[h]
-%\vspace{-6pt}
 \centering
 \begin{tabular}{l||l|l}
 \hline
@@ -334,10 +368,9 @@ XXTEA & \begin{tabular}[c]{@{}l@{}}* RC5 or RC6 - 50\%\\ ** TEA - 67\%\end{tabul
 %}
 \caption{Output when evaluating DRACA and Signsrch with different variants of TEA}
 \label{tab:cryptobinary-evaluate_variant}
-%\vspace*{-0.7cm}
 \end{table}
 
-For example, as shown in Table \ref{tab:cryptobinary-evaluate_variant}, when using DRACA to analyze binaries containing TEA or XXTEA, the tool provides a confidence score. It tends to determine that a binary program is more likely to contain TEA functions if TEA or XXTEA is present. However, when analyzing binary programs containing XTEA, DRACA may incorrectly identify RC5 or RC6 as being present in 50\% of cases, and TEA functions in only 34\% of cases. In contrast, Signsrch is able to detect TEA functions in all three binary programs containing TEA, XTEA, or XXTEA, but it may identify different TEA signatures in each binary.
+For example, as shown in \autoref{tab:cryptobinary-evaluate_variant}, when using DRACA to analyze binaries containing TEA or XXTEA, the tool provides a confidence score. It tends to determine that a binary program is more likely to contain TEA functions if TEA or XXTEA is present. However, when analyzing binary programs containing XTEA, DRACA may incorrectly identify RC5 or RC6 as being present in 50\% of cases, and TEA functions in only 34\% of cases. In contrast, Signsrch is able to detect TEA functions in all three binary programs containing TEA, XTEA, or XXTEA, but it may identify different TEA signatures in each binary.
 
 %\noindent\fbox{%
     %\parbox{\textwidth}{%
@@ -364,14 +397,13 @@ We selected multiple (ransomware) malware binaries, including CryptoLocker \cite
 %TeslaCrypt is a ransomware trojan that targets game-play data, with newer variants also affecting other file types \cite{GALLAGHER_2015}.  
 %Win32Dircrypt may encrypt file through spam emails or by being downloaded by other malware and ask payment for decryption.
 
-We tested the tools with these malware samples and present the results in Table \ref{tab:cryptobinary-evaluate_malware}. It is worth noting that malware may have different versions depending on the discovery date, and detection results are highly dependent on these versions. We found that the tools could detect cryptographic functions in TeslaCrypt version 2 but failed to do so in versions 1 and 3. This suggests that the malware may employ non-standard algorithms to evade binary analysis in certain versions, increasing the difficulty of detection. Furthermore, cryptographic functions in CryptoLocker's September 10, 2013 version were detectable by the tools, but in the November 20, 2013, and January 22, 2014 versions, they were no longer detectable. In the latter two versions, some tools identified the presence of anti-debugging techniques in the malware, which might explain why cryptographic functions could not be detected anymore.
+We tested the tools with these malware samples and present the results in \autoref{tab:cryptobinary-evaluate_malware}. It is worth noting that malware may have different versions depending on the discovery date, and detection results are highly dependent on these versions. We found that the tools could detect cryptographic functions in TeslaCrypt version 2 but failed to do so in versions 1 and 3. This suggests that the malware may employ non-standard algorithms to evade binary analysis in certain versions, increasing the difficulty of detection. Furthermore, cryptographic functions in CryptoLocker's September 10, 2013 version were detectable by the tools, but in the November 20, 2013, and January 22, 2014 versions, they were no longer detectable. In the latter two versions, some tools identified the presence of anti-debugging techniques in the malware, which might explain why cryptographic functions could not be detected anymore.
 
 %We found that none of the cryptographic detection tools we chose can detect AES in CryptoWall, since CryptoWall primarily uses RSA, and may only use non-standard versions of AES in its source code.
 %Meanwhile, most tools cannot detect AES in TeslaCrypt, but DRACA successfully finds AES algorithm in TeslaCrypt version 3372C.  And even though AES cannot be detected, some tools still successfully found other cryptographic hash algorithms in CryptoWall and TeslaCrypt including SHA256, RIPEMD, and Fork256.
 
 
 \begin{table}[h]
-\vspace*{-0.1cm}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||c|c|c|c}
@@ -392,7 +424,6 @@ Win32Dircrypt           & \xmark & \cmark      & \cmark    &            \\ \hlin
 \end{adjustbox}
 \caption{Evaluation results for cryptographic function detection in different malware versions}
 \label{tab:cryptobinary-evaluate_malware}
-%\vspace*{-0.6cm}
 \end{table}
 
 

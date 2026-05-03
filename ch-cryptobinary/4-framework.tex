@@ -1,4 +1,4 @@
-\section{Analysis framework for open-source detection tools}
+\section{Analysis Framework for Open-Source Detection Tools}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:cryptobinary-framework}
 
@@ -79,7 +79,7 @@ functions including:
 \item libpng (1.6.43)
 \end{itemize}
 \end{multicols}
-\vspace*{-10pt}
+
 This allows us to again test for false positives, but also to test for a variety of different cryptographic algorithms implemented in different ways.
 We select open source libraries only, so that we are able to compile them based on our evaluation metrics. For each tool, we used the latest version available at the time of evaluation. Our selection includes a diverse range of libraries, from those with frequent recent updates, such as OpenSSL, to those that are a bit older, such as libjpeg.
 
@@ -88,32 +88,48 @@ Signal was selected because it both utilizes multiple (modern) cryptographic sch
 
 \subsection{Evaluation Metrics}
 \label{subsec:cryptobinary-metrics}
-To ensure a thorough exploration of current tools (and to provide rigorous and fair evaluation metrics for the future), we have meticulously crafted a series of evaluation experiments. These experiments are thoughtfully designed to align with the challenges we discuss in Section \ref{subsec:cryptobinary-challenges}, maximizing our ability to uncover the current state of these tools and elucidate their strengths and weaknesses.  Our evaluation metrics are as follows:
+To ensure a thorough exploration of current tools (and to provide rigorous and fair evaluation metrics for the future), we have meticulously crafted a series of evaluation experiments. These experiments are thoughtfully designed to align with the challenges we discuss in \autoref{subsec:cryptobinary-challenges}, maximizing our ability to uncover the current state of these tools and elucidate their strengths and weaknesses.  Our evaluation metrics are as follows:
  
 \begin{itemize}
-\item \textbf{Based on optimization levels:} Evaluate based on different compiler optimizations including -O0, -O1, -O2, -O3, -Os, and -Ofast
+\item \textbf{Based on optimization levels:} Evaluate based on different compiler optimizations including \texttt{-O0}, \texttt{-O1}, \texttt{-O2}, \texttt{-O3}, \texttt{-Os}, and \texttt{-Ofast}.
 
 \item \textbf{Based on different combinations of obfuscation mechanisms:}
 
 \begin{itemize}
-\item \textbf{Control-flow obfuscation:} Adding bogus control-flow, control-flow flattening, substitution of instructions, polymorphism
+\item \textbf{Control-flow obfuscation:} Adding bogus control-flow, control-flow flattening, substitution of instructions, polymorphism.
 
-\item \textbf{Data-flow obfuscation:} Data aggregation, data-splitting, variable transformation
+\item \textbf{Data-flow obfuscation:} Data aggregation, data-splitting, variable transformation.
 
-\item \textbf{Modified versions of algorithms:} For example, modified TEA (Russian TEA) used in malware as suggested in \cite{xu2017cryptographic}
+\item \textbf{Modified versions of algorithms:} For example, modified TEA (Russian TEA) used in malware as suggested in \cite{xu2017cryptographic}.
 
-\item \textbf{Layout Obfuscation:} Address obfuscation, obfuscating debug information, address layout/memory layout randomization 
+\item \textbf{Layout Obfuscation:} Address obfuscation, obfuscating debug information, address layout/memory layout randomization .
 
-\item \textbf{Combination of all prior techniques}
+\item \textbf{Combination of prior techniques}
 \end{itemize}
 % \item \textbf{Based on type of the algorithm:} Some approaches can work better on stream ciphers, some others can work better on block ciphers
 
-\item \textbf{Based on different compilers:} Evaluate based on different compilers, including GCC, CLANG, MSVC
+\item \textbf{Based on different compilers:} Evaluate based on different compilers, including GCC, CLANG, MSVC.
 % \item \textbf{Based on algorithm versions:} A single cryptograhic algorithm may have multiple variant versions, and some malware do not use standard algorithm implementation.
 
 \end{itemize}
 
-The full list of optimizations, obfuscations, and their combinations we select for our evaluation can be found in Appendix \ref{app:cryptobinary-metrics}.
+The full list of optimizations, obfuscations, and their combinations selected for our evaluation is shown below.
+
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item No identification
+\item Identification with optimization flag \texttt{-O0}
+\item Identification with optimization  flag \texttt{-O1}
+\item Identification with optimization flag \texttt{-O2}
+\item Identification with optimization flag \texttt{-O3}
+\item Identification with optimization flag \texttt{-Os}
+\item Identification with optimization flag: \texttt{-Ofast}
+\item Identification with instruction substitution obfuscation: \texttt{-obs\textunderscore sub}
+\item Identification with control-flow flattening: \texttt{-obs\textunderscore fla}
+\item Identification with bogus control-flow: \texttt{-obs\textunderscore bcf}
+\item Identification with combination of obfuscation: \texttt{-obs\textunderscore sub}, \texttt{-obs\textunderscore fla}, \texttt{-obs\textunderscore bcf}
+\item Identification with combination of obfuscation and optimization: \texttt{-obs\textunderscore sub}, \texttt{-obs\textunderscore fla}, \texttt{-obs\textunderscore bcf}, \texttt{-O3}
+\end{enumerate}
 
 %\section{Identiifcation techniques}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,9 +165,7 @@ The full list of optimizations, obfuscations, and their combinations we select f
 % \end{minipage}
 % \end{figure}
 
-
-
-We assessed each tool with these benchmarks and metrics to thoroughly explore accuracy and detection capabilities when handling binary programs subjected to specific compiler or optimization/obfuscation techniques.\footnote{All benchmarks and metrics we evaluate are available at https://github.com/BARC-Purdue/CryptoBinary.} For instance, a tool \textbf{A} might successfully detect MD5 when all optimization flags are applied but fail to do so in the presence of obfuscation. Conversely, a tool \textbf{B} may be able to detect TEA when compiled with GCC but not when compiled with CLANG. This exploration provides us with a more comprehensive understanding of the current state of cryptographic function detection tools, revealing their weaknesses and indicating areas for future development from various perspectives.
+We assessed each tool with these benchmarks and metrics to thoroughly explore accuracy and detection capabilities when handling binary programs subjected to specific compiler or optimization/obfuscation techniques.\footnote{All benchmarks and metrics we evaluate are available at \url{https://github.com/BARC-Purdue/CryptoBinary}.} For instance, a tool \textbf{A} might successfully detect MD5 when all optimization flags are applied but fail to do so in the presence of obfuscation. Conversely, a tool \textbf{B} may be able to detect TEA when compiled with GCC but not when compiled with CLANG. This exploration provides us with a more comprehensive understanding of the current state of cryptographic function detection tools, revealing their weaknesses and indicating areas for future development from various perspectives.
 
 
 % Then based on our metric, we give tool \textbf{A}

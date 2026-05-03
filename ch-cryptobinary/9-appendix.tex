@@ -1,21 +1,3 @@
-\section{List of Optimizations, Obfuscations, and their Combinations for Our Evaluation Metrics}
-\label{app:cryptobinary-metrics}
-\begin{enumerate}
-\setcounter{enumi}{-1}
-\item No identification
-\item Identification with optimization flag -O0
-\item Identification with optimization  flag -O1
-\item Identification with optimization flag -O2
-\item Identification with optimization flag -O3
-\item Identification with optimization  flag –Os
-\item Identification with optimization flag: -Ofast
-\item Identification with instruction substitution obfuscation: -obs\textunderscore sub
-\item Identification with control-flow flattening: -obs\textunderscore fla
-\item Identification with bogus control-flow: -obs\textunderscore bcf
-\item Identification with combination of obfuscation: -obs\textunderscore sub, obs\textunderscore fla, obs\textunderscore bcf
-\item Identification with combination of obfuscation and optimization: -obs\textunderscore sub, obs\textunderscore fla, obs\textunderscore bcf, -O3
-\end{enumerate}
-
 \section{Procedure for R+R Evaluation}
 
 \subsection{Steps in our Reproduction Evaluation}
@@ -181,16 +163,3 @@ Java applets, as well as 16- and 32-bit DOS Windows executables.
 % \parhead{CryptoSearcher} is a cryptographic function detection tool developed in 2004, and was evaluated previously in \cite{xu2017cryptographic}. However, we cannot find the tool's source code or documentation about how to use this tool. We only found the cryptographic signature files such as Blowfish, RC2, RC4, RC5, RC6, CAST-256, etc. Currently, we cannot evaluate this tool due to the lack of tool's source program and its documentation.
 
 % \parhead{Kerckhoff} cannot be evaluated in this paper due to the lack of tool's source code or documentation.
-
-
-\section{Additional Tables}
-\label{app:cryptobinary-addltables}
-%\input{tab_comparativestudy}
-
-This appendix contains the complete results of all of our replication and reproduction studies.
-
-\input{ch-cryptobinary/tab_percentages}
-\input{ch-cryptobinary/tab_detection}
-%\input{tab_evaluation}
-\input{ch-cryptobinary/tab_fullevaluation}
-%\input{tab_fullevaluation_old}
