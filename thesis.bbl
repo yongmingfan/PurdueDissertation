@@ -2348,12 +2348,25 @@
       \field{year}{2023}
     \endentry
     \entry{darkforest}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=7fc4cc7dd5c746b4fdd65ec9d851815c}{%
+           family={{Dark Forest Team}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
+      \strng{fullhash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
+      \strng{bibnamehash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
+      \strng{authorbibnamehash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
+      \strng{authornamehash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
+      \strng{authorfullhash}{7fc4cc7dd5c746b4fdd65ec9d851815c}
       \field{sortinit}{9}
       \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://blog.zkga.me/}}
-      \field{title}{Dark Forest}
-      \field{year}{2022}
+      \field{howpublished}{\url{https://blog.zkga.me/announcing-darkforest}}
+      \field{month}{8}
+      \field{title}{{Announcing Dark Forest}}
+      \field{year}{2020}
     \endentry
     \entry{aleo}{misc}{}
       \field{sortinit}{9}
@@ -2641,13 +2654,65 @@
       \field{title}{{libsnark}: A Rust implementation of the Groth16 zkSNARK}
       \field{year}{2023}
     \endentry
-    \entry{gnark}{misc}{}
+    \entry{gnark}{software}{}
+      \name{author}{6}{}{%
+        {{hash=7e7125d7a948fea579cc902d215310b1}{%
+           family={Botrel},
+           familyi={B\bibinitperiod},
+           given={Gautam},
+           giveni={G\bibinitperiod}}}%
+        {{hash=fed34639447f973b6fd431e94e5b91ac}{%
+           family={Piellard},
+           familyi={P\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=06e00fbaef80206a97d9edfa570570b0}{%
+           family={Housni},
+           familyi={H\bibinitperiod},
+           given={Youssef\bibnamedelima El},
+           giveni={Y\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=a83176190a1762b4603bb183c1ce6194}{%
+           family={Kubjas},
+           familyi={K\bibinitperiod},
+           given={Ivo},
+           giveni={I\bibinitperiod}}}%
+        {{hash=242a571a3b9fcad41dd03896fb532046}{%
+           family={Tabaie},
+           familyi={T\bibinitperiod},
+           given={Arya},
+           giveni={A\bibinitperiod}}}%
+        {{hash=782448d494f88e8366eb2520e2ac895c}{%
+           family={Galteland},
+           familyi={G\bibinitperiod},
+           given={Yao\bibnamedelima J.},
+           giveni={Y\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Zenodo}%
+      }
+      \strng{namehash}{9af6eedddb6a9886a1a99a58c5c2460b}
+      \strng{fullhash}{253690024c159ef60e4ef9fda6216889}
+      \strng{bibnamehash}{253690024c159ef60e4ef9fda6216889}
+      \strng{authorbibnamehash}{253690024c159ef60e4ef9fda6216889}
+      \strng{authornamehash}{9af6eedddb6a9886a1a99a58c5c2460b}
+      \strng{authorfullhash}{253690024c159ef60e4ef9fda6216889}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://github.com/Consensys/gnark}}
-      \field{title}{{gnark} zk-SNARK library}
-      \field{year}{2023}
+      \field{month}{5}
+      \field{title}{Consensys/gnark: v0.15.0}
+      \field{version}{v0.15.0}
+      \field{year}{2026}
+      \verb{doi}
+      \verb 10.5281/zenodo.5819104
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.5281/zenodo.5819104
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.5281/zenodo.5819104
+      \endverb
     \endentry
     \entry{chen2018systematic}{article}{}
       \name{author}{6}{}{%
@@ -3649,8 +3714,8 @@
     \endentry
     \entry{circl}{manual}{}
       \name{author}{2}{}{%
-        {{hash=8dfd48ee6fad74e9ad3be85c2945fd58}{%
-           family={Faz-Hern\'{a}ndez},
+        {{hash=fe6ec882b9be22d883f83443c801817e}{%
+           family={Faz-Hernandez},
            familyi={F\bibinithyphendelim H\bibinitperiod},
            given={Armando},
            giveni={A\bibinitperiod}}}%
@@ -3660,23 +3725,25 @@
            given={Kris},
            giveni={K\bibinitperiod}}}%
       }
-      \list{organization}{1}{%
-        {Cloudflare}%
-      }
-      \strng{namehash}{ca1f27de0323e98f7a29a99be5febed2}
-      \strng{fullhash}{ca1f27de0323e98f7a29a99be5febed2}
-      \strng{bibnamehash}{ca1f27de0323e98f7a29a99be5febed2}
-      \strng{authorbibnamehash}{ca1f27de0323e98f7a29a99be5febed2}
-      \strng{authornamehash}{ca1f27de0323e98f7a29a99be5febed2}
-      \strng{authorfullhash}{ca1f27de0323e98f7a29a99be5febed2}
+      \strng{namehash}{a247c1318010551b901dde36b102cdf8}
+      \strng{fullhash}{a247c1318010551b901dde36b102cdf8}
+      \strng{bibnamehash}{a247c1318010551b901dde36b102cdf8}
+      \strng{authorbibnamehash}{a247c1318010551b901dde36b102cdf8}
+      \strng{authornamehash}{a247c1318010551b901dde36b102cdf8}
+      \strng{authorfullhash}{a247c1318010551b901dde36b102cdf8}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{month}{6}
-      \field{note}{Available at \url{https://github.com/cloudflare/circl}. v1.2.0 Accessed Jun 2022}
       \field{title}{Introducing CIRCL: An Advanced Cryptographic Library}
       \field{year}{2019}
+      \verb{urlraw}
+      \verb https://github.com/cloudflare/circl/
+      \endverb
+      \verb{url}
+      \verb https://github.com/cloudflare/circl/
+      \endverb
     \endentry
     \entry{snarkjs}{misc}{}
       \field{sortinit}{1}
