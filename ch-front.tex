@@ -35,7 +35,7 @@
   \entry{Dr.~Antonio Bianchi}{Department of Computer Science}
   % There should be one \approvedby command containing the
   % "FORM 9 THESIS FORM HEAD NAME HERE" (from TEMPL, retrieved on 2020-03-01).
-  \approvedby{Dr.~Petros Drineas}
+  \approvedby{Dr.~Voicu Popescu}
 \end{statement}
 
 % Dedication page is optional.
@@ -49,9 +49,15 @@
 % a brief statement of appreciation or recognition of special
 % assistance.
 \begin{acknowledgments}
-  Purdue University's Engineering Computer Network
-  (now part of Purdue IT)
-  and Graduate School helped fund \PurdueThesisLogo\ development.
+  First and foremost, I would like to express my deepest appreciation to my doctoral advisor and mentor, Dr. Christina Garman, for giving me the opportunity to conduct research under her guidance. Her mentorship has been essential to my growth throughout my Ph.D. She gave me the freedom to explore my own research interests while also helping me stay focused and think carefully about the larger direction of my work. Beyond research and academic training, her guidance also helped me better understand my long-term goals, my interests, and the kind of researcher and educator I hope to become. I am truly fortunate to have had her support, patience, and encouragement during this journey.
+
+  I would also like to thank Dr. Jeremiah Blocki, Dr. Dave (Jing) Tian, and Dr. Antonio Bianchi for serving on my dissertation committee and for providing valuable guidance throughout this process. Their feedback, questions, and suggestions helped me improve this dissertation and think more deeply about my research. I am also grateful to my collaborators, Priyam Biswas from Intel, Rui Zhu from Amazon, and Yuquan Xu from Georgia Tech. Working with all of you has been a rewarding experience, and I sincerely appreciate the ideas, discussions, and effort you contributed to our collaborations.
+
+  My research path has also been shaped by many faculty members I had the opportunity to work with before and during my Ph.D. I am grateful to Dr. Xiaojing Liao, Dr. David Crandall, Dr. Selma Sabanovic, and Dr. William Swanson from Indiana University Bloomington, as well as Dr. James Elder from York University. I learned a great deal from each of them, and their guidance helped build the foundation for my later research. I also deeply appreciate Dr. Jennifer Coy from Ball State University and especially Dr. Yue Xiao from William \& Mary for their assistance, advice, and support in my academic career.
+
+  I am fortunate to have been part of the Purdue BARC group, including Alex Seto, Jacob White, Arushi Arora, and Saurav Chittal. The discussions, feedback, and weekly interactions within the group made my Ph.D. experience more meaningful and productive. I appreciated the research environment we shared and the support I received from the group throughout this journey. Their companionship and willingness to exchange ideas helped me grow both as a researcher and as a colleague.
+
+  Finally, I would like to thank my friends Dr. Chuck Jia, Yiwei Zhang, Chenchen Zheng, and Sijing Peng, who provided valuable support in both life and research during my Ph.D. journey. Their friendship, encouragement, and care helped me through many challenging moments and made this experience much more memorable. I am grateful for the conversations, time, and support we shared along the way. This journey would have been much more difficult without the people who stood by me outside of research as well as within it.
 \end{acknowledgments}
 
 % The preface is optional.
@@ -104,20 +110,20 @@
 % information you supply in
 %     \begin{scheme} ... \end{scheme}
 % environments.
-\listofschemes
+% \listofschemes
 
 % List of Symbols is optional.
-\begin{symbols}
-  \(m\)& mass\cr
-  \(v\)& velocity\cr
-\end{symbols}
+% \begin{symbols}
+%   \(m\)& mass\cr
+%   \(v\)& velocity\cr
+% \end{symbols}
 
 % List of Abbreviations is optional.
-\begin{abbreviations}
-  abbr& abbreviation\cr
-  bcf& billion cubic feet\cr
-  BMOC& big man on campus\cr
-\end{abbreviations}
+% \begin{abbreviations}
+%   abbr& abbreviation\cr
+%   bcf& billion cubic feet\cr
+%   BMOC& big man on campus\cr
+% \end{abbreviations}
 
 % Nomenclature is optional.
 % \begin{nomenclature}
@@ -160,19 +166,19 @@
 
 % Glossary is optional.
 \begin{glossary}
-  Cryptographic Primitive & Cryptographic primitive (also called cryptographic function or cryptographic algorithm) refers to the entirety of a specific scheme or class of algorithms such as AES or RSA, used to generate ciphertext and support encryption and decryption processes for securing information.
-\\
   Binary Analysis & Binary analysis is the examination of compiled executables without source code to understand program structure, behavior, and embedded functionality at the machine instruction level.
 \\
+  Black-box Fuzzing & A testing approach where inputs are generated without any knowledge of the program's internal structure. The system is treated as opaque, and only external behaviors such as crashes or errors are observed.
+\\
   Cryptographic Logic Error & An error or bug that causes a program to produce an incorrect result due to errors in the cryptographic protocol implementation, such as incorrect mathematical operations or disregarding the specification.
+\\
+  Cryptographic Primitive & Cryptographic primitive (also called cryptographic function or cryptographic algorithm) refers to the entirety of a specific scheme or class of algorithms such as AES or RSA, used to generate ciphertext and support encryption and decryption processes for securing information.
+\\
+  White-box Fuzzing & A testing approach where inputs are generated using full knowledge of the program's internal structure. Code and execution paths are analyzed to systematically explore behaviors and improve test coverage.
 \\
   Zero Knwoledge Proof & A cryptographic protocol that allows a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
 \\
   zk-SNARKs & Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge are a non-interactive zero-knowledge proof system with short proofs size and efficient verification, enabling practical deployment in cryptographic systems.
-\\
-  White-box Fuzzing & A testing approach where inputs are generated using full knowledge of the program's internal structure. Code and execution paths are analyzed to systematically explore behaviors and improve test coverage.
-\\
-  Black-box Fuzzing & A testing approach where inputs are generated without any knowledge of the program's internal structure. The system is treated as opaque, and only external behaviors such as crashes or errors are observed.\\
 
 \end{glossary}
 

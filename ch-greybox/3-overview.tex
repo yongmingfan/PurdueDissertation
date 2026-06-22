@@ -1,0 +1,213 @@
+\section{Overview}
+\label{sec:overview}
+
+This section presents the target program structure, workflow, and intended use of \greyboxfuzz. We first describe the structure of a \zksnark application and introduce the terminology used throughout the paper in that context. We then explain why existing fuzzing approaches are insufficient for detecting \logicerror in \zksnark binary programs. Finally, we describe the workflow of \greyboxfuzz, along with its intended users and use cases.
+
+\subsection{Structure of a \zksnark Program}
+\label{subsec:structure_zkp}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth,keepaspectratio]{./ch-greybox/figure/structure_zkp.png}
+  \caption{Structure of a \zksnark program.}
+  \label{fig:structure_zkp}
+\end{figure}
+
+A \zksnark application typically contains two complete programs: a prover-side program, denoted by \pprog, and a verifier-side program, denoted by \vprog. Each complete program contains both general program logic and a core cryptographic function. \autoref{fig:structure_zkp} illustrates this structure.
+
+The prover-side program \pprog receives the original witness \witnessorg, a circuit representation such as a Rank-1 Constraint System (R1CS), and a proving key. The original witness may contain both public and private values. Since the core proof-generation function \pfunc operates on the algebraic input format required by the underlying proof system, \pprog first applies an \inputconvert step to transform \witnessorg into the internal witness representation \witnessint. This internal representation typically encodes values in forms suitable for proof computation, such as finite-field elements, ordered vectors, or other system-specific structures, rather than the original application-level format. For example, an application may provide a witness value as a decimal integer or a structured object, while the proof system requires that value to be represented as one or more finite-field elements in a fixed order. After this conversion, \pfunc uses \witnessint, the circuit, and the proving key to generate a proof.
+
+The verifier-side program \vprog receives the proof, the public input, and a verification key. The verifier does not receive the prover's private witness. However, the public input still needs to be parsed and converted into the internal representation expected by the verification function \vfunc. Therefore, similar to \pprog, \vprog also contains an \inputconvert step for public values. After conversion, \vfunc checks the proof with respect to the public input and verification key, and outputs either accept or reject.
+
+This structure creates several possible sources of \logicerror. An inconsistency may originate from the circuit, the prover-side input converter, the proof-generation function, the verifier-side input converter, or the verification function. Therefore, detecting that an error exists is not sufficient. A practical testing tool should also help locate which component is responsible for the error.
+
+Depending on the specific proof system, a setup phase may also be required before \pprog and \vprog are executed. For example, many \zksnark protocols require a setup process to generate parameters such as a common reference string, proving key, and verification key. These setup artifacts are treated as inputs to the corresponding prover and verifier programs.
+
+In the remainder of this paper, we use \userp{} and \userv{} to denote the prover and verifier as the two participating parties in the protocol. We use the term \emph{software error} to refer to observable program failures, such as crashes, memory errors, assertion failures, or abnormal termination, and we use \logicerror{} to refer to cryptographically incorrect behavior that may not cause any runtime failure. We also distinguish between \programbranch, which handles general program functionality such as parsing, memory management, and input/output, and \cryptobranch, which performs cryptographic computation or directly influences cryptographic computation, such as proof generation, proof verification, finite-field arithmetic, elliptic-curve operations, constraint evaluation, and protocol-specific logic.
+
+\subsection{Motivation for Grey-Box Fuzzing of \zksnark Programs}
+\label{subsec:motivation_greybox}
+General-purpose fuzzing tools are effective at detecting software errors in cryptographic programs. For example, fuzzers such as \afl can generate inputs that expose crashes, buffer overflows, null pointer dereferences, and other memory-safety issues. However, many serious errors in \zksnark implementations are \logicerror rather than ordinary software errors. A \zksnark program may execute successfully but still produce an incorrect proof, accept an invalid proof, reject a valid proof, or enforce a statement different from the intended one. Since these errors may not cause crashes or abnormal termination, crash-oriented fuzzing alone cannot reliably detect them.
+
+Differential fuzzing provides a more suitable foundation for detecting \logicerror because it checks whether the target implementation produces the expected cryptographic result rather than merely observing whether the program crashes. In principle, a fuzzer can compare the output of a target \zksnark program against the expected accept-or-reject result of the intended statement and report inconsistencies such as accepting an invalid witness or rejecting a valid one. This makes differential fuzzing a natural starting point for testing \zksnark correctness.
+
+Among possible differential fuzzing designs, a grey-box approach is particularly suitable for real-world \zksnark applications. Unlike source-code-based approaches, grey-box fuzzing can be applied directly to deployed binary programs, which is important when source code is unavailable. At the same time, unlike unguided mutation, it can use limited internal information from the target program to improve testing efficiency. In our setting, this is especially valuable because \zksnark applications follow structured cryptographic workflows that can benefit from protocol-aware guidance even in binary-only form.
+
+The first major obstacle is input generation. General-purpose fuzzers mutate byte sequences without understanding the structure or meaning of cryptographic inputs. As a result, they often produce malformed witnesses, invalid field elements, incorrectly encoded group elements, or proof objects that are rejected before execution reaches the core cryptographic computation. Although such inputs may still be useful for testing parsers or input validation code, they are inefficient for finding logic errors in proof generation or verification. To reach deeper cryptographic computation, the fuzzer must generate inputs that preserve the expected format while still exploring valid, invalid, and boundary-case values.
+
+The second obstacle is coverage guidance. General fuzzers usually reward any input that discovers a new execution path. In \zksnark software, however, many execution paths are unrelated to cryptographic correctness, such as file parsing, memory allocation, data-structure handling, and general input/output code \cite{wen2024practical, 0xparc_zk_bug_tracker}. Exploring these paths may increase overall coverage, but it does not necessarily improve the chance of detecting proof-related logic errors. A more effective strategy is to identify the branches that depend on cryptographic inputs and prioritize inputs that exercise those branches.
+
+These challenges motivate the design of \greyboxfuzz. By combining differential fuzzing with structure-aware input generation and cryptographic-branch-focused coverage guidance, \greyboxfuzz improves the practicality and efficiency of testing binary-only \zksnark applications.
+
+\subsection{Workflow}
+\label{subsec:workflow}
+
+\begin{figure*}[t]
+  \includegraphics[width=\textwidth,keepaspectratio]{./ch-greybox/figure/overview.png}
+  \caption{Overview of \greyboxfuzz.}
+  \label{fig:overview}
+\end{figure*}
+
+\autoref{fig:overview} shows the workflow of \greyboxfuzz. To achieve the design goals and address the obstacles described in \ref{subsec:motivation_greybox}, the workflow consists of five main components: differential ground truth for generating the expected result for a \zksnark program, preprocessing for investigating the target \zksnark program and obtaining additional information to improve fuzzing efficiency, input generation for producing suitable test inputs for effective fuzzing of \zksnark programs, coverage monitoring for tracking testing progress, and error localization as a new feature not provided by previous fuzzing tools.
+
+\parhead{Differential ground truth}
+For each generated seed, \greyboxfuzz executes the target \pprog and \vprog and compares the result with the expected result derived from the user-provided statement. In this process, the high-level cryptographic statement serves as the testing oracle. Instead of requiring developers to implement a separate reference program for every target application, \greyboxfuzz evaluates the generated inputs against the statement to obtain the expected result and then compares that result with the output of the target binary program. If both results agree, the seed does not expose a \logicerror. If the target program accepts an input that should be rejected, rejects an input that should be accepted, or otherwise produces a result inconsistent with the statement, \greyboxfuzz reports a potential error.
+
+
+\parhead{Preprocessing}
+Before fuzzing begins, \greyboxfuzz performs a one-time analysis of the target binary programs. Since \greyboxfuzz targets binary-only \zksnark programs, it cannot rely on source-code instrumentation. Instead, it applies static taint tracking to identify \cryptobranch in the target binaries. These branches are the parts of the program that depend on cryptographic inputs, such as the witness, circuit, proving key, verification key, or proof. Identifying these branches allows \greyboxfuzz to distinguish security-relevant cryptographic computation from general program logic.
+
+During preprocessing, \greyboxfuzz also identifies program locations needed by the error locator. These locations are used to separate the complete prover and verifier programs into smaller logical components, such as input conversion, proof generation, and proof verification. This enables \greyboxfuzz to provide more useful feedback when it detects an inconsistency and helps narrow the component most likely responsible for the error.
+
+
+\parhead{Input generation}
+After preprocessing, \greyboxfuzz generates and mutates input seeds for the target program. Unlike general-purpose fuzzers, \greyboxfuzz uses a structure-aware input formatter that understands the structure of the cryptographic statement. The user provides the intended statement in a domain-specific language, and \greyboxfuzz uses this statement to infer the expected input types and constraints. In our current implementation, this domain-specific language is Charm. The formatter extracts variable information from the statement and uses it to guide both seed generation and mutation. It distinguishes among input structure, mathematical validity, and statement-level value validity. This design allows \greyboxfuzz to produce inputs that preserve the legal format expected by the target program while still exploring invalid, boundary-case, and security-relevant values.
+
+\parhead{Coverage monitoring}
+During execution, \greyboxfuzz records which binary instructions are visited by each seed. Because \greyboxfuzz focuses on \logicerror, it does not treat all new execution paths equally. Instead, it prioritizes seeds that visit new \cryptobranch. To support this strategy, \greyboxfuzz combines static taint tracking with dynamic tracing. Static taint tracking identifies instructions whose behavior depends on cryptographic inputs, while dynamic tracing records whether generated seeds reach those cryptographic-related branches. Inputs that explore new \cryptobranch are prioritized, whereas inputs that only expand general programming coverage receive less attention. This prevents the fuzzer from spending excessive time exploring general parsing, input/output, or memory-management code when those paths do not affect the cryptographic result.
+
+\parhead{Error localization}
+When \greyboxfuzz detects an inconsistency, it invokes the error locator. A \zksnark program may fail because of an incorrect circuit, an incorrect input converter, an incorrect proof-generation function, or an incorrect verification function. The error locator therefore analyzes multiple intermediate components, including the circuit, converted witness values, proof-generation behavior, and verification behavior, to narrow the source of the error. Instead of only reporting that the target program failed, \greyboxfuzz attempts to identify whether the error is caused by the circuit, the prover-side input converter, \pfunc, the verifier-side input converter, or \vfunc. This feedback helps developers diagnose and fix \logicerror in binary-only \zksnark implementations.
+
+\subsection{Users and Use Cases}
+\label{subsec:users_use_cases}
+
+\greyboxfuzz is designed for users who need to evaluate the correctness and security of a specific \zksnark application but may not have the ability to audit the entire implementation manually. This includes both prover-side and verifier-side users.
+
+From the prover's perspective, the main concern is whether the program correctly proves the intended statement using the provided witness. A prover-side error may cause a valid witness to be converted incorrectly, a valid proof to fail, or the proof-generation process to enforce a statement different from the intended one.
+
+From the verifier's perspective, the main concern is whether an invalid proof can be accepted. If a prover can generate a proof using values that do not satisfy the intended statement, then the verifier should not trust the proof in that setting. Such a result may indicate an error in the circuit, input conversion, proof generation, verification, or the surrounding program logic.
+
+To use \greyboxfuzz, the user provides the prover binary, the verifier binary, the required cryptographic artifacts, and a high-level description of the intended statement. \greyboxfuzz then generates test inputs, checks the target program against the statement, monitors cryptographic coverage, and reports both detected inconsistencies and their likely locations. This allows users to evaluate a specific proof application without requiring source-code access or a complete manual audit of the underlying \zksnark library.
+
+\subsection{Structure of this Paper}
+
+As discussed in Section~\ref{subsec:workflow}, \greyboxfuzz introduces several techniques to improve the detection of security risks in \zksnark programs. Section~\ref{sec:differential} presents the differential fuzzing foundation of \greyboxfuzz, and Section~\ref{sec:input_formatter} describes how \greyboxfuzz defines the expected verification result and generates test seeds for \zksnark programs. Section~\ref{sec:coverage_monitor} describes the coverage monitor, which guides fuzzing toward cryptographic-related branches instead of treating all execution paths equally. Section~\ref{sec:error_locator} introduces the error locator, a new component of \greyboxfuzz that provides more precise information about where a detected error originates. Section~\ref{sec:evaluation} evaluates the performance and effectiveness of \greyboxfuzz. Finally, Section~\ref{sec:discussion} discusses selected security issues discovered by \greyboxfuzz.
+
+
+
+
+
+
+% \section{Overview}
+% \label{sec:overview}
+
+% This section presents the terminology, target program structure, and workflow of \greyboxfuzz. We first define the notation used throughout the paper. We then explain why existing fuzzing approaches are insufficient for detecting \logicerror in \zksnark binary programs. Finally, we describe the structure of the target programs, the overall workflow of \greyboxfuzz, and the intended users and use cases.
+
+% \subsection{Terminology}
+% \label{subsec:terminology}
+
+% Before presenting the workflow of \greyboxfuzz, we define the terminology used in this paper.
+
+% \begin{itemize}[leftmargin=*]
+%     \setlength{\itemsep}{0pt}
+%     \setlength{\parskip}{0pt}
+
+%     \item \textbf{\userp}: The prover. This party wants to convince a verifier that a statement is true without revealing the private witness.
+
+%     \item \textbf{\userv}: The verifier. This party checks whether a proof is valid with respect to the public statement and public input.
+
+%     \item \textbf{\pfunc}: The core proof-generation function in a \zkp protocol. It takes the internal witness representation, circuit, and proving key as input and outputs a proof.
+
+%     \item \textbf{\vfunc}: The core verification function in a \zkp protocol. It takes the proof, public input, and verification key as input and outputs either accept or reject.
+
+%     \item \textbf{\pprog}: The complete prover-side program. It includes input parsing, witness conversion, data-structure handling, and the invocation of \pfunc. \clg{What is witness conversion, data-structure handling, etc?  We might need to introduce this sort of flow and these sort of things when you introduce SNARKs in the background.  Assume you might get a software-security person reading this paper for example.}
+% 		\clg{Ah, I see you have this stuff later then.  We either need to re-order or put a reference to that somewhere here earlier on.  Otherwise your reader will get confused like I did :) }
+
+%     \item \textbf{\vprog}: The complete verifier-side program. It includes input parsing, public-input conversion, data-structure handling, and the invocation of \vfunc.
+
+%     \item \textbf{\witnessorg}: The original witness provided to the program. It may include both public values and private values before they are converted into the internal representation required by the proof system.
+
+%     \item \textbf{\witnessint}: The internal witness representation used by the proof system. In many \zksnark implementations, this representation consists of finite-field elements derived from \witnessorg.
+
+%     \item \textbf{Software error}: An error that causes an observable program failure, such as a crash, memory error, assertion failure, or abnormal termination.
+
+%     \item \textbf{\xmakefirstuc{\logicerror}}: An error that causes the program to produce a cryptographically incorrect result without necessarily crashing. Examples include an incorrect witness conversion, a missing constraint, a misused gadget, an incorrect optimization, or a flawed protocol implementation.
+
+%     \item \textbf{\xmakefirstuc{\programbranch}}: Code that handles general program functionality, such as input/output, parsing, memory management, data-structure operations, and other non-cryptographic tasks.
+
+%     \item \textbf{\xmakefirstuc{\cryptobranch}}: Code that performs cryptographic computation or directly influences cryptographic computation, including proof generation, proof verification, finite-field arithmetic, elliptic-curve operations, constraint evaluation, and protocol-specific logic.
+% \end{itemize}
+
+% \clg{Let's maybe avoid using bullets if we can?  I feel like structured text looks more ``professional''.}
+
+% \subsection{Motivation for Grey-Box Fuzzing of \zksnark Programs}
+% \label{subsec:motivation_greybox}
+
+% General-purpose fuzzing tools are effective at detecting software errors in cryptographic programs. For example, fuzzers such as \afl can generate inputs that expose crashes, buffer overflows, null pointer dereferences, and other memory-safety issues. These tools are useful when the target error produces an observable runtime failure.
+
+% However, many serious errors in \zksnark implementations are \logicerror rather than ordinary software errors. A program may execute successfully but still produce an incorrect proof, accept an invalid proof, reject a valid proof, or enforce a statement different from the intended one. Since these errors may not cause crashes or abnormal termination, crash-oriented fuzzing cannot reliably detect them.
+
+% Differential fuzzing provides a better foundation for detecting \logicerror because it checks whether the target implementation produces the expected cryptographic result, rather than only observing whether the program crashes. A straightforward way to apply this idea is to extend \afl with a statement-specific oracle for \zksnark verification. For each generated seed, the oracle computes the expected accept or reject result for the intended statement, and the modified fuzzer compares this result with the output of the target \zksnark program. This enables the fuzzer to report inconsistencies such as accepting an invalid witness or rejecting a valid one. However, this approach still inherits the limitations of general-purpose fuzzing: it mutates inputs without understanding \zksnark input structure and it treats all new execution paths as equally useful, even when many of them are unrelated to cryptographic correctness.
+
+% Nevertheless, directly applying traditional fuzzing techniques to \zksnark programs remains inefficient. \zksnark inputs have strict structural and mathematical requirements. Random byte-level mutation often produces malformed inputs that are rejected during parsing or input validation, preventing the execution from reaching the cryptographic computation. Moreover, white-box fuzzing techniques that rely on source-code instrumentation are not applicable when only binary programs are available.
+
+% \greyboxfuzz addresses these limitations by using a grey-box design for \zksnark binary programs. It does not require source code, but it still uses protocol-level knowledge and binary analysis to guide fuzzing. Specifically, \greyboxfuzz generates structure-aware inputs, focuses coverage feedback on \cryptobranch, and provides an error locator that helps identify which component caused a detected inconsistency.
+
+% \clg{This feels like mostly a motivation for fuzzing in general, not necessarily the grey-box part?  Is there any way to motivate that?  Do we have a good ``story'' we can tell somewhere about a user wanting to audit some sort of specific application or something like that?}
+% \clg{I see you have users and use cases later on, maybe we want to consider elevating that earlier as part of the motivation and to help the reader answer these sorts of questions?}
+
+% \subsection{Structure of a \zksnark Program}
+% \label{subsec:structure_zkp}
+
+% \begin{figure}[t]
+%   \includegraphics[width=0.5\textwidth,keepaspectratio]{./imgs/structure_zkp.png}
+%   \caption{Structure of a \zksnark program. \clg{are there boxes/lines around some of the words and things?}}
+%   \label{fig:structure_zkp}
+% \end{figure}
+
+% A \zksnark application typically contains two complete programs: a prover-side program \pprog and a verifier-side program \vprog. Each complete program contains both general program logic and a core cryptographic function. \autoref{fig:structure_zkp} illustrates this structure.
+
+% The prover-side program \pprog receives the original witness \witnessorg, a circuit representation such as a Rank-1 Constraint System (R1CS), and a proving key. The original witness may contain both public and private values. Since the core proof-generation function \pfunc operates on the algebraic input format required by the underlying proof system, \pprog first applies an \inputconvert step to transform \witnessorg into \witnessint. This internal representation typically encodes values in forms suitable for proof computation, such as finite-field elements, ordered vectors, or other system-specific structures, rather than the original application-level format. For example, an application may provide a witness value as a decimal integer or a structured object, while the proof system requires that value to be represented as one or more finite-field elements in a fixed order. After this conversion, \pfunc uses \witnessint, the circuit, and the proving key to generate a proof.
+% \clg{We might still want to explain what we mean by ``internal representation''?  Like that that's because of the math (think how one can't just directly encrypt a message with RSA for example).}
+
+% The verifier-side program \vprog receives the proof, the public input, and a verification key. The verifier does not receive the prover's private witness. However, the public input still needs to be parsed and converted into the internal representation expected by the verification function. Therefore, similar as the \pprog, \vprog also contains an \inputconvert step for public values. After conversion, \vfunc checks the proof with respect to the public input and verification key, and outputs either accept or reject.
+
+% This structure creates several possible sources of \logicerror. An inconsistency may originate from the circuit, the prover-side input converter, the proof-generation function, the verifier-side input converter, or the verification function. Therefore, detecting that an error exists is not sufficient. A practical testing tool should also help locate which component is responsible for the error.
+
+% Depending on the specific proof system, a setup phase may also be required before \pprog and \vprog are executed. For example, many \zksnark protocols require a setup process to generate parameters such as a common reference string, proving key, and verification key. These setup artifacts are treated as inputs to the corresponding prover and verifier programs.
+
+% \subsection{Workflow}
+% \label{subsec:workflow}
+
+% \begin{figure*}[t]
+%   \includegraphics[width=\textwidth,keepaspectratio]{./imgs/overview.png}
+%   \caption{Overview of \greyboxfuzz.}
+%   \label{fig:overview}
+% \end{figure*}
+
+% \autoref{fig:overview} shows the workflow of \greyboxfuzz. The workflow contains four main components: preprocessing, input generation, coverage monitoring, and error localization.  \clg{We discuss these in more detail in Section XX.}
+
+% \parhead{Preprocessing}
+% Before fuzzing begins, \greyboxfuzz performs a one-time analysis of the target binary programs. Since \greyboxfuzz targets binary-only \zksnark programs, it cannot rely on source-code instrumentation. Instead, it applies static taint tracking to identify \cryptobranch in the target binaries. These branches are the parts of the program that depend on cryptographic inputs, such as the witness, circuit, proving key, verification key, or proof. Identifying these branches allows \greyboxfuzz to distinguish security-relevant cryptographic computation from general program logic.
+
+% During preprocessing, \greyboxfuzz also identifies program locations needed by the error locator. These locations are used to separate the complete prover and verifier programs into smaller logical components, such as input conversion, proof generation, and proof verification. This enables \greyboxfuzz to provide more useful feedback when it detects an inconsistency, which helps developers to decide the next step action.
+% \clg{Not sure I'd necessarily call this ``debugging'' since to me that implies something a developer might do?  And developers wouldn't really use a greybox tool like this.}
+
+% \parhead{Input generation}
+% After preprocessing, \greyboxfuzz generates and mutates input seeds for the target program. Unlike general-purpose fuzzers, \greyboxfuzz uses an input formatter that understands the structure of the cryptographic statement. The user provides the intended statement in a domain-specific language, and \greyboxfuzz uses this statement to infer the expected input types and constraints. This allows \greyboxfuzz to generate inputs that preserve the legal format expected by the target program while still exploring invalid, boundary-case, and security-relevant values.
+
+% \parhead{Differential checking}
+% For each generated seed, \greyboxfuzz executes the target \pprog and \vprog and compares the result with the expected result derived from the user-provided statement. If both results agree, the seed does not expose a \logicerror. If the target program accepts an input that should be rejected, rejects an input that should be accepted, or otherwise produces a result inconsistent with the statement, \greyboxfuzz reports a potential error.
+
+% \parhead{Coverage monitoring}
+% During execution, \greyboxfuzz records which binary instructions are visited by each seed. Because \greyboxfuzz focuses on \logicerror, it does not treat all new execution paths equally. Instead, it prioritizes seeds that visit new \cryptobranch. This prevents the fuzzer from spending excessive time exploring general parsing, input/output, or memory-management code when those paths do not affect the cryptographic result.
+
+% \parhead{Error localization}
+% When \greyboxfuzz detects an inconsistency, it invokes the error locator. The error locator analyzes the circuit, converted witness values, proof-generation behavior, and verification behavior to narrow the source of the error. Instead of only reporting that the target program failed, \greyboxfuzz attempts to identify whether the error is caused by the circuit, the prover-side input converter, \pfunc, the verifier-side input converter, or \vfunc. This feedback helps developers diagnose and fix \logicerror in binary-only \zksnark implementations.
+
+% \subsection{Users and Use Cases}
+% \label{subsec:users_use_cases}
+
+% \greyboxfuzz is designed for users who need to evaluate the correctness and security of a specific \zksnark application but may not have the ability to audit the entire implementation manually. This includes both prover-side and verifier-side users.
+
+% From the prover's perspective, the main concern is whether the program correctly proves the intended statement using the provided witness. A prover-side error may cause a valid witness to be converted incorrectly, a valid proof to fail, or the proof-generation process to enforce a statement different from the intended one.
+
+% From the verifier's perspective, the main concern is whether an invalid proof can be accepted. If a prover can generate a proof using values that do not satisfy the intended statement, then the verifier should not trust the proof in that setting. Such a result may indicate an error in the circuit, input conversion, proof generation, verification, or the surrounding program logic.
+
+% To use \greyboxfuzz, the user provides the prover binary, the verifier binary, the required cryptographic artifacts, and a high-level description of the intended statement. \greyboxfuzz then generates test inputs, checks the target program against the statement, monitors cryptographic coverage, and reports both detected inconsistencies and their likely locations. This allows users to evaluate a specific proof application without requiring source-code access or a complete manual audit of the underlying \zksnark library.
+
+% \subsection{Structure of this Paper}
+% As discussed in Section~\ref{subsec:workflow}, \greyboxfuzz introduces several techniques to improve the detection of security risks in \zksnark programs. Section~\ref{sec:differential} presents the differential fuzzing foundation of \greyboxfuzz and Section~\ref{sec:input_formatter} includes how \greyboxfuzz defines the expected verification result and generates test seeds for \zksnark programs. Section~\ref{sec:coverage_monitor} describes the coverage monitor, which guides fuzzing toward cryptographic-related branches instead of treating all execution paths equally. Section~\ref{sec:error_locator} introduces the error locator, a new component of \greyboxfuzz that provides more precise information about where a detected error originates. Section~\ref{sec:evaluation} evaluates the performance and effectiveness of \greyboxfuzz. Finally, Section~\ref{sec:discussion} discusses selected security issues discovered by \greyboxfuzz.
+
+% \clg{This should maybe go in the Intro?  Feels a bit late for this at this point potentially.}

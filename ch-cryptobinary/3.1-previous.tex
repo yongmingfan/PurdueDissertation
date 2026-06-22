@@ -1,0 +1,115 @@
+\section{Previous Evaluations}
+\label{sec:previous}
+We first investigate the experimental methods and evaluation approaches used by previous tools to gain a better understanding of the existing research and development in this field. By carefully examining these approaches, we aim to identify common practices, strengths, and potential areas for improvement. In this section, we provide a detailed investigation and discussion of all 12 tools that are listed in Section \ref{subsec:detection_tools}. Our analysis includes how these tools were tested, the metrics used to evaluate their performance, and any limitations or challenges they faced. This comprehensive review helps us build a clearer picture of the progress made so far and lays the foundation for improving future studies and tools.
+
+In Table \ref{tab:previous_evaluation}, we summarize the evaluation benchmarks and metrics selected by each tool in their respective evaluation experiments. We categorize the evaluation experiments of each tool into four main categories:
+\begin{itemize}
+    \item Whether the tool was evaluated using at least some binary programs containing basic cryptographic functions.
+    \item Whether the tool was evaluated using real-world applications to assess performance.
+    \item Whether additional metrics, such as optimization flags, were considered in the tool’s evaluation.
+    \item Whether the tool’s performance was cross-compared with previously developed tools.
+\end{itemize}
+
+Detailed information regarding these experiments will be discussed in the following sections.
+
+\begin{table}[h]
+\caption{Evaluation benchmarks and metrics selection by previous cryptographic function detection tools}
+\vspace*{6pt}
+\centering
+\begin{tabular}{c||c|c|c|c}
+\hline
+Evaluation Criteria & \makecell{Cryptographic\\Function} & \makecell{Real-world\\Application} & \makecell{Evaluation\\Metrics} & \makecell{Cross\\Comparison} \\ \hline\hline
+Aligot             & \cmark &        & \cmark & \cmark \\ \hline
+CryptoHunt         & \cmark & \cmark & \cmark & \cmark \\ \hline
+CryptoKnight       & \cmark &        &        &        \\ \hline
+DRACA              &        &        &        &        \\ \hline
+FindCrypt2         &        &        &        &        \\ \hline
+FALKE-MC           & \cmark & \cmark & \cmark &        \\ \hline
+HCD                &        &        &        &        \\ \hline
+Kerckhoff          & \cmark & \cmark &        &        \\ \hline
+PEiD KANAL         &        &        &        &        \\ \hline
+Signsrch           &        &        &        &        \\ \hline
+Softmax Classifier & \cmark &        &        &        \\ \hline
+Where’s Crypto     & \cmark &        &        &        \\ \hline
+\end{tabular}
+\label{tab:previous_evaluation}
+\end{table}
+
+% \begin{table*}[]
+% \centering
+% \footnotesize
+% \setlength{\tabcolsep}{4pt} % Default value: 6pt
+% \renewcommand{\arraystretch}{1.2} % Default value: 1
+% %\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+% % \begin{adjustbox}{width=0.95\textwidth}
+% \begin{tabular}{l||c|c|c|c|c|c|c|c|c|c|c|c}
+% \hline
+% Tool & Aligot & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Hunt\end{tabular} & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Knight\end{tabular} & DRACA & FindCrypt2 & FALKE-MC & HCD & Kerckhoff & \begin{tabular}[c]{@{}c@{}}PEiD\\ KANAL\end{tabular} & SignSrch & \begin{tabular}[c]{@{}c@{}}Softmax\\ Classifier\end{tabular} & \begin{tabular}[c]{@{}c@{}}Where’s\\ Crypto\end{tabular} \\ \hline\hline
+% Cryptographic Function & & & & & & & & & & & & \\ \hline
+% Real-World Application & & & & & & & & & & & & \\ \hline
+% Evaluation Metrics & & & & & & & & & & & & \\ \hline
+% Comparison to Prior & & & & & & & & & & & & \\ \hline
+% \end{tabular}
+% \caption{Caption}
+% \label{tab:previous_evaluation}
+% \end{table*}
+
+\subsection{Lack of Evaluation Experiments}
+%Tools developed by industry organizations are usually not experimentally evaluated. However, developers of these tools usually provide detection ability instructions, which can be used as ground truth information for further evaluation.
+
+Tools developed by industry organizations are often not evaluated by experiments, which limits the understanding of their true performance and reliability. However, these tools frequently come with documentation or instructions provided by their developers, outlining their claimed detection capabilities for single cryptographic algorithms and intended use cases. This information, although not derived from formal testing, can serve as ground truth data for further R+R evaluations.
+
+\subsection{Evaluation with Basic Cryptographic Algorithms}
+Most tools have been evaluated using a selection of basic cryptographic algorithms to demonstrate their ability to detect cryptographic functions in binaries. These basic algorithms serve as the foundational and critical components for assessing the detection performance of cryptographic function detection tools. However, previous studies have used a variety of different cryptographic algorithms in their evaluations, making it challenging to compare the performance of these tools across each other due to the lack of standardized benchmarks.
+
+Furthermore, the selection criteria of previous evaluations were not clearly explained, leaving questions about why a specific algorithm was chosen over others. This inconsistency has also resulted in recent tools missing many popular and important cryptographic algorithms in their evaluations. Consequently, it remains unclear whether certain cryptographic function detection tools are limited to detecting only the cryptographic functions included in their chosen benchmarks or if their capabilities extend beyond these specific selections. In Table \ref{tab:previous_algo}, we provide a list of the cryptographic algorithms selected by each tool in their evaluation experiments. This compilation highlights the specific algorithms used to assess the performance of the tools and underscores the variations in selection across different studies. The tools listed in Section \ref{subsec:detection_tools} but not included in Table \ref{tab:previous_algo} did not conduct any evaluation experiments.
+
+\begin{table*}[h]
+\caption{Cryptographic Algorithms Selected in Previous Evaluation Experiments}
+\vspace*{6pt}
+\centering
+\footnotesize
+\begin{tabular}{c||c|c|c|c|c|c|c|c|c|c}
+\hline
+Tool & AES & Blowfish & DES & MD5 & RC4 & RC5 & RSA & SHA1 & SHA256 & TEA \\ \hline\hline
+Aligot & \cmark &  &  & \cmark & \cmark &  &  &  &  & \cmark \\ \hline
+CryptoHunt & \cmark &  &  & \cmark & \cmark &  & \cmark &  &  & \cmark \\ \hline
+CryptoKnight & \cmark & \cmark &  & \cmark & \cmark &  & \cmark &  &  &  \\ \hline
+FALKE-MC & \cmark &  &  &  &  &  & \cmark &  &  &  \\ \hline
+Kerckhoff & \cmark &  & \cmark & \cmark & \cmark &  & \cmark &  &  &  \\ \hline
+Softmax Classifier &  & \cmark & \cmark & \cmark &  &  &  & \cmark & \cmark &  \\ \hline
+\end{tabular}
+\label{tab:previous_algo}
+\end{table*}
+
+\subsection{Evaluation with Real World Applications}
+In addition to basic cryptographic algorithms, some tools have been evaluated using real-world applications to provide a more comprehensive assessment of their performance. For example, CryptoHunt was evaluated using cryptographic algorithms such as AES and MD5, implemented by various libraries, including OpenSSL and Libgcrypt. Similarly, FALKE-MC was tested with cryptographic algorithms developed by different developers. This evaluation design offers a more accurate evaluation of performance across diverse metrics, as it accounts for practical scenarios and variations in implementation settings.
+
+However, similar to the evaluation with basic cryptographic algorithms, previous studies did not specify the selection criteria for the real-world applications used in their experiments. As a result, it remains unclear why certain applications were chosen and how they contribute to a more accurate performance evaluation of cryptographic function detection tools. Additionally, these evaluations appear to lack the inclusion of real-world applications, such as non-cryptographic binary programs that have behavior patterns similar to cryptographic functions or large-scale projects that could introduce runtime complexity challenges. The absence of these scenarios highlights a critical gap in the evaluation process, limiting its ability to assess tool performance under diverse and practical conditions.
+
+\subsection{Measurements and Metrics Design in Previous Experiments}
+
+% \clg{Not sure what you mean by metrics here in the title?  Can we make it a bit more specific?}
+
+In addition to considering the selection of evaluation benchmarks, other evaluation metrics such as obfuscation and compiler version also play a crucial role in influencing the results of cryptographic function detection. For example, optimization and obfuscation can significantly affect the analysis results for cryptographic function detection \cite{ren2021unleashing}. Several tools have specifically addressed these challenges by developing advanced techniques that demonstrate improved performance in detecting cryptographic functions within binary applications compiled with optimizations. For instance, CryptoHunt \cite{xu2017cryptographic} focuses primarily on detecting cryptographic functions in obfuscated binaries. Similarly, Aligot \cite{calvet2012aligot} and FALKE-MC \cite{benedetti2017detection} consider optimization flags and include optimized binary programs in their evaluation experiments.
+
+Even though some tools consider certain metrics in their evaluations, their evaluation metrics do not comprehensively address all the challenges associated with cryptographic function detection discussed in Section \ref{subsec:challenges}. This oversight leaves potential areas unexplored, resulting in gaps in the evaluation process and a lack of understanding of the tools’ performance under certain conditions. Addressing these unevaluated areas is crucial for advancing the field and ensuring robust assessments of cryptographic function detection tools.
+
+Table \ref{tab:previous_opt} summarizes the types of optimization flags that have been considered by previous tools in their evaluation studies, providing insights into the approaches taken to address the impact of optimization on detection accuracy.
+
+
+\begin{table}[]
+\caption{Optimization Flags Selected by Evaluation Experiments}
+\vspace*{6pt}
+\centering
+\begin{tabular}{c||c|c|c|c|c|c}
+\hline
+Tool & O1 & O2 & O3 & Os & Ofast & AsProtect \\ \hline\hline
+Aligot &  &  &  &  &  & \cmark \\ \hline
+CryptoHunt & \cmark & \cmark &  &  &  &  \\ \hline
+FALKE-MC & \cmark & \cmark & \cmark & \cmark & \cmark &  \\ \hline
+Kerckhoffs & \cmark & \cmark & \cmark &  &  &  \\ \hline
+\end{tabular}
+\label{tab:previous_opt}
+\end{table}
+

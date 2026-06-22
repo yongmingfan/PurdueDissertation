@@ -28,7 +28,7 @@ i) Dynamic, ii) Static, and iii) Machine learning based approaches.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\parhead{Static Approaches.} Static approaches perform various forms of static analysis to detect
+\indent\parhead{Static Approaches.} Static approaches perform various forms of static analysis to detect
 any static signatures, such as 'magic' constants, instruction sequences, and different code structures
 such as S-boxes, as a means to identify cryptographic algorithms. This type of approach is based on the assumption that
 cryptographic functions will perform a large number of arithmetic computations compared to non-cryptographic functions.
@@ -52,7 +52,7 @@ can bypass static analysis based detection mechanisms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\parhead{Dynamic Approaches.} Dynamic approaches~\cite{xu2017cryptographic,calvet2012aligot,li2012cipherxray}
+\indent\parhead{Dynamic Approaches.} Dynamic approaches~\cite{xu2017cryptographic,calvet2012aligot,li2012cipherxray}
 primarily focus on identifying cryptographic primitives
 from execution traces.
 Lutz et al. \cite{lutz2008towards} first applied dynamic analysis to identify cryptographic algorithms based on three indicators:
@@ -82,7 +82,7 @@ binaries, but suffer from much greater performance overhead.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-\parhead{Machine Learning Based Approaches.} With the growing popularity of machine learning, several recent works have explored utilizing such techniques.
+\indent\parhead{Machine Learning Based Approaches.} With the growing popularity of machine learning, several recent works have explored utilizing such techniques.
 Shin et al.~\cite{shin2015recognizing} discussed how recurrent neural networks can identify functions in binaries with greater accuracy and efficiency.
 However, their approach was generalized for any function identification. 
 For the purpose of cryptographic function identification,
@@ -135,28 +135,28 @@ Many of these features only pertain to certain algorithms and cannot be used to 
 We now discuss some of the popular cryptographic features used for identification purposes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{Magic Constants.} In this approach, algorithm specific ``magic constants'' are searched for in the binary.  These are constant values that must occur in any implementation of a given algorithm.
-%For example, the magic constants for the TEA algorithm usually are 2654435769 or
-%0x9E3779B9. Existence of these constants in a binary can be used as a hint that it might contain TEA.
+\indent\parhead{Magic Constants.} In this approach, algorithm specific ``magic constants'' are searched for in the binary.  These are constant values that must occur in any implementation of a given algorithm.
+For example, the magic constants for the TEA algorithm usually are 2654435769 or
+0x9E3779B9. Existence of these constants in a binary can be used as a hint that it might contain TEA.
 For instance, Signsrch~\cite{signsrch} relies on the magic number `0x9e3779b9' to detect the TEA algorithm; however, it fails to identify the algorithm when data obfuscation is applied~\cite{xu2017cryptographic}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{Presence of Loops.} Most cryptographic functions use some form of loops for key generation, encryption, or other operations.
-%For example, the factorization-based RSA algorithm has loops to perform modular exponentiation.
+\indent\parhead{Presence of Loops.} Most cryptographic functions use some form of loops for key generation, encryption, or other operations.
+For example, the factorization-based RSA algorithm has loops to perform modular exponentiation.
 CryptoHunt~\cite{xu2017cryptographic} utilized loops as a means for detection. Given that loops may present in regular functions, further program analysis is necessary to ensure accurate detection.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{Changes in Entropy.} The process of decryption usually decreases information entropy. Hence, entropy can be used as an indicator of  encrypted versus plaintext data. Several techniques~\cite{lutz2008towards, lee2022rcryptect} have used entropy to distinguish encrypted blocks from regular ones. 
+\indent\parhead{Changes in Entropy.} The process of decryption usually decreases information entropy. Hence, entropy can be used as an indicator of  encrypted versus plaintext data. Several techniques~\cite{lutz2008towards, lee2022rcryptect} have used entropy to distinguish encrypted blocks from regular ones. 
 However, relying on entropy can also lead to false positives in certain circumstances~\cite{grobert2011automated}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{I/O Mapping.} Cryptographic functions sometimes have one-to-one mappings between their input to output, i.e., given a key and the plaintext, we might always get the same output, or given the input to a hash function, we should always get the same output. 
-%These sort of unique one-to-one mappings can sometimes be used as indicators of the presence of cryptography (or even of specific deterministic algorithms like a hash function). 
+\indent\parhead{I/O Mapping.} Cryptographic functions sometimes have one-to-one mappings between their input to output, i.e., given a key and the plaintext, we might always get the same output, or given the input to a hash function, we should always get the same output. 
+These sort of unique one-to-one mappings can sometimes be used as indicators of the presence of cryptography (or even of specific deterministic algorithms like a hash function). 
 However, these approaches rely on the accurate extraction of the key and input/output from the memory, as any wrong extraction can defeat the usefulness of unique mapping.
 %data obfuscation
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{Data-Flow Isomorphism.}
+\indent\parhead{Data-Flow Isomorphism.}
 %A Data-Flow Graph (DFG) is a graph that represents data dependencies between a number of
 %perations within a program~\cite{DFG}.
 In this approach~\cite{lestringant2015automated}, a Data-Flow Graph (DFG)~\cite{DFG} is generated from the
@@ -171,7 +171,7 @@ statements, which are more prominent in asymmetric algorithms. Additionally, DFG
 vary in effectiveness depending on data obfuscations techniques used in the implementation, such as data-splitting.
 
 %%%%%%%%%%%%%%%%%%%%%
-\parhead{S-Box.} Substitution boxes (S-Box)~\cite{sbox} are a fundamental component used in many symmetric key ciphers.
+\indent\parhead{S-Box.} Substitution boxes (S-Box)~\cite{sbox} are a fundamental component used in many symmetric key ciphers.
 %An S-box is a table or function that swaps input bits with different bits, enhancing encryption security against attacks
 %like differential and linear cryptanalysis, and often has a very distinct signature. 
 For instance, the BLOWFISH algorithm
@@ -180,7 +180,7 @@ sequentially stored in memory, allowing tools to detect BLOWFISH by locating thi
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\parhead{Instruction Sequences.} An instruction sequence is a series of instructions or commands that a CPU executes in a specific order to perform tasks within a program. %These instructions can range from simple arithmetic calculations to more complex data manipulation and control flow operations. 
+\indent\parhead{Instruction Sequences.} An instruction sequence is a series of instructions or commands that a CPU executes in a specific order to perform tasks within a program. These instructions can range from simple arithmetic calculations to more complex data manipulation and control flow operations. 
 Many fundamental cryptographic operations will consist of fingerprintable instruction sequences and hence can be used for the purpose of identification. Nevertheless, this method may lose its effectiveness when dealing with control-flow obfuscations such as control-flow flattening~\cite{cfg_f}.
 
 

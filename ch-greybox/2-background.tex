@@ -1,0 +1,80 @@
+\section{Background}
+\label{sec:background}
+In this section, we introduce some necessary relevant backgrounds and prior works in this fields.
+
+\subsection{\zksnark}
+
+Zero-knowledge proofs allow a prover to convince a verifier that a statement is true without revealing any information beyond the validity of the statement \cite{groth2016size}. Among different Zero-knowledge proofs constructions, zero-knowledge succinct non-interactive arguments of knowledge (zk-SNARKs) have gained significant attention because of their efficiency and practicality. zk-SNARKs provide three important properties. First, zero-knowledge ensures that the proof does not reveal the prover's private witness. Second, succinctness enables compact proofs and efficient verification. Third, non-interactivity allows the prover to send a single proof to the verifier without requiring multiple rounds of communication. These properties make zk-SNARKs suitable for applications that require both privacy and efficiency, such as anonymous transactions, verifiable computation, and privacy-preserving identity systems. Their adoption in blockchain systems, including Zcash and Ethereum, further demonstrates their practical importance \cite{zcash_protocol_specification, circom_documentation, snarkjs}.
+
+\subsection{Fuzzing}
+
+Fuzzing is an automated software testing technique that generates random or mutated inputs and feeds them to a program to uncover crashes, memory errors, and security vulnerabilities. It has been widely used to detect bugs in many types of software, including cryptographic programs, by exploring unexpected edge cases and triggering abnormal behavior \cite{aflplusplus_afl_fuzz_approach, google_fuzzing_docs}. Differential fuzzing is a specialized fuzzing technique that detects logic errors by comparing the behavior of multiple implementations of the same specification. Unlike traditional fuzzing, which primarily detects memory corruption and crashes, differential fuzzing focuses on output inconsistencies when different programs process the same inputs. Several fuzzing tools have been developed for security testing, as discussed in Section~\ref{subsec:prior_work}. Fuzzing techniques can be broadly categorized into white-box, black-box, and grey-box fuzzing.
+
+\parhead{White-box fuzzing} has access to the program's source code and internal structure. It can use techniques such as symbolic execution and constraint solving to systematically explore execution paths \cite{godefroid2007random}.
+
+\parhead{Black-box fuzzing} tests a program without access to its source code or internal structure. It relies only on external inputs and outputs to detect vulnerabilities. Black-box fuzzing generates random or mutated inputs and observes program behavior to identify crashes or unexpected results, but it lacks detailed execution-path awareness \cite{godefroid2007random}.
+
+\parhead{Grey-box fuzzing} operates with partial knowledge of the program's internal behavior without requiring source code. It often uses lightweight instrumentation or feedback mechanisms to guide input generation and improve path exploration \cite{wang2020sok}.
+
+\subsection{Differential Fuzzing}
+Differential fuzzing relies on test vectors to systematically evaluate multiple implementations of a specification, aiming to detect inconsistencies and potential vulnerabilities. A test vector is a set of inputs crafted to trigger various execution paths within a program, enabling the fuzzer to identify divergent behaviors between implementations. 
+
+For cryptographic programs, providing correct test vectors presents unique challenges due to the structured and deterministic nature of cryptographic algorithms. Some cryptographic algorithms such as RSA and SHA256 have standraded test vector program, which can be used in differential fuzzing.  Known test vectors derived from standard cryptographic test suites, such as NIST’s Cryptographic Algorithm Validation Program (CAVP), serve as valuable seed inputs \cite{nist_cryptographic_algorithm_validation_program}. Differential fuzzing further enhances this process by comparing outputs from multiple cryptographic implementations, such as OpenSSL, BoringSSL, and LibreSSL, to detect inconsistencies that may indicate implementation flaws. However, a complex cryptographic protocol such as \zkp do not have existing test vector program. In order to develop a differential fuzzing to detect \logicerror, the differential fuzzing needs to obtain the test vector for \zkp program.
+
+
+\subsection{Taint Tracking}
+
+Taint tracking is a program analysis technique that monitors how sensitive or untrusted data flows through a program. It is commonly used to detect security vulnerabilities such as information leaks, injection attacks, and unsafe memory operations. Taint tracking marks selected inputs as tainted and propagates taint as those inputs influence registers, memory locations, variables, or program outputs. This allows an analysis tool to determine whether untrusted data reaches security-critical operations, such as system calls, memory accesses, or cryptographic computations. Taint tracking can be performed dynamically, where taint propagation is analyzed during program execution, or statically, where the program is analyzed without execution \cite{yan2017sok}.
+
+\subsection{Prior Work}
+\label{subsec:prior_work}
+
+\begin{table}[ht]
+\centering
+\scriptsize{
+\begin{tabular}{c||c|c|c|c|c}
+\hline
+Fuzzer
+& \rotatebox{75}{AFL \cite{google_afl}}
+& \rotatebox{75}{CDF \cite{aumasson2017automated}}
+& \rotatebox{75}{SNARKProbe \cite{fan2024snarkprobe}}
+& \rotatebox{75}{ZKFUZZ}
+& \rotatebox{75}{\greyboxfuzz} \\ \hline\hline
+Blackbox Binary & \CIRCLE & \CIRCLE & \Circle & \Circle & \CIRCLE \\ \hline
+Support \zksnark & \CIRCLE & \Circle & \CIRCLE & \CIRCLE & \CIRCLE \\ \hline
+Software Error & \CIRCLE & \CIRCLE & \CIRCLE & \Circle & \CIRCLE \\ \hline
+Crypto Error & \Circle & \CIRCLE & \CIRCLE & \RIGHTcircle & \CIRCLE \\ \hline
+Error Locator & \RIGHTcircle & \Circle & \Circle & \Circle & \CIRCLE \\ \hline
+\end{tabular}
+}
+\caption{Comparison of \greyboxfuzz and a selection of cryptographic and generic fuzzing tools}
+\label{tab:fuzzer_comparison}
+\end{table}
+
+
+Several fuzzing tools can be used to evaluate the security of cryptographic programs, and some of them are specifically designed for cryptographic software to improve testing performance and detection capability. However, these techniques still have important limitations. Some tools do not support \zksnark programs or cannot detect \logicerror because they mainly focus on crashes, memory errors, or other generic software failures. Other fuzzing tools that support cryptographic protocols often require access to source code, which reduces their applicability to real-world binary-only programs. As shown in Table~\ref{tab:fuzzer_comparison}, existing approaches also provide limited support for locating the source of detected errors.
+
+\begin{table}[h]
+    \centering
+\begin{tabular}{c||c|c|c}
+\hline
+Tool & Circuit Error & Frontend Error & Backend Error \\ \hline\hline
+Circomspect & \CIRCLE & \Circle & \Circle \\ \hline
+ZKAP & \CIRCLE & \Circle & \Circle \\ \hline
+Korrekt & \CIRCLE & \Circle & \Circle \\ \hline
+Coda & \CIRCLE & \Circle & \Circle \\ \hline
+Ecne & \CIRCLE & \Circle & \Circle \\ \hline
+Picus & \CIRCLE & \Circle & \Circle \\ \hline
+Aleo & \CIRCLE & \Circle & \Circle \\ \hline
+OWBB23 & \Circle & \CIRCLE & \Circle \\ \hline
+SNARKProbe & \CIRCLE & \Circle & \CIRCLE \\ \hline
+CIVER & \CIRCLE & \Circle & \Circle \\ \hline
+ZKFUZZ & \CIRCLE & \Circle & \Circle \\ \hline
+\end{tabular}
+\caption{Comparison of the focus of \zksnark security tools}
+\label{tab:snark_comparison}
+\end{table}
+
+Meanwhile, several tools have been specifically designed for \zksnark security analysis \cite{chaliasos2024sok}, and \autoref{tab:snark_comparison} compares the analysis focus of existing \zksnark security tools. Most prior tools mainly focus on detecting circuit-related errors and lack the ability to identify backend errors arising from the \zksnark setup, prover, and verifier stages.
+
+As a result, these tools are insufficient for evaluating \zksnark implementations in settings where source code is unavailable, where security risks arise from cryptographic logic errors rather than ordinary program crashes, and where end-to-end analysis of the full workflow is required rather than circuit-level checking alone.

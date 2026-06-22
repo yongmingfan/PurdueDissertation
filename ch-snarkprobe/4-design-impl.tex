@@ -1,7 +1,7 @@
 \section{Design and Implementation}
 \label{sec:snarkprobe-design}
 
-In this section, we introduce both the high level goals and concrete implementation decisions, tools, and techniques that allow us to realize \tool.  We start with the \ConstraintChecker and then discuss the various components of \SnarkFuzzer.  These two sub-tools can be used either in conjunction with each other, or separately, depending on what the developer wishes to check.
+In this section, we introduce both the high level goals and concrete implementation decisions, tools, and techniques that allow us to realize \snarkprobe.  We start with the \ConstraintChecker and then discuss the various components of \SnarkFuzzer.  These two sub-tools can be used either in conjunction with each other, or separately, depending on what the developer wishes to check.
 
 \subsection{\ConstraintChecker}
 \label{subsec:snarkprobe-constraintchecker}
@@ -16,7 +16,7 @@ To check this, we developed our \ConstraintChecker, which leverages an SMT solve
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{
-  frame=tb,
+  % frame=tb,
   language=Python,
   aboveskip=3mm,
   belowskip=3mm,
@@ -40,6 +40,7 @@ To check this, we developed our \ConstraintChecker, which leverages an SMT solve
 }
 
 \begin{ZZlisting}[H]
+\caption{An example of \ConstraintChecker}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{CenteredBox}
@@ -67,13 +68,15 @@ fcmp.runComparisonTests()
 \end{minipage}
 \end{CenteredBox}
 \end{adjustbox}
-\caption{An example of \ConstraintChecker}
 \label{list:constraintchecker}
 \end{ZZlisting}
+
 \parhead{Implementation.} The \ConstraintChecker contains two major components: the Circuit Extractor and a three-step equivalence check. We discuss these components in detail below. \autoref{pro:constraintchecker} presents the detailed procedure for each component. We discuss optimizations in \autoref{app:snarkprobe-constraintopt}.
 
 
 \begin{protocol}[!htbp]
+\caption{Protocol of the \ConstraintChecker Using an SMT Solver}
+\vspace*{6pt}
 \centering
 \begingroup
 \makeatletter
@@ -266,7 +269,6 @@ Check if $S$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c$.
 \end{adjustbox}
 
 \vspace{0.5em}
-\caption{Protocol of the \ConstraintChecker Using an SMT Solver}
 \label{pro:constraintchecker}
 
 \vspace*{\fill}
@@ -282,11 +284,11 @@ After extracting the circuit, the \ConstraintChecker uses the SMT solver to veri
 \parheadit{Function Valid Check.} As the witness should be a solution in both the statement equations and equations built by the R1CS gates, we first create two SMT solvers $S_1$ and $S_2$ to verify that fact (see \autoref{pro:constraintchecker} (b)). The \ConstraintChecker considers the statement equations and R1CS gates to not be equivalent if the witness is not a valid solution for both.
 
 
-\parheadit{Equivalence comparison.} The equivalence comparison verifies if the statement equations $y_1 = f(x_1)$ and R1CS gates $y_2 = f(x_2)$ have the same output for all the same inputs. First, the \ConstraintChecker creates a solver $S$, and adds $y_1 = f(x_1)$, $y_2 = f(x_2)$, $x1 = x2$ and $y_1 \ne y_2$ to the solver $S$ (see \autoref{pro:constraintchecker} (c)). If $S$ results in \texttt{SAT}, then the SMT solver has discovered that the statement equations and R1CS gates have a different output for at least one input and thus considers them not equivalent, and otherwise, it results in \texttt{UNSAT}. Like in many other use cases, the \ConstraintChecker cannot guarantee equivalency if the SMT solver returns \texttt{UNSAT} or \texttt{UNKNOWN}.
+\parheadit{Equivalence Comparison.} The equivalence comparison verifies if the statement equations $y_1 = f(x_1)$ and R1CS gates $y_2 = f(x_2)$ have the same output for all the same inputs. First, the \ConstraintChecker creates a solver $S$, and adds $y_1 = f(x_1)$, $y_2 = f(x_2)$, $x1 = x2$ and $y_1 \ne y_2$ to the solver $S$ (see \autoref{pro:constraintchecker} (c)). If $S$ results in \texttt{SAT}, then the SMT solver has discovered that the statement equations and R1CS gates have a different output for at least one input and thus considers them not equivalent, and otherwise, it results in \texttt{UNSAT}. Like in many other use cases, the \ConstraintChecker cannot guarantee equivalency if the SMT solver returns \texttt{UNSAT} or \texttt{UNKNOWN}.
 Note that the SMT solver may return \texttt{UNKNOWN} for a variety of reasons, including running out of memory, or if the quantifier-free fragment is undecidable (such as nonlinear integer arithmetic) or too ``expensive'' (such as finding primes $p*q = N$ for some $N$).
 %Therefore, since the equations represented by an R1CS matrix are of the form $A * B - C = 0$, if the statement equation is not a quantifier-free formula, the SMT solver will never result in \texttt{UNKNOWN}.
 
-\parheadit{Domain comparison.} The SMT solver cannot directly calculate an equation's domain, but it can find the maximum and minimum values for an equation (\autoref{subfig:snarkprobe-domaina} in \autoref{app:snarkprobe-domaingap} shows an example of different upper and/or lower bounds). We also use the SMT solver to find out if there is a gap between the domains' of the statement equations and R1CS gates, though we cannot guarantee to find all such gaps that may exist (see \autoref{app:snarkprobe-domaingap} for a detailed discussion).
+\parheadit{Domain Comparison.} The SMT solver cannot directly calculate an equation's domain, but it can find the maximum and minimum values for an equation (\autoref{subfig:snarkprobe-domaina} in \autoref{app:snarkprobe-domaingap} shows an example of different upper and/or lower bounds). We also use the SMT solver to find out if there is a gap between the domains' of the statement equations and R1CS gates, though we cannot guarantee to find all such gaps that may exist (see \autoref{app:snarkprobe-domaingap} for a detailed discussion).
 
 
 %%%%%%%%%%

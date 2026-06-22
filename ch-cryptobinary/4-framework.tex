@@ -4,23 +4,23 @@
 
 Previous tools have been evaluated only with certain basic cryptographic algorithms, and often seem to lack evaluation for false positives, real world applications, and large scale projects. Therefore, as the first step in our replication study, we build a new benchmarking framework with a number of evaluation metrics, which will not only encompass all evaluations conducted by previous tools but also establish a unified more comprehensive evaluation benchmark moving forward.
 
-\fanyo{add transaction}
+% \fanyo{add transaction}
 
-\vspace*{-10pt}
-\begin{multicols}{3}
-\begin{itemize}[noitemsep,topsep=0pt]
-\item Aligot \cite{calvet2012aligot}
-\item CryptoHunt \cite{xu2017cryptographic}
-\item CryptoKnight \cite{hill2018cryptoknight}
-\item DRACA \cite{draca}
-\item FindCrypt2 \cite{findcrypt2}
-\item HCD \cite{hcd}
-\item PEiD KANAL \cite{kanal}
-\item SignSrch \cite{signsrch}
-\item Where's Crypto \cite{meijer2021s}
-\end{itemize}
-\end{multicols}
-\vspace*{-10pt}
+% \vspace*{-10pt}
+% \begin{multicols}{3}
+% \begin{itemize}[noitemsep,topsep=0pt]
+% \item Aligot \cite{calvet2012aligot}
+% \item CryptoHunt \cite{xu2017cryptographic}
+% \item CryptoKnight \cite{hill2018cryptoknight}
+% \item DRACA \cite{draca}
+% \item FindCrypt2 \cite{findcrypt2}
+% \item HCD \cite{hcd}
+% \item PEiD KANAL \cite{kanal}
+% \item SignSrch \cite{signsrch}
+% \item Where's Crypto \cite{meijer2021s}
+% \end{itemize}
+% \end{multicols}
+% \vspace*{-10pt}
 
 \subsection{Benchmarking Framework}
 \label{subsec:cryptobinary-framework}
@@ -88,7 +88,7 @@ Signal was selected because it both utilizes multiple (modern) cryptographic sch
 
 \subsection{Evaluation Metrics}
 \label{subsec:cryptobinary-metrics}
-To ensure a thorough exploration of current tools (and to provide rigorous and fair evaluation metrics for the future), we have meticulously crafted a series of evaluation experiments. These experiments are thoughtfully designed to align with the challenges we discuss in \autoref{subsec:cryptobinary-challenges}, maximizing our ability to uncover the current state of these tools and elucidate their strengths and weaknesses.  Our evaluation metrics are as follows:
+To ensure a thorough exploration of current tools (and to provide rigorous and fair evaluation metrics for the future), we have meticulously crafted a series of evaluation experiments. These experiments are thoughtfully designed to align with the challenges we discuss in \autoref{subsec:challenges}, maximizing our ability to uncover the current state of these tools and elucidate their strengths and weaknesses.  Our evaluation metrics are as follows:
  
 \begin{itemize}
 \item \textbf{Based on optimization levels:} Evaluate based on different compiler optimizations including \texttt{-O0}, \texttt{-O1}, \texttt{-O2}, \texttt{-O3}, \texttt{-Os}, and \texttt{-Ofast}.

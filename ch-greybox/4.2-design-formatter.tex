@@ -1,0 +1,79 @@
+\section{Input Formatter}
+\label{sec:input_formatter}
+
+The effectiveness of fuzzing depends heavily on the quality of the generated inputs. For programs with simple input formats, random mutation may be sufficient to reach meaningful program states. However, \zksnark programs require highly structured inputs, including public inputs, private witnesses, finite-field elements, elliptic-curve points, keys, proofs, and circuit-related data. If these inputs do not satisfy the expected format, the program often rejects them during parsing or early validation. As a result, a general-purpose fuzzer may spend most of its time generating inputs that never reach the cryptographic computation where \logicerror may occur.
+
+To address this problem, \greyboxfuzz uses an input formatter that generates and mutates seeds according to the structure of the target statement. The input formatter does not attempt to prove that every generated seed is semantically valid. Instead, its goal is to preserve the legal input format required by the target \zksnark program while still allowing the fuzzer to explore valid values, invalid values, and boundary cases. This design allows \greyboxfuzz to avoid wasting most fuzzing iterations on malformed inputs and increases the probability that generated seeds reach \pfunc and \vfunc.
+
+The input formatter is built on the statement-level oracle described in \autoref{sec:differential}. Since the user expresses the intended statement in Charm, \greyboxfuzz can use the same statement description to infer the structure of the required inputs. For example, a Charm statement may declare variables as integers, finite-field elements, group elements, or other cryptographic objects. \greyboxfuzz extracts this information and uses it to guide seed generation and mutation. This provides a lightweight structure-aware fuzzing layer without requiring source-code access to the target \zksnark binary.
+
+\subsection{Seed Scheduling}
+
+Not all generated seeds are equally useful for detecting \logicerror. Some inputs are rejected before they reach the cryptographic computation, while others exercise proof generation and verification but represent invalid statement-level values. To prioritize more useful seeds, \greyboxfuzz classifies generated inputs using three properties: \textbf{structure}, \textbf{mathematical validity}, and \textbf{statement-level value}. \autoref{tab:seed_scheduling} shows the scheduling priority used by \greyboxfuzz.
+
+\textbf{Structure} describes whether the seed has the expected syntactic format. For example, if the target program expects a witness containing integer values, then a string or floating-point value has an invalid structure. If the target program expects an elliptic-curve point, then the seed must contain the components required to represent that point. Inputs with invalid structure are usually rejected during parsing or cause ordinary software failures. They are therefore less useful for detecting \logicerror, which usually occurs after the program reaches cryptographic computation.
+
+\textbf{Mathematical validity} describes whether the seed satisfies the algebraic constraints required by the input type. For example, a finite-field element must lie within the field range, and an elliptic-curve point must represent a valid point on the selected curve. A seed may have the correct structure but still violate these mathematical requirements. Such inputs are useful for testing whether the target program correctly validates cryptographic objects and rejects invalid mathematical values.
+
+\textbf{Statement-level value} describes whether the seed satisfies the intended statement. For example, in a statement that proves knowledge of an age within an allowed range, the input may be a correctly formatted integer and may satisfy the mathematical type constraints, but still be invalid for the application if the value is outside the intended range. These inputs are important because many \logicerror arise when the program accepts values that have a legal format but do not satisfy the intended statement.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{c|c|c|c}
+\hline
+Priority & Structure & Mathematical Validity & Statement-Level Value \\ \hline\hline
+1 & Valid & Valid & Valid \\ \hline
+2 & Valid & Valid & Invalid \\ \hline
+3 & Valid & Invalid & Invalid \\ \hline
+4 & Invalid & Invalid & Invalid \\ \hline
+\end{tabular}
+\caption{Seed scheduling priority used by the input formatter.}
+\label{tab:seed_scheduling}
+\end{table}
+
+This scheduling policy gives the highest priority to seeds that can reach the cryptographic computation and exercise the intended statement. It also preserves lower-priority invalid seeds because they may still expose input-validation bugs or software errors. However, \greyboxfuzz gives less fuzzing effort to structurally invalid seeds because they are unlikely to reveal \logicerror in proof generation or verification.
+
+\subsection{Extracting Seed Structure}
+
+The input formatter obtains seed structure from the Charm statement provided by the user. Charm represents cryptographic statements using high-level objects and operations, such as integers, finite-field elements, group elements, exponentiation, hashing, and pairing-related operations. \greyboxfuzz parses the Charm statement to identify the variables used by the statement, their roles as public or private inputs, and their expected types.
+
+For built-in types, such as integers or byte strings, the formatter can directly generate values of the same type. For cryptographic types, the formatter records the internal structure required to serialize and mutate the value. For example, a finite-field element is generated within the modulus of the selected field. A group element is generated according to the representation expected by the group. If the target input is represented by multiple components, the formatter mutates each component while preserving the overall structure of the object.
+
+This process allows \greyboxfuzz to generate inputs that match the type expectations of both the Charm oracle and the target \zksnark program. For example, consider a statement of the form \(h = g^x\), where \(g\) and \(h\) are public group elements and \(x\) is a private exponent. From this statement, \greyboxfuzz learns that \(g\) and \(h\) should be generated as group elements and that \(x\) should be generated as a scalar value in the appropriate field. The formatter can then generate seeds that preserve this structure while varying the actual values used for testing.
+
+The input formatter only infers structural and mathematical constraints that are visible from the statement and its variable types. It does not automatically infer all application-level semantics. For example, if a variable represents a year or an age, Charm may only expose it as an integer. The formatter therefore knows how to generate an integer, but it may not know the intended application range unless the statement explicitly encodes that range. This distinction is important because \greyboxfuzz intentionally generates both valid and invalid statement-level values. Inputs that are structurally legal but semantically invalid are often the most useful for detecting \logicerror.
+
+\subsection{Seed Generation and Mutation}
+
+After extracting the seed structure, \greyboxfuzz generates inputs using two complementary strategies: grammar-based generation and structure-preserving mutation.
+
+\parhead{Grammar-based generation}
+The formatter first generates seeds from the extracted input structure. Each generated seed follows the expected format of the target statement. For example, if an input is a finite-field element, the formatter generates a value in the corresponding field representation. If an input is a group element, the formatter generates a value using the representation expected by the selected group. This strategy increases the probability that generated seeds pass parsing and early validation, allowing the execution to reach proof generation and verification.
+
+\parhead{Structure-preserving mutation}
+The formatter also mutates previously generated seeds while preserving their high-level structure. Instead of applying arbitrary byte-level mutations, \greyboxfuzz mutates individual fields according to their types. For example, it may replace a scalar with another scalar, change a field element to a boundary value, or modify one component of a structured cryptographic object while keeping the object in a legal encoding. This allows \greyboxfuzz to explore nearby inputs without destroying the format needed by the target program.
+
+\greyboxfuzz also generates negative test cases. These inputs intentionally violate mathematical or statement-level requirements while preserving the legal format. For example, a seed may use a value outside the intended application range, or it may fail to satisfy the statement while still being correctly encoded. Such inputs are important because a secure implementation should reject them. If the target program accepts one of these inputs, \greyboxfuzz reports a potential \logicerror.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+Generation Strategy & Format & Expected Statement Result \\ \hline\hline
+Grammar-based & Legal & Accept \\ \hline
+Grammar-based & Legal & Reject \\ \hline
+Grammar-based & Illegal & Reject \\ \hline
+Mutation-based & Legal & Accept \\ \hline
+Mutation-based & Legal & Reject \\ \hline
+Mutation-based & Illegal & Reject \\ \hline
+\end{tabular}
+\caption{Input generation strategies used by \greyboxfuzz.}
+\label{tab:input_formatter}
+\end{table}
+
+\autoref{tab:input_formatter} summarizes the input generation strategies used by \greyboxfuzz. Legal-format inputs are the primary focus because they are more likely to reach the cryptographic computation. Among them, both accepting and rejecting cases are necessary: accepting cases test whether valid witnesses are handled correctly, while rejecting cases test whether invalid witnesses are incorrectly accepted. Illegal-format inputs are assigned lower priority but are still useful for detecting ordinary software errors and input-validation failures.
+
+By combining statement derived structure, priority based scheduling, and structure preserving mutation, the input formatter improves the efficiency of fuzzing \zksnark programs. It reduces the number of seeds rejected before cryptographic execution and increases the number of test cases that exercise proof generation, proof verification, and statement-level correctness.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

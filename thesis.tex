@@ -432,6 +432,7 @@
 \ConfigureBibliography
 \addbibresource{all-biblatex-cryptobinary.bib}
 \addbibresource{all-biblatex-snarkprobe.bib}
+\addbibresource{all-biblatex-greybox.bib}
 % \addbibresource{all-biblatex-blackbox.bib}
 
 % \DeclareSourcemap
@@ -968,6 +969,9 @@
 \usepackage{enumitem}
 \usepackage{xstring}
 
+% greybox
+\usepackage{mfirstuc}
+
 
 \newcommand{\protocolblock}[1]{%
 \fbox{%
@@ -987,8 +991,10 @@
 
 \newcommand{\cmark}{\ding{51}}
 \newcommand{\xmark}{\ding{55}}
-\newcommand{\parhead}[1]{\noindent {\bfseries\boldmath\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
-\newcommand{\parheadit}[1]{\noindent {\itshape\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
+% \newcommand{\parhead}[1]{\noindent {\bfseries\boldmath\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
+% \newcommand{\parheadit}[1]{\noindent {\itshape\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
+\newcommand{\parhead}[1]{\noindent\hspace*{\parindent}{\bfseries\boldmath\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
+\newcommand{\parheadit}[1]{\noindent\hspace*{\parindent}{\itshape\ignorespaces #1}\hskip 0.9em plus 0.3em minus 0.3em}
 
 \newcommand*{\tabCIRCLE}{\raisebox{-0.2ex}{\tikz{\filldraw[draw=black,fill=black] (0,0) circle [radius=0.1cm];}}}
 \newcommand*{\tabCircle}{\raisebox{-0.2ex}{\tikz{\filldraw[draw=black,fill=white] (0,0) circle [radius=0.1cm];}}}
@@ -1052,7 +1058,7 @@
 }
 
 % macros
-\def\tool{\texttt{SNARKProbe}\xspace}
+\def\snarkprobe{\texttt{SNARKProbe}\xspace}
 \def\SnarkFuzzer{SnarkFuzzer\xspace}
 \def\ConstraintChecker{Constraint Checker\xspace}
 \def\logicerror{cryptographic logic error\xspace}
@@ -1070,12 +1076,88 @@
 \def\libsnark{\texttt{libsnark}\xspace}
 \def\bellman{\texttt{Bellman}\xspace}
 \def\arkworks{\texttt{arkworks}\xspace}
-\def\circom{\texttt{Circom}\xspace}
+\def\rapidsnark{\texttt{rapidsnark}\xspace}
+\def\snarkjs{\texttt{snarkjs}\xspace}
 \def\gnark{\texttt{gnark}\xspace}
+\def\playsnark{\texttt{playsnark}\xspace}
+\def\circom{\texttt{Circom}\xspace}
 \def\groth16{Groth16\xspace}
 \def\pinocchio{Pinocchio\xspace}
 
+% ----- tmp for greybox start -----
+\def\zkp{zero knowldge proof\xspace}
+\def\greyboxfuzz{\texttt{GreyBox-Fuzzing}\xspace}
+\def\pp{proving program\xspace}
+\def\vp{verification program\xspace}
+\def\programbranch{general programming branch\xspace}
+\def\cryptobranch{cryptographic related branch\xspace}
+\def\userp{\texttt{user}\textsubscript{\texttt{P}}\xspace}
+\def\userv{\texttt{user}\textsubscript{\texttt{V}}\xspace}
+\def\witnessorg{\texttt{witness}\textsubscript{\texttt{org}}\xspace}
+\def\witnessint{\texttt{witness}\textsubscript{\texttt{int}}\xspace}
+\def\pfunc{\ensuremath{\mathcal{P}}\xspace}
+\def\vfunc{\ensuremath{\mathcal{V}}\xspace}
+\def\pprog{\ensuremath{\mathcal{P}_\texttt{func}}\xspace}
+\def\vprog{\ensuremath{\mathcal{V}_\texttt{func}}\xspace}
+\def\inputconvert{input converter\xspace}
+\def\afl{\texttt{AFL/AFL++}\xspace}
+\def\diffafl{\texttt{Diff AFL}\xspace}
+% ----- tmp for greybox end -----
+
+
 % ---------- Additional ----------
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=false,
+  breakindent=0pt,
+  breakautoindent=false,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  framexleftmargin=5pt,
+  framexrightmargin=0pt,
+  tabsize=4
+}
+
+\lstdefinestyle{asmstyle}{
+  language={[x86masm]Assembler},
+  frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4
+}
+
+\lstdefinestyle{cstyle}{
+  language=C,
+  frame=none,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  tabsize=4
+}
 
 \begin{document}
 
@@ -1109,8 +1191,8 @@
 \include{ch-introduction}
 \include{ch-cryptobinary}
 \include{ch-snarkprobe}
-% \include{ch-greybox}
-% \include{ch-summary}
+\include{ch-greybox}
+\include{ch-summary}
 
 
 

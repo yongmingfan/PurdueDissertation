@@ -1,12 +1,15 @@
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Evolution of cryptographic function identification techniques}}{18}{figure.caption.20}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Timeline of the development of cryptographic algorithm detection tools}}{20}{figure.caption.23}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Types of cryptographic functionality and designs targeted by different tools and approaches, by percentage of tools surveyed}}{27}{figure.caption.30}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Evaluation result for MD5 with different compilers. A full marker indicates that function can be detected and an empty marker that it cannot.}}{41}{figure.caption.66}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Detection percentage by algorithm across all tools}}{48}{figure.caption.77}%
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Workflow of \texttt {SNARKProbe}\xspace . White boxes represent subcomponents universal for all zkSNARK libraries, forward diagonal stripes represent those designed for a specific library, and backward diagonal stripes represent those designed for a specific programming language.}}{61}{figure.caption.103}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Example file for the ideal branch file}}{71}{figure.caption.153}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Example file for the ideal value file}}{72}{figure.caption.154}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Content of variable type G1}}{75}{figure.caption.157}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Runtime of each component in SnarkFuzzer\xspace with different libraries and protocols, both in terms of actual time as well as percentage of the total.}}{79}{figure.caption.165}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Percentage (breadth) of library coverage after a given number of iterations}}{81}{figure.caption.167}%
-\contentsline {figure}{\numberline {B.1}{\ignorespaces Examples of Domain Comparison}}{105}{figure.caption.210}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Evolution of cryptographic function identification techniques}}{22}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Timeline of the development of cryptographic algorithm detection tools}}{24}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Types of cryptographic functionality and designs targeted by different tools and approaches, by percentage of tools surveyed}}{32}{figure.caption.28}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Evaluation result for MD5 with different compilers. A full marker indicates that function can be detected and an empty marker that it cannot.}}{50}{figure.caption.72}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Detection percentage by algorithm across all tools}}{57}{figure.caption.83}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Workflow of \texttt {SNARKProbe}\xspace . White boxes represent subcomponents universal for all zkSNARK libraries, forward diagonal stripes represent those designed for a specific library, and backward diagonal stripes represent those designed for a specific programming language.}}{70}{figure.caption.109}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Example file for the ideal branch file}}{80}{figure.caption.159}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Example file for the ideal value file}}{81}{figure.caption.160}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Content of variable type G1}}{84}{figure.caption.163}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Runtime of each component in SnarkFuzzer\xspace with different libraries and protocols, both in terms of actual time as well as percentage of the total.}}{88}{figure.caption.171}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Percentage (breadth) of library coverage after a given number of iterations}}{90}{figure.caption.173}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Structure of a zkSNARK\xspace program.}}{108}{figure.caption.199}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Overview of \texttt {GreyBox-Fuzzing}\xspace .}}{111}{figure.caption.202}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Error localization procedure in \texttt {GreyBox-Fuzzing}\xspace .}}{129}{figure.caption.262}%
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Examples of Domain Comparison}}{168}{figure.caption.311}%

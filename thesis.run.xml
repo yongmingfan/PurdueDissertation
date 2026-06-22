@@ -85,6 +85,7 @@
       <file>all-biblatex.bib</file>
       <file>all-biblatex-cryptobinary.bib</file>
       <file>all-biblatex-snarkprobe.bib</file>
+      <file>all-biblatex-greybox.bib</file>
     </requires>
   </external>
 </requests>

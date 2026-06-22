@@ -71,6 +71,7 @@ Based on our replicability evaluation, we find that some tools cannot be replica
 \label{subsec:cryptobinary-false}
 
 \begin{table}[H]
+\caption{Comparative analysis of detection approaches versus stated capabilities in original documentation. Cross mark denotes inconsistencies (false positive or false negative), check mark successful replication.}\vspace*{6pt}
 \footnotesize
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -88,7 +89,6 @@ SignSrch & \cmark & \xmark & \cmark &  & \cmark &  & \cmark & \cmark & \cmark \\
 Where's Crypto & \cmark & \cmark & \cmark &  &  &  & \cmark & \cmark & \cmark \\ \hline
 \end{tabular}
 \end{adjustbox}
-\caption{Comparative analysis of detection approaches versus stated capabilities in original documentation. Cross mark denotes inconsistencies (false positive or false negative), check mark successful replication.}
 \label{tab:cryptobinary-comparison}
 \end{table}
 
@@ -98,6 +98,8 @@ During our evaluation, we encountered instances where certain tools yielded fals
 \parhead{Unreplicable cryptographic function detection.} In \autoref{tab:cryptobinary-summary}, we list the purported performance for each tool. However, our evaluation could not verify the detection capabilities for certain cryptographic functions in some of the tools. \autoref{tab:cryptobinary-comparison} presents the outcomes of our assessment relative to the detection capabilities as claimed by the respective tools' original documentation. If a tool claims to have the ability to detect a cryptographic algorithm, but we cannot reproduce the same result in any of our benchmarks or evaluation metrics, we mark it with a red exclamation mark. Otherwise, if we can confirm the detection ability, we mark it with a green circle. A blank means the tool makes no claim about the given algorithm.  Due to the unavailability of documentation for HCD and PEiD KANAL, a comparison of our evaluation results with their claimed detection capabilities was not possible.
 
 \begin{table*}[htb]
+\caption{Performance Metrics for Tool Evaluation: False Positives, False Negatives, True Positives, and True Negatives}
+\vspace*{6pt}
 \centering
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.2}
@@ -129,7 +131,6 @@ During our evaluation, we encountered instances where certain tools yielded fals
 \end{tabular}
 \end{adjustbox}
 %}
-\caption{Performance Metrics for Tool Evaluation: False Positives, False Negatives, True Positives, and True Negatives}
 \label{tab:cryptobinary-quat}
 \end{table*}
 
@@ -162,6 +163,8 @@ In \autoref{tab:cryptobinary-system}, we evaluate the capability of exisiting wo
 
 
 \begin{table}[t]
+\caption{Tool compatibility with different operating systems; \CIRCLE~represents a tool that supports the desired system, while \Circle indicates a tool that does not support the desired system; \LEFTcircle \space represents cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ}
+\vspace*{6pt}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||ccc||ccc}
@@ -180,7 +183,6 @@ Signsrch              & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}
 Where's Crypto        & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\Circle}     & \Circle     & \multicolumn{1}{c|}{\CIRCLE}       & \multicolumn{1}{c|}{\CIRCLE}     & \CIRCLE     \\ \hline
 \end{tabular}
 \end{adjustbox}
-\caption{Tool compatibility with different operating systems; \CIRCLE~represents a tool that supports the desired system, while \Circle indicates a tool that does not support the desired system; \LEFTcircle \space represents cases where a tool cannot be executed on a Unix-like system but becomes functional with the assistance of WineHQ}
 \label{tab:cryptobinary-system}
 \end{table}
 
@@ -220,15 +222,13 @@ To study the impact of compilers on cryptographic function detection, we compile
 
 \begin{figure}[ht]
     \centering
-  \includegraphics[width=0.95\textwidth,keepaspectratio]{ch-cryptobinary/figure/evaluate_compiler_new.png}
+  \includegraphics[width=0.95\textwidth,keepaspectratio]{ch-cryptobinary/figure/evaluate_compiler_new_update.png}
 	%\vspace*{-10pt}
   \caption{Evaluation result for MD5 with different compilers. A full marker indicates that function can be detected and an empty marker that it cannot.}
   \label{fig:cryptobinary-evaluate_compiler}
 \end{figure}
 
-\fanyo{fix typo in figure!!!}
-
-In this example, DRACA, Findcrypt2, PEiD KANAL, Signsrch, and Where's Crypto support detecting the MD5 algorithm. However, their detection capabilities are influenced by the compiler used. All of these tools can detect the MD5 algorithm in binaries compiled with the MSVC compiler, regardless of the optimization flag. In contrast, for binaries compiled with GCC, they can only detect the MD5 algorithm when the -O0 optimization flag is applied. Furthermore, when using the Clang compiler, none of these tools were able to detect the MD5 algorithm in the binary. This suggests that differences between compilers may significantly impact a tool's analysis results. In general, we found that the MSVC compiler has less impact on detection results compared to GCC and CLANG. Specifically, if a tool can detect a certain cryptographic algorithm in a program compiled by GCC or CLANG, it will also be able to detect that algorithm in the same program compiled by MSVC.
+In this example, DRACA, Findcrypt2, PEiD KANAL, Signsrch, and Where's Crypto support detecting the MD5 algorithm. However, their detection capabilities are influenced by the compiler used. All of these tools can detect the MD5 algorithm in binaries compiled with the MSVC compiler, regardless of the optimization flag. In contrast, for binaries compiled with GCC, they can only detect the MD5 algorithm when the \texttt{-O0} optimization flag is applied. Furthermore, when using the Clang compiler, none of these tools were able to detect the MD5 algorithm in the binary. This suggests that differences between compilers may significantly impact a tool's analysis results. In general, we found that the MSVC compiler has less impact on detection results compared to GCC and CLANG. Specifically, if a tool can detect a certain cryptographic algorithm in a program compiled by GCC or CLANG, it will also be able to detect that algorithm in the same program compiled by MSVC.
 
 For example, Signsrch shows inconsistent performance with Clang, GCC, and MSVC, identifying the SHA-1 hash function in certain programs compiled with identical optimization flags but using a different compiler. We also observe same behaviour for DARACA when detect XXTEA algorithm (see \autoref{tab:cryptobinary-benchmarks} for details).
 
@@ -357,6 +357,8 @@ Optimization flags significantly alter the structure and behavior of a binary pr
 We also carried out evaluations to determine whether variations in a cryptographic algorithm affects the success of its detection. As a case study, we analyzed different variants of the Tiny Encryption Algorithm (TEA), including standard TEA, XTEA, and XXTEA. While all the tools were able to successfully detect TEA binaries with any of these three variants, we observed some interesting details in the detection results.
 
 \begin{table}[h]
+\caption{Output when evaluating DRACA and Signsrch with different variants of TEA}
+\vspace*{6pt}
 \centering
 \begin{tabular}{l||l|l}
 \hline
@@ -366,7 +368,6 @@ XTEA  & \begin{tabular}[c]{@{}l@{}}* RC5 or RC6 - 50\%\\ ** TEA - 34\%\end{tabul
 XXTEA & \begin{tabular}[c]{@{}l@{}}* RC5 or RC6 - 50\%\\ ** TEA - 67\%\end{tabular} & * TEA1\_DS {[}32.le.4{]}                                                                     \\ \hline
 \end{tabular}
 %}
-\caption{Output when evaluating DRACA and Signsrch with different variants of TEA}
 \label{tab:cryptobinary-evaluate_variant}
 \end{table}
 
@@ -404,6 +405,8 @@ We tested the tools with these malware samples and present the results in \autor
 
 
 \begin{table}[h]
+\caption{Evaluation results for cryptographic function detection in different malware versions}
+\vspace*{6pt}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||c|c|c|c}
@@ -422,7 +425,6 @@ Win32Dircrypt           & \xmark & \cmark      & \cmark    &            \\ \hlin
 \end{tabular}
 %}
 \end{adjustbox}
-\caption{Evaluation results for cryptographic function detection in different malware versions}
 \label{tab:cryptobinary-evaluate_malware}
 \end{table}
 

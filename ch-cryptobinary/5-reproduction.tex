@@ -14,6 +14,8 @@ In our reproducibility evaluation we follow the ACM guidelines on reproducibilit
 % \fanyo{We use \cmark to indicate successful reproduction of the tool with their original test cases, \xmark for failure to reproduce or when the tool is unavailable (neither source code nor compiled binary is provided), and \texttt{n/a} if the tool is executable but lacks the original test cases.}
 
 \begin{table}[h]
+\caption{Reproducibility outcome for each tools. \cmark~indicates a tool that has passed the reproduction evaluation, while \xmark~represents a tool that has either failed the reproduction evaluation or is not accessible. \textminus~denotes a tool that is available for use, but the developer has not provided the original test cases.}
+\vspace*{6pt}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c|c|c|c|c|c}
@@ -24,7 +26,6 @@ HCD & Kerckhoff  & \makecell{PEiD \\ KANAL}  & SignSrch  & \makecell{Softmax \\ 
 \textminus  & \xmark & \textminus & \textminus & \xmark & \cmark  \\ \hline
 \end{tabular}
 \end{adjustbox}
-\caption{Reproducibility outcome for each tools. \cmark~indicates a tool that has passed the reproduction evaluation, while \xmark~represents a tool that has either failed the reproduction evaluation or is not accessible. \textminus~denotes a tool that is available for use, but the developer has not provided the original test cases.}
 \label{tab:cryptobinary-reproducibility}
 \end{table}
 

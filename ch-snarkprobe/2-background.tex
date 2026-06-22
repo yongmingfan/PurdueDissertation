@@ -36,10 +36,12 @@ In addition, most general purpose fuzzing tools cannot detect \textit{\logicerro
 We consider a \logicerror to be one that causes a deviation from the expected protocol flow or an incorrect output, without causing an error message or crash.
 To the best of our knowledge, we are the first to build such fuzzing techniques for zkSNARKs.
 
-We provide a comparison of \tool and the most relevant existing fuzzing tools in \autoref{tab:snarkprobe-fuzzer_comparison}, focusing on the types of errors they are able to catch, if they can precisely locate such errors, and their adaptability to \zksnark{s}.  Currently, most fuzzing tools are limited to identifying software errors. While some tools such as CDF and SHA-3 Test have the capability to identify \logicerror{s}, their functionality is restricted and cannot be easily extended.
+We provide a comparison of \snarkprobe and the most relevant existing fuzzing tools in \autoref{tab:snarkprobe-fuzzer_comparison}, focusing on the types of errors they are able to catch, if they can precisely locate such errors, and their adaptability to \zksnark{s}.  Currently, most fuzzing tools are limited to identifying software errors. While some tools such as CDF and SHA-3 Test have the capability to identify \logicerror{s}, their functionality is restricted and cannot be easily extended.
 Presently, our \SnarkFuzzer stands as the only fuzzing tool capable of detecting both software and \logicerror{s} for \zksnark{s}, accompanied by source code references and protocol location information.
 
 \begin{table}[t]
+\caption{Comparison of \snarkprobe and a selection of cryptographic and generic fuzzing tools. A \LEFTcircle~ means achieves in select instances.}
+\vspace*{6pt}
 \centering
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||c|ccc|cc}
@@ -51,10 +53,9 @@ AFL \cite{afl} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\C
 CDF \cite{aumasson2017automated} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\LEFTcircle} & \Circle & \multicolumn{1}{c|}{\Circle} & \Circle \\ \hline
 SHA-3 Test \cite{mouha2018finding} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\CIRCLE} & \Circle & \multicolumn{1}{c|}{\Circle} & \Circle \\ \hline
 TLS-Attacker \cite{somorovsky2016systematic} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\LEFTcircle} & \Circle & \multicolumn{1}{c|}{\CIRCLE} & \LEFTcircle \\ \hline
-\textbf{\tool} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE \\ \hline
+\textbf{\snarkprobe} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE & \multicolumn{1}{c|}{\CIRCLE} & \CIRCLE \\ \hline
 \end{tabular}
 \end{adjustbox}
-\caption{Comparison of \tool and a selection of cryptographic and generic fuzzing tools. A \LEFTcircle~ means achieves in select instances.}
 \label{tab:snarkprobe-fuzzer_comparison}
 \end{table}
 
@@ -71,16 +72,16 @@ Such attack models work to model timing results by combining a fixed secret inpu
 Recent work has provided a more general framework for such techniques and extended them to automate format oracle attacks~\cite{beck2020automating}.
 This also extends work which sought to automatically deploy existing, known attacks~\cite{kupser2015break}.  While these works also seek to automatically detect vulnerabilities in different contexts, and use some similar techniques such as SMT solvers, these are largely orthogonal to our current work and do not extend to existing zkSNARK systems.
 
-There is a growing trend towards computer aided cryptography and formal verification of implementations (see \cite{barbosa2021sok} for a detailed discussion).  Project Everest~\cite{projecteverest} contains a variety of formally verified software components.  While we are seeing increasingly complex protocols being formally verified~\cite{protzenko2019formally}, we have not yet seen these techniques applied to zkSNARKs.  We see our work both as a step towards a formally verified zkSNARK implementation, bridging the current gap through the use of heuristic techniques like fuzzing, as well as a complement to it.  A formally verified implementation could be used to provide a trustworthy ground truth for our fuzzing techniques, for example.  In addition, formal verification is typically targeted at a single implementation, which necessitates re-running the often complicated process for each new application.  \tool is designed to streamline the process and make it easy for a user to check a variety of applications or libraries, with little manual effort.
+There is a growing trend towards computer aided cryptography and formal verification of implementations (see \cite{barbosa2021sok} for a detailed discussion).  Project Everest~\cite{projecteverest} contains a variety of formally verified software components.  While we are seeing increasingly complex protocols being formally verified~\cite{protzenko2019formally}, we have not yet seen these techniques applied to zkSNARKs.  We see our work both as a step towards a formally verified zkSNARK implementation, bridging the current gap through the use of heuristic techniques like fuzzing, as well as a complement to it.  A formally verified implementation could be used to provide a trustworthy ground truth for our fuzzing techniques, for example.  In addition, formal verification is typically targeted at a single implementation, which necessitates re-running the often complicated process for each new application.  \snarkprobe is designed to streamline the process and make it easy for a user to check a variety of applications or libraries, with little manual effort.
 
 \subsection{Challenges and Motivation}
-Based on the prior work and current techquies, there are following challenges to evaluate the security of a \zksnark library, which are also our motivation to develop our \tool.
+Based on the prior work and current techquies, there are following challenges to evaluate the security of a \zksnark library, which are also our motivation to develop our \snarkprobe.
 \begin{itemize}[leftmargin=*]
     \setlength{\itemsep}{0pt}
     \setlength{\parskip}{0pt}
 		\item Manually evaluating the security of cryptographic library source code requires a significant investment of time and resources.
         \item Existing cryptographic fuzzers and their techniques does not support \zksnark or  other zero knowledge proof protocol due to their complexity.
         \item General-purpose fuzzing tools cannot detect \textit{\logicerror{s}} and are unable to produce suitable input for \zksnark programs.
-	  %\item \fanyo{We evaluate \tool's ability with recent \zksnark applications in academic paper and projects to find potential inconsistencies and different types of errors in zkSNARK protocols and implementations and discuss the various inconsistencies it detected.}
+	  %\item \fanyo{We evaluate \snarkprobe's ability with recent \zksnark applications in academic paper and projects to find potential inconsistencies and different types of errors in zkSNARK protocols and implementations and discuss the various inconsistencies it detected.}
 \end{itemize}
 

@@ -22,12 +22,12 @@ It can assist in binary analysis to give a better depiction of how the
 functions work.  Determining the type of cryptographic function in a
 binary can help to pinpoint the existence of a malicious
 payload~\cite{yan2008revealing} and also help cryptographic experts identify potentially insecure protocols or implementations (or those that require more manual analysis).
-%Finally, oftentimes malware and ransomware use
-%similar cryptographic functions with some minor changes. For example, there are
-%different versions of the TeslaCrypt ransomware~\cite{teslacrypt}.
-%Identifying one piece of ransomware via an automatic detection mechanism can help to
-%identify other versions and thus save time and resources that could be better devoted to implementing
-%effective prevention mechanisms.
+Finally, oftentimes malware and ransomware use
+similar cryptographic functions with some minor changes. For example, there are
+different versions of the TeslaCrypt ransomware~\cite{teslacrypt}.
+Identifying one piece of ransomware via an automatic detection mechanism can help to
+identify other versions and thus save time and resources that could be better devoted to implementing
+effective prevention mechanisms.
 
 \begin{figure}[t]
   \centering
@@ -109,4 +109,7 @@ of current detection mechanisms and analyze existing tools based on this suite.
 % In Section~\ref{sec:taxonomy} we present our taxonomy of cryptographic algorithms, and in Section~\ref{sec:features} we discuss the various features of cryptographic algorithms that have been used for identification.
 % In Section~\ref{sec:detection} we analyze different detection techniques and their strengths and weaknesses, and in Section~\ref{sec:challenges} we enumerate the inherent challenges in detecting and classifying cryptographic code in real-world applications.
 % In Sections~\ref{sec:framework} and~\ref{sec:evaluation} we introduce our benchmarking framework and run existing tools on it to generate a fair comparison among existing work and highlight gaps in coverage.
+
+\subsection{Chapter Organization}
+In \autoref{sec:cryptobinary-background}, we provide background on cryptographic function detection, and in \autoref{sec:cryptobinary-overview}, we introduce existing cryptographic algorithm detection tools. In \autoref{sec:cryptobinary-framework}, we present our newly developed benchmarking framework and evaluation metrics for reproduction and replication studies. In \autoref{sec:cryptobinary-reproduction} and \autoref{sec:cryptobinary-replication}, we report the evaluation results for both reproduction and replication studies and identify future research directions based on these findings. Finally, in \autoref{sec:cryptobinary-discussion}, we discuss broader research opportunities and key areas for future improvement.
 

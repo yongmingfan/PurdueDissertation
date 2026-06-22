@@ -1,14 +1,14 @@
 \section{Error Catching Evaluation}
 \label{sec:snarkprobe-errorcatching}
 
-Our second set of evaluations demonstrates \tool's ability to \emph{automatically} catch different types of errors in \zksnark libraries.  We test \tool on \libsnark, \bellman, \arkworks, and \texttt{playsnark}, as well as on the circuit generator \circom.  Additionally, we show how \tool would have caught a previous CVE in the \zksnark component of Zcash, a popular privacy-preserving cryptocurrency.  In total, \tool detected seven inconsistencies in current \zksnark libraries, successfully \textit{automatically} located the previous vulnerability, and could potentially detect two additional types of errors. % (which we discuss in Appendix~\ref{app:potentialerrors} due to space constraints as these were not found in any high profile applications at this time). 
-We summarize our results in \autoref{tab:snarkprobe-error_summary}.%, including the type of error, which component of \tool is able to detect the error, and what exactly the error affects.
+Our second set of evaluations demonstrates \snarkprobe's ability to \emph{automatically} catch different types of errors in \zksnark libraries.  We test \snarkprobe on \libsnark, \bellman, \arkworks, and \texttt{playsnark}, as well as on the circuit generator \circom.  Additionally, we show how \snarkprobe would have caught a previous CVE in the \zksnark component of Zcash, a popular privacy-preserving cryptocurrency.  In total, \snarkprobe detected seven inconsistencies in current \zksnark libraries, successfully \textit{automatically} located the previous vulnerability, and could potentially detect two additional types of errors. % (which we discuss in Appendix~\ref{app:potentialerrors} due to space constraints as these were not found in any high profile applications at this time). 
+We summarize our results in \autoref{tab:snarkprobe-error_summary}.%, including the type of error, which component of \snarkprobe is able to detect the error, and what exactly the error affects.
 
-%\fanyo{The main goals of our evaluations of \tool are to show that 1) out tools can detect errors or vulnerabilities especially \logicerror{} in \zksnark libraries with improved performance comparing to other tools; 2) our tools have can detect these errors in a reasonable runtime with real \zksnark libraries and applications.}
+%\fanyo{The main goals of our evaluations of \snarkprobe are to show that 1) out tools can detect errors or vulnerabilities especially \logicerror{} in \zksnark libraries with improved performance comparing to other tools; 2) our tools have can detect these errors in a reasonable runtime with real \zksnark libraries and applications.}
 
-%\fanyo{Our first major point of evaluation is \tool's ability to \emph{automatically} catch different types of errors in widely-used zkSNARK libraries and circuit generator.  In this section, we introduce the errors that \tool found in real world \zksnark libraries for both \ConstraintChecker and \SnarkFuzzer. We also evaluate \SnarkFuzzer to compare with current fuzzing tool to show the performance improvements and enhanced abilities of our design. We will also discuss the runtime performance in Section \ref{sec:evaluation}.}
+%\fanyo{Our first major point of evaluation is \snarkprobe's ability to \emph{automatically} catch different types of errors in widely-used zkSNARK libraries and circuit generator.  In this section, we introduce the errors that \snarkprobe found in real world \zksnark libraries for both \ConstraintChecker and \SnarkFuzzer. We also evaluate \SnarkFuzzer to compare with current fuzzing tool to show the performance improvements and enhanced abilities of our design. We will also discuss the runtime performance in Section \ref{sec:evaluation}.}
 %
-%\fanyo{We firstly evaluated \tool with three major, widely used \zksnark libraries and its circuit generator including \libsnark, \bellman, and \arkworks. Meanwhile, we also evaluate some other libraries and circuit generator from recent projects and academic papers such as playsnark, LegoSNARK, and Circom. To better show the ability of our \tool, we also evaluate our \tool with previous \zksnark library versions, and the evaluation results shows that our \tool can also detect. In total, \tool found 7 issues or bugs in current \zksnark libraries plus 1 vulnerability in previous version \zksnark library and table \ref{tab:error_summary} contains the summary information for each bug \tool found.}
+%\fanyo{We firstly evaluated \snarkprobe with three major, widely used \zksnark libraries and its circuit generator including \libsnark, \bellman, and \arkworks. Meanwhile, we also evaluate some other libraries and circuit generator from recent projects and academic papers such as playsnark, LegoSNARK, and Circom. To better show the ability of our \snarkprobe, we also evaluate our \snarkprobe with previous \zksnark library versions, and the evaluation results shows that our \snarkprobe can also detect. In total, \snarkprobe found 7 issues or bugs in current \zksnark libraries plus 1 vulnerability in previous version \zksnark library and table \ref{tab:error_summary} contains the summary information for each bug \snarkprobe found.}
 
 
 \begin{table}[!htp]
@@ -19,7 +19,9 @@ We summarize our results in \autoref{tab:snarkprobe-error_summary}.%, including 
 \begin{minipage}{\textheight}
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.75}
+\caption{Summary of the current potential errors and inconsistencies, and previous vulnerabilities, that \snarkprobe is able to catch and locate.}
+\vspace*{6pt}
+\renewcommand{\arraystretch}{2}
 \begin{tabular*}{\textheight}{@{\extracolsep{\fill}}|lllll|}
 \hline
 \multicolumn{1}{|c||}{\textbf{Error/Vulnerability}} &
@@ -44,7 +46,6 @@ We summarize our results in \autoref{tab:snarkprobe-error_summary}.%, including 
 \multicolumn{1}{|l||}{CVE-2019-7167} & \multicolumn{1}{l|}{Logic Error} & \multicolumn{1}{l|}{PGHR13 Protocol} & \multicolumn{1}{l|}{libsnark (2018)} & SnarkFuzzer \\ \hline
 \end{tabular*}
 
-\caption{Summary of the current potential errors and inconsistencies, and previous vulnerabilities, that \tool is able to catch and locate.}
 \label{tab:snarkprobe-error_summary}
 \end{minipage}
 \end{adjustbox}%
@@ -60,7 +61,6 @@ There is always a possibility that a developer may generate an incorrect R1CS ma
 While we did not find any examples of this in the few applications we tested, consider the following scenario.
 Take a statement equation like $x^3 + x + 5 = y$ which the developer will typically flatten into \texttt{R1CS\_gates} with private input $x = 3$ and public input $y = 35$.  This set of equations is then equal to $x^3 + x + 5 = 35$. However, the developer \emph{may} incorrectly flatten the statement equation into \texttt{R1CS\_gates\_2}.
 
-\vspace*{5pt}
 \begin{equation}
 \label{eq:r1cs-gates}
 \begin{aligned}
@@ -83,7 +83,6 @@ w_{3} + 2 = y
 \end{cases}
 \end{aligned}
 \end{equation}
-\vspace*{5pt}
 
 While \texttt{R1CS\_gates\_2} still satisfies the private input $x = 3$ and public input $y = 35$, causing the underlying library to output an acceptable proof, this flattening does not in fact equal the statement equation $x^3 + x + 5 = y$.
 Although the statement equation and \texttt{R1CS\_gates\_2} satisfy the witness, and their domains have the same upper and lower bounds, they have a different output range, which our \ConstraintChecker will catch and flag as an error.
@@ -161,12 +160,12 @@ As part of the \zksnark setup process, a set of private parameters informally re
 %In order to maintain the integrity of the system and prevent unauthorized acquisition of secret knowledge by verifiers, it is imperative to eradicate toxic waste within the \zksnark protocol.
 However, our \SnarkFuzzer identified an actual implementation error in a \zksnark library called \texttt{playsnark}, whereby toxic waste is not properly destroyed during the setup phase. \texttt{playsnark}~\cite{playsnark} serves as a learning playground for proof systems, including Pinocchio and Groth16.
 %It lacks a comprehensive security audit by a qualified engineer, rendering it unsuitable for security-sensitive applications\footnote{And it in fact makes no claims to have deployable security.}.
-While \texttt{playsnark} makes no claims that it should be used for security-sensitive applications, we feel that this example still exemplifies valuable use cases for \tool.  First, it can indeed catch errors that would be exploitable in real applications.  And second, while libraries like \bellman and \libsnark are professionally audited, this will likely not always be the case for all \zksnark code in production usage in the future (as we have seen in many other domains).  Tooling such as \tool can be an invaluable resource for non-experts and small organizations, enabling them to assess the security posture of unaudited \zksnark libraries, audit their own code throughout the development process, and facilitating informed decisions regarding future security implementations.
+While \texttt{playsnark} makes no claims that it should be used for security-sensitive applications, we feel that this example still exemplifies valuable use cases for \snarkprobe.  First, it can indeed catch errors that would be exploitable in real applications.  And second, while libraries like \bellman and \libsnark are professionally audited, this will likely not always be the case for all \zksnark code in production usage in the future (as we have seen in many other domains).  Tooling such as \snarkprobe can be an invaluable resource for non-experts and small organizations, enabling them to assess the security posture of unaudited \zksnark libraries, audit their own code throughout the development process, and facilitating informed decisions regarding future security implementations.
 
 
 \parhead{\libsnark Out of Memory.}
 \SnarkFuzzer detects a corner-case software error in \libsnark. When our \inputgenerator tried to produce a large R1CS matrix with tens of thousands of variables and constraints, we discovered that \libsnark cannot compile and produce a \zksnark program with such a large R1CS matrix without throwing a segmentation fault or memory error.  Intuitively, this occurs because the input matrix we generated was quite dense, i.e., it had a large number of both variables and constraints, as opposed to being quite sparse like most typical R1CS matrices.  \libsnark's R1CS storage format is clearly not setup to handle such cases.  In general, this would not impact the typical usage of the \libsnark, as our fuzzer is designed to look for extreme cases like this that might not happen with a typical real world proof statement.
-%However, one cannot guarantee that such a case will never happen in practice, which is why tools like \tool can be valuable for stress testing implementations.
+%However, one cannot guarantee that such a case will never happen in practice, which is why tools like \snarkprobe can be valuable for stress testing implementations.
 
 We take this example as a chance to take a step back and revisit our comparison of \SnarkFuzzer to a traditional, more generic fuzzer like AFL.  As generic memory and software errors such as this have nothing to do with the actual cryptography and \zksnark logic, traditional fuzzers are also able to detect them.  However, it is likely to take a generic fuzzer significantly longer (and many more inputs) to catch such errors, as they lack the context to understand what an ``extreme'' input means in this instance, and, as we have seen, it is not easy to instrument a fuzzer with this context.  Additionally, all previous instances that we discussed would not be detectable by a generic fuzzer, as they are specifically cryptographic logic errors.
 
@@ -175,7 +174,7 @@ We take this example as a chance to take a step back and revisit our comparison 
 
 
 \subsection{Found in Previous Versions of Libraries}
-\parhead{CVE-2019-7167 Problem.} Finally, we discuss how \tool (specifically \SnarkFuzzer) is able to detect real world vulnerabilities by demonstrating its ability to pinpoint a previous CVE.
+\parhead{CVE-2019-7167 Problem.} Finally, we discuss how \snarkprobe (specifically \SnarkFuzzer) is able to detect real world vulnerabilities by demonstrating its ability to pinpoint a previous CVE.
 CVE-2019-7167 \cite{gabizon2019auroralight} was found in \libsnark through a manual code audit, as part of its usage in the popular privacy-preserving cryptocurrency Zcash \cite{zcash} (and has since been patched).
 %Our \SnarkFuzzer also detected the \pinocchio protocol vulnerability reported as CVE-2019-7167 \cite{gabizon2019auroralight} in \libsnark.  This vulnerability was found by Gabizon in 2019 \cite{gabizon2019auroralight} and has since been fixed by Zcash \cite{zcash} and in \libsnark.
 At a high level, this vulnerability produced a bypass element in the key generation that damaged the soundness of the \zksnark proof system. To fix this vulnerability, the value of $pk_{A}^{'}$ must be replaced from $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=0}^{m+3}$ to $\{A_{i}(\tau)\alpha_{A}\rho_{A}\mathcal{P}\}_{i=n+1}^{m+3}$, with all other values the same.

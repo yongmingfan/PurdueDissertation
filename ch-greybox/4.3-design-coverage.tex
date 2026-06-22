@@ -1,0 +1,193 @@
+\section{Coverage Monitor}
+\label{sec:coverage_monitor}
+
+The coverage monitor guides \greyboxfuzz toward the parts of a \zksnark binary that are most relevant to detecting \logicerror. General-purpose fuzzers usually treat all newly discovered execution paths as useful. This strategy is effective for finding crashes and memory errors, but it is inefficient for \zksnark programs because many execution paths only involve parsing, file handling, memory allocation, or other general program logic. These paths may improve overall code coverage without improving the chance of detecting cryptographic correctness errors.
+
+\greyboxfuzz therefore uses a cryptographic-branch-focused coverage strategy. Instead of prioritizing every new path, \greyboxfuzz first identifies the instructions that are related to cryptographic computation and then gives higher priority to seeds that exercise new instructions in those regions. This allows the fuzzer to spend more time testing proof generation, proof verification, witness conversion, finite-field arithmetic, elliptic-curve operations, and other computation that can affect the final verification result.
+
+The coverage monitor has two stages. First, before fuzzing begins, \greyboxfuzz performs static taint tracking on the target binaries to classify instructions as either \cryptobranch or \programbranch. Second, during fuzzing, \greyboxfuzz dynamically traces executed instructions and records whether each seed visits new \cryptobranch. The resulting feedback is used to guide seed scheduling and to determine whether the cryptographic portion of the target program has been sufficiently explored.
+
+\subsection{\zksnark Code Branches}
+\label{subsec:zkp_code_branch}
+
+\greyboxfuzz separates the target binary into two categories of code: \cryptobranch and \programbranch. A \cryptobranch is an instruction or code region that performs cryptographic computation or directly influences cryptographic computation. This includes operations related to witness conversion, constraint evaluation, proof generation, proof verification, finite-field arithmetic, elliptic-curve operations, and pairing-based computation. A \programbranch is an instruction or code region that handles general program functionality, such as input/output, parsing, memory management, data-structure operations, or language-runtime behavior.
+
+This distinction is important because \greyboxfuzz targets \logicerror rather than ordinary software errors. A software error, such as a crash or invalid memory access, may occur in either \cryptobranch or \programbranch. In contrast, a \logicerror is caused by incorrect cryptographic behavior, such as accepting an invalid proof, rejecting a valid proof, incorrectly converting a witness, or enforcing a statement different from the intended one. These errors are most likely to appear in code that participates in cryptographic computation or directly affects the values used by that computation.
+
+Therefore, \greyboxfuzz does not require complete coverage of the entire binary before providing useful feedback. Instead, it focuses on coverage of \cryptobranch. If the fuzzer has already generated seeds that exercise the identified \cryptobranch, continuing to explore unrelated \programbranch may provide limited additional benefit for detecting \logicerror. This targeted coverage strategy improves fuzzing efficiency while preserving the ability to test the security-relevant parts of the program.
+
+\subsection{Branch Identification}
+\label{subsec:branch_identify}
+
+Before fuzzing begins, \greyboxfuzz identifies \cryptobranch in the target \pprog and \vprog. In a \zksnark program, the prover computes proof elements from the witness, circuit, proving key, and protocol-specific randomness. The verifier checks the proof using the public input, verification key, and proof object. These computations depend on cryptographic inputs and determine whether the final verification result is correct. Therefore, \greyboxfuzz uses taint tracking to identify instructions whose values are derived from, or controlled by, these cryptographic inputs.
+
+\greyboxfuzz uses static taint tracking for this identification step. Static analysis is useful because it can inspect the binary without requiring a particular execution path to be triggered by a seed. Dynamic taint tracking only observes the paths executed by the current inputs, so it may miss \cryptobranch that are not reached during early fuzzing. In contrast, static taint tracking allows \greyboxfuzz to build an initial map of potentially relevant cryptographic instructions before the fuzzing loop begins.
+
+For \pprog, \greyboxfuzz initializes the circuit, witness, and proving key as taint sources. For \vprog, \greyboxfuzz initializes the public input, proof, and verification key as taint sources. Instructions that compute values from these sources, move tainted values through registers or memory, or execute under conditions affected by these sources are marked as \cryptobranch. Other instructions are treated as \programbranch unless later analysis shows that they influence cryptographic computation.
+
+\subsection{Control-Dependency-Aware Taint Tracking}
+\label{subsec:control_dependency_taint}
+
+A direct data-dependency taint tracker is not sufficient for identifying all \cryptobranch. Traditional taint tracking usually propagates taint when a value is directly computed from a tainted value. For example, if \(x\) is tainted and \(y = x + 1\), then \(y\) is also tainted. However, this approach misses implicit dependencies introduced by control flow. If \(x\) determines which branch is executed and \(y\) is assigned inside that branch, then \(y\) depends on \(x\) even if the assignment does not directly use \(x\).
+
+\autoref{list:taintdiff} illustrates this limitation. In Option 1, \(y\) is directly computed from the tainted variable \(x\), so a traditional taint tracker marks \(y\) as tainted. In Option 2, the value of \(y\) is selected by a branch condition involving \(x\). Although neither assignment directly uses \(x\), the final value of \(y\) still depends on \(x\). A direct data-dependency tracker may fail to mark \(y\) as tainted, causing \greyboxfuzz to miss instructions that are logically influenced by cryptographic inputs.
+
+\begin{ZZlisting}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{CenteredBox}
+\begin{minipage}{0.96\textwidth}
+
+\begin{minipage}[t]{0.47\textwidth}
+Option 1
+
+\vspace{0.3em}
+\hrule
+\vspace{0.5em}
+
+\begin{lstlisting}[style=cstyle]
+int x = strtol(argv[1], NULL, 10);
+if (x > VALUE)
+    int y = x + 1;
+else
+    int y = x - 1;
+\end{lstlisting}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.47\textwidth}
+Option 2
+
+\vspace{0.3em}
+\hrule
+\vspace{0.5em}
+
+\begin{lstlisting}[style=cstyle]
+int x = strtol(argv[1], NULL, 10);
+if (x > VALUE)
+    int y = 11;
+else
+    int y = 9;
+\end{lstlisting}
+\end{minipage}
+
+\end{minipage}
+\end{CenteredBox}
+\end{adjustbox}
+\caption{Direct data-dependency taint tracking can miss values that depend on tainted inputs through control flow.}
+\label{list:taintdiff}
+\end{ZZlisting}
+
+
+% \begin{table}[t]
+% \centering
+% \begin{tabular}{|p{3.9cm}|p{3.9cm}|}
+% \hline
+% Option 1 & Option 2 \\ \hline
+% \begin{lstlisting}[style=C]
+% int (*@\textcolor{red}{x}@*) = strtol(argv[1], NULL, 10);
+% if ((*@\textcolor{red}{x}@*) > VALUE)
+%     int (*@\textcolor{orange}{y}@*) = (*@\textcolor{red}{x}@*) + 1;
+% else
+%     int (*@\textcolor{orange}{y}@*) = (*@\textcolor{red}{x}@*) - 1;
+% \end{lstlisting}
+% &
+% \begin{lstlisting}[style=C]
+% int (*@\textcolor{red}{x}@*) = strtol(argv[1], NULL, 10);
+% if ((*@\textcolor{red}{x}@*) > VALUE)
+%     int (*@\textcolor{orange}{y}@*) = 11;
+% else
+%     int (*@\textcolor{orange}{y}@*) = 9;
+% \end{lstlisting}
+% \\ \hline
+% \end{tabular}
+% \caption{Direct data-dependency taint tracking can miss values that depend on tainted inputs through control flow.}
+% \label{tab:taintdiff}
+% \end{table}
+
+To address this limitation, \greyboxfuzz uses a control-dependency-aware taint tracking strategy. In addition to propagating taint through explicit data movement and arithmetic operations, \greyboxfuzz also propagates taint to values assigned inside a conditional region controlled by a tainted condition. This is important for cryptographic programs because input-dependent branches may select different constants, table entries, validation outcomes, or protocol states. Even when a value is not directly computed from a tainted input, it may still influence the cryptographic result.
+
+The static taint tracker operates on assembly instructions and maintains two taint states: tainted memory locations and tainted registers. It applies the following rules:
+
+\begin{itemize}[leftmargin=*]
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+
+    \item A register becomes tainted when a tainted memory value or another tainted register is moved into it.
+
+    \item A register becomes untainted when it is overwritten by a value that is not derived from tainted data.
+
+    \item A memory location becomes tainted when a value derived from tainted data is written to it.
+
+    \item An instruction is marked as \cryptobranch when it reads, writes, computes, or propagates tainted data.
+
+    \item If a branch condition depends on tainted data, values assigned inside the corresponding control-dependent region are treated as tainted.
+
+    \item A function return value is treated as tainted if the function receives tainted input or accesses tainted memory during its computation.
+\end{itemize}
+
+During this process, \greyboxfuzz records the offset of each instruction marked as \cryptobranch. The tracker records offsets rather than runtime addresses because static analysis does not execute the program and therefore does not observe the actual loaded addresses. Using offsets also avoids inconsistencies caused by Address Space Layout Randomization (ASLR), since the same instruction may be loaded at different runtime addresses across executions.
+
+
+\begin{ZZlisting}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{CenteredBox}
+\begin{minipage}{0.96\textwidth}
+\begin{lstlisting}[style=asmstyle]
+0x0000113f <+22>:    mov    -0xc(%rbp),%edx
+0x00001142 <+25>:    mov    -0x8(%rbp),%eax
+0x00001145 <+28>:    add    %edx,%eax
+0x00001147 <+30>:    mov    %eax,-0x4(%rbp)
+0x0000114a <+33>:    mov    $0x3,%eax
+\end{lstlisting}
+\end{minipage}
+\end{CenteredBox}
+\end{adjustbox}
+\caption{Example of instruction-level taint propagation. If \texttt{-0xc(\%rbp)} is tainted, then \texttt{\%edx} becomes tainted and the addition at offset \texttt{0x00001145} is marked as \cryptobranch.}
+\label{list:asm}
+\end{ZZlisting}
+
+
+\autoref{list:asm} shows a simple example. If the memory location \texttt{-0xc(\%rbp)} is tainted, the first instruction moves the tainted value into \texttt{\%edx}. The instruction at offset \texttt{0x00001145} then performs an addition using \texttt{\%edx}. Because this computation uses tainted data, \greyboxfuzz marks this instruction as \cryptobranch. The resulting instruction offset is later used by the dynamic coverage monitor to determine whether a fuzzing seed exercised this cryptographic computation.
+
+Although the taint tracker is designed for \zksnark programs in this paper, the same strategy can be applied more broadly to other cryptographic protocols whose security-relevant computation depends on identifiable protocol inputs. For example, proof systems such as Bulletproofs or other zero-knowledge protocols also compute protocol outputs from witnesses, public statements, commitments, and public parameters. As long as these inputs can be identified as taint sources, the same taint tracking strategy can be used to distinguish cryptographic computation from general program logic.
+
+\subsection{Branch Tracking}
+\label{subsec:branch_tracking}
+
+After \greyboxfuzz identifies \cryptobranch statically, it monitors branch visits dynamically during fuzzing. For each generated seed, \greyboxfuzz executes the target binary and records which instructions are executed. The goal is to determine whether the seed reaches new \cryptobranch, not merely whether it increases total program coverage.
+
+\greyboxfuzz uses Intel PIN to instrument the target binary and trace execution at the basic-block level. For each executed basic block, \greyboxfuzz iterates over its instructions and computes the offset of each instruction relative to the loaded binary base address. This offset representation matches the offsets produced by static taint tracking, allowing \greyboxfuzz to compare runtime execution traces with the statically identified \cryptobranch set.
+
+
+
+\begin{ZZlisting}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{CenteredBox}
+\begin{minipage}{0.96\textwidth}
+\begin{lstlisting}[style=asmstyle]
+2117a: mov rax, qword ptr [rip+0x199e7]
+21181: test rax, rax
+21184: jz 0x70f88305918a
+21186: add qword ptr [rax+0x8], r12
+2118a: mov rax, qword ptr [rip+0x19a57]
+21191: test rax, rax
+21194: jz 0x70f88305919a
+21196: add qword ptr [rax+0x8], r12
+2119a: mov rax, qword ptr [rip+0x19b1f]
+\end{lstlisting}
+\end{minipage}
+\end{CenteredBox}
+\end{adjustbox}
+\caption{Example of runtime instruction offsets recorded by the dynamic branch tracker.}
+\label{list:tracing}
+\end{ZZlisting}
+
+
+
+\autoref{list:tracing} shows an example of the tracing output. Each line contains the instruction offset and the corresponding disassembled instruction observed during execution. When a recorded offset matches an offset in the statically identified \cryptobranch set, \greyboxfuzz marks that \cryptobranch as visited for the current seed.
+
+This information is used as fuzzing feedback. If a seed visits a previously unseen \cryptobranch, \greyboxfuzz treats it as valuable and prioritizes it for future mutation. If a seed only explores new \programbranch, \greyboxfuzz gives it lower priority because that path is less likely to expose \logicerror. This differs from general instrumentation-guided fuzzing, which typically rewards any new execution path. By focusing on cryptographic coverage, \greyboxfuzz improves the efficiency of fuzzing while still preserving the ability to detect ordinary software errors when malformed inputs cause crashes.
+
+The branch tracking result also provides a stopping criterion. Instead of requiring complete coverage of the entire binary, \greyboxfuzz can report the coverage achieved over the identified \cryptobranch. This allows developers to determine whether the security-relevant portion of the target program has been sufficiently tested.

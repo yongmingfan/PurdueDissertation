@@ -1,0 +1,54 @@
+\section{Differential Fuzzing}
+\label{sec:differential}
+
+The goal of differential fuzzing in \greyboxfuzz is to determine whether the target \zksnark program returns the correct verification result for a generated input. Traditional differential fuzzing usually compares multiple implementations of the same specification. This strategy is difficult to apply directly to \zksnark programs because each application may encode a different statement, and building an independent \zksnark implementation for every statement is expensive and error-prone. Instead of requiring a second \zksnark implementation as the reference, \greyboxfuzz uses the intended statement itself as the testing oracle.
+
+For each generated seed, \greyboxfuzz computes the expected result by evaluating whether the seed satisfies the statement that the \zksnark program is supposed to prove. The target prover and verifier are then executed on the same seed, and their verification result is compared against this expected result. If the statement evaluation and the target program agree, the seed does not expose an inconsistency. If they disagree, \greyboxfuzz reports a potential \logicerror. For example, if the statement requires proving knowledge of a secret exponent $x$ such that $h = g^x$, where $g$ and $h$ are public values and $x$ is private, \greyboxfuzz does not need a second \zksnark prover and verifier as the reference. It only needs an independent program that checks whether the relation $h = g^x$ holds for the generated input. This program returns the ground-truth accept or reject result for that input.
+
+This design changes the role of test vectors in \greyboxfuzz. Rather than using fixed \zksnark test vectors or manually constructing a separate reference implementation, \greyboxfuzz generates new inputs during fuzzing and evaluates each input against the statement-level oracle. This is important because \logicerror often appears only for specific boundary cases, malformed-but-parseable values, or inputs that violate the intended statement while still satisfying the program's expected format. By computing the expected result for each generated seed, \greyboxfuzz can detect cases where the target program accepts an invalid witness, rejects a valid witness, or produces a verification result inconsistent with the intended statement.
+
+To reduce the burden of writing the statement-level oracle, \greyboxfuzz uses Charm \cite{akinyele2013charm}. Charm is a framework for prototyping cryptographic systems and provides high-level abstractions for common cryptographic objects and operations, including group elements, finite-field values, exponentiation, hashing, and pairing-based operations. Instead of asking the user to manually implement low-level cryptographic computations, \greyboxfuzz allows the user to express the intended statement in Charm. The Charm program serves as the oracle that computes the expected verification result for each generated seed.
+
+For example, the statement $h = g^x$ can be expressed at a high level by declaring $g$ and $h$ as public group elements and $x$ as a private exponent. The oracle then checks whether the relation holds under the selected group parameters. Conceptually, the oracle has the following form:
+
+
+\begin{ZZlisting}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{CenteredBox}
+\begin{minipage}{0.96\textwidth}
+\begin{lstlisting}[style=pythonstyle]
+from charm.toolbox.eccurve import prime192v1
+from charm.toolbox.ecgroup import ECGroup
+
+group = ECGroup(prime192v1)
+g = group.random()
+x = group.random()
+h = g ** x
+
+def oracle(g, h, x):
+    return h == g ** x
+
+\end{lstlisting}
+\end{minipage}
+\end{CenteredBox}
+\end{adjustbox}
+\caption{An example of Charm implementation}
+\label{list:charm}
+\end{ZZlisting}
+
+
+% \begin{verbatim}
+% def oracle(g, h, x):
+%     return h == g ** x
+% \end{verbatim}
+
+The actual Charm implementation handles the underlying cryptographic representation of the variables, so the user does not need to manually implement elliptic-curve arithmetic or finite-field operations. This makes the oracle easier to write and less likely to introduce unrelated implementation mistakes. The user only needs to describe the mathematical relationship that the proof is intended to enforce.
+
+After the oracle is defined, \greyboxfuzz uses it during fuzzing as follows. First, the input formatter generates a seed according to the expected structure of the statement. Second, the seed is evaluated by the Charm oracle to obtain the expected accept or reject result. Third, the same seed is passed to the target \pprog and \vprog to obtain the actual verification result. Finally, \greyboxfuzz compares the expected result with the actual result. A mismatch indicates that the target \zksnark program may not correctly implement the intended statement.
+
+This statement-level oracle provides two advantages. First, it avoids the need to construct a separate \zksnark implementation for every target program. Second, it allows \greyboxfuzz to test the semantic correctness of the target program rather than only its ability to execute without crashing. As a result, \greyboxfuzz can detect \logicerror that would be missed by crash-oriented fuzzing, including missing constraints, incorrect witness conversion, invalid boundary handling, and incorrect proof or verification behavior.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
