@@ -2267,6 +2267,88 @@
       \field{title}{Advancing a Vision for Privacy Enhancing Technologies}
       \field{year}{2022}
     \endentry
+    \entry{goldreich2019proofs}{incollection}{}
+      \name{author}{3}{}{%
+        {{hash=66aba379c7d3adb8af5b662a65c4c140}{%
+           family={Goldreich},
+           familyi={G\bibinitperiod},
+           given={Oded},
+           giveni={O\bibinitperiod}}}%
+        {{hash=fb54c363f1b0d126e883c84df49e4790}{%
+           family={Micali},
+           familyi={M\bibinitperiod},
+           given={Silvio},
+           giveni={S\bibinitperiod}}}%
+        {{hash=94bdc407739d530448ac88956c6c98a5}{%
+           family={Wigderson},
+           familyi={W\bibinitperiod},
+           given={Avi},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{f7297e7dc88cdb1738f358f850a910b8}
+      \strng{fullhash}{5a9fcc707bce192056e824a8880d37a2}
+      \strng{bibnamehash}{5a9fcc707bce192056e824a8880d37a2}
+      \strng{authorbibnamehash}{5a9fcc707bce192056e824a8880d37a2}
+      \strng{authornamehash}{f7297e7dc88cdb1738f358f850a910b8}
+      \strng{authorfullhash}{5a9fcc707bce192056e824a8880d37a2}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Providing Sound Foundations for Cryptography: On the Work of Shafi Goldwasser and Silvio Micali}
+      \field{title}{Proofs that yield nothing but their validity and a methodology of cryptographic protocol design}
+      \field{year}{2019}
+      \field{pages}{285\bibrangedash 306}
+      \range{pages}{22}
+    \endentry
+    \entry{ben2013snarks}{inproceedings}{}
+      \name{author}{5}{}{%
+        {{hash=c225b1561fdce9ac9f61f1edca0e0160}{%
+           family={Ben-Sasson},
+           familyi={B\bibinithyphendelim S\bibinitperiod},
+           given={Eli},
+           giveni={E\bibinitperiod}}}%
+        {{hash=dfbdc8dc8205deeb7a8fbc765799dd0b}{%
+           family={Chiesa},
+           familyi={C\bibinitperiod},
+           given={Alessandro},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9b8ddec78ab1bf52f758858ca3928a61}{%
+           family={Genkin},
+           familyi={G\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=a9a80df1ddea18e1b64f84a0cbcdc25f}{%
+           family={Tromer},
+           familyi={T\bibinitperiod},
+           given={Eran},
+           giveni={E\bibinitperiod}}}%
+        {{hash=37e60561c9593ab3c5d37d85a184713e}{%
+           family={Virza},
+           familyi={V\bibinitperiod},
+           given={Madars},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{efe95f795f4099043fbd4bc4466d77c6}
+      \strng{fullhash}{7ec9002f44e8ff62579b2e14bbcdf439}
+      \strng{bibnamehash}{7ec9002f44e8ff62579b2e14bbcdf439}
+      \strng{authorbibnamehash}{7ec9002f44e8ff62579b2e14bbcdf439}
+      \strng{authornamehash}{efe95f795f4099043fbd4bc4466d77c6}
+      \strng{authorfullhash}{7ec9002f44e8ff62579b2e14bbcdf439}
+      \field{extraname}{1}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Annual cryptology conference}
+      \field{title}{SNARKs for C: Verifying program executions succinctly and in zero knowledge}
+      \field{year}{2013}
+      \field{pages}{90\bibrangedash 108}
+      \range{pages}{19}
+    \endentry
     \entry{parno2013pinocchio}{article}{}
       \name{author}{4}{}{%
         {{hash=d1c3ff1d03867d809be05c74fdae1593}{%
@@ -2620,6 +2702,7 @@
       \strng{authorbibnamehash}{2d81fda7bd7ef6af75188ac8df854c96}
       \strng{authornamehash}{efe95f795f4099043fbd4bc4466d77c6}
       \strng{authorfullhash}{2d81fda7bd7ef6af75188ac8df854c96}
+      \field{extraname}{2}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
@@ -4967,8 +5050,6 @@
       \field{year}{2026}
     \endentry
   \enddatalist
-  \missing{cryptoeprint:2013:507}
-  \missing{gmw86}
 \endrefsection
 \endinput
 
