@@ -89,7 +89,7 @@ First, the \inputgenerator produces an R1CS matrix (i.e., proof) using a variety
 
 Together, these two components allow \snarkprobe to evaluate the end-to-end correctness and security of a specific implementation of a given proof statement for a given library (or to individually check different parts if desired).
 
-Unlike standard fuzzers, \SnarkFuzzer can detect both software and \logicerror{s}.  We consider a \emph{software error} to be a bug or fault in the software that causes unintended behaviors or incorrect performance, such as crashing, overflow, or a system error.  A \emph{\logicerror}, on the other hand, is one that causes a program to produce an incorrect result due to errors in the cryptographic protocol implementation, such as incorrect mathematical operations or disregarding the specification. A \logicerror will not cause a software crash or raise an error message, making them much harder to detect.
+Unlike standard fuzzers, \SnarkFuzzer can detect both software and \logicerror{s}.  We consider a \emph{software error} to be a bug or fault in the software that causes unintended behaviors or incorrect performance, such as crashing, overflow, or a system error.  A \emph{\logicerror}, on the other hand, is one that causes a program to produce an incorrect result due to errors in the cryptographic protocol implementation, such as incorrect mathematical operations or disregarding the specification. A \logicerror will not cause a software crash or raise an error message, making it much harder to detect.
 For a basic example, in RSA, software errors might cause a program crash, but cryptographic logic errors are issues where the ciphertext value was not computed correctly ($m^e \mod N$ computed incorrectly) or too large a ciphertext was used (e.g., larger than the modulus).
 
 %In general, \snarkprobe should be as automatic as possible, requiring little intervention from the developer.  However, there are still a few small manual pre-processing steps.
@@ -97,12 +97,12 @@ For a basic example, in RSA, software errors might cause a program crash, but cr
 %Second, before running \SnarkFuzzer, the user needs to manually create one ideal file containing the basic programming structure of the target library. However, this only needs to be done once ever per library that one wishes to test and could be done by anyone.
 %We do not believe that these manual interventions require substantial cryptographic or zero-knowledge proof related expertise.
 
-While we currently focus on R1CS-based zkSNARKS, we believe this high level design can be adapted without major changes to support additional (newer) types of proofs, particularly in the case of \SnarkFuzzer, which would largely only involve changing the input generation methodology and format.
+While we currently focus on R1CS-based \zksnark, we believe this high level design can be adapted without major changes to support additional (newer) types of proofs, particularly in the case of \SnarkFuzzer, which would largely only involve changing the input generation methodology and format.
 
 \parhead{Why dynamic analysis?}
 Dynamic analysis supports our goal of finding \logicerror{s} by allowing us to trace and extract real-time data and variable values, which we can then use to check for cryptographic protocol conformance and implementation errors.
 It also allows us to easily support a number of different zkSNARK libraries written in different languages without the need for additional manual intervention, extensions, or program instrumentation by the user, making \snarkprobe flexible as well.
-Our design choices mean that is easy to extend \snarkprobe to support new languages and libraries, without needing to investigate new instrumentation techniques or tools.
+Our design choices mean that it is easy to extend \snarkprobe to support new languages and libraries, without needing to investigate new instrumentation techniques or tools.
 
 %In next two sections, we will go into more details and present how our tools detect errors in zk-SNARKs library. Section \ref{sec:design} introduces the design of the \ConstraintChecker and \SnarkFuzzer, and Section \ref{sec:implementation} demonstrates how we achieve our designs and the specific techniques we apply.
 

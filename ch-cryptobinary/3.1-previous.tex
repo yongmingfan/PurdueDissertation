@@ -1,20 +1,21 @@
 \section{Previous Evaluations}
-\label{sec:previous}
+\label{sec:cryptobinary-previous}
 We first investigate the experimental methods and evaluation approaches used by previous tools to gain a better understanding of the existing research and development in this field. By carefully examining these approaches, we aim to identify common practices, strengths, and potential areas for improvement. In this section, we provide a detailed investigation and discussion of all 12 tools that are listed in Section \ref{subsec:detection_tools}. Our analysis includes how these tools were tested, the metrics used to evaluate their performance, and any limitations or challenges they faced. This comprehensive review helps us build a clearer picture of the progress made so far and lays the foundation for improving future studies and tools.
 
 In Table \ref{tab:previous_evaluation}, we summarize the evaluation benchmarks and metrics selected by each tool in their respective evaluation experiments. We categorize the evaluation experiments of each tool into four main categories:
 \begin{itemize}
     \item Whether the tool was evaluated using at least some binary programs containing basic cryptographic functions.
     \item Whether the tool was evaluated using real-world applications to assess performance.
-    \item Whether additional metrics, such as optimization flags, were considered in the tool’s evaluation.
-    \item Whether the tool’s performance was cross-compared with previously developed tools.
+    \item Whether additional metrics, such as optimization flags, were considered in the tool's evaluation.
+    \item Whether the tool's performance was cross-compared with previously developed tools.
 \end{itemize}
 
 Detailed information regarding these experiments will be discussed in the following sections.
 
-\begin{table}[h]
+\begin{table}[ht]
 \caption{Evaluation benchmarks and metrics selection by previous cryptographic function detection tools}
 \vspace*{6pt}
+\renewcommand{\arraystretch}{1.2}
 \centering
 \begin{tabular}{c||c|c|c|c}
 \hline
@@ -30,7 +31,7 @@ Kerckhoff          & \cmark & \cmark &        &        \\ \hline
 PEiD KANAL         &        &        &        &        \\ \hline
 Signsrch           &        &        &        &        \\ \hline
 Softmax Classifier & \cmark &        &        &        \\ \hline
-Where’s Crypto     & \cmark &        &        &        \\ \hline
+Where's Crypto     & \cmark &        &        &        \\ \hline
 \end{tabular}
 \label{tab:previous_evaluation}
 \end{table}
@@ -44,7 +45,7 @@ Where’s Crypto     & \cmark &        &        &        \\ \hline
 % % \begin{adjustbox}{width=0.95\textwidth}
 % \begin{tabular}{l||c|c|c|c|c|c|c|c|c|c|c|c}
 % \hline
-% Tool & Aligot & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Hunt\end{tabular} & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Knight\end{tabular} & DRACA & FindCrypt2 & FALKE-MC & HCD & Kerckhoff & \begin{tabular}[c]{@{}c@{}}PEiD\\ KANAL\end{tabular} & SignSrch & \begin{tabular}[c]{@{}c@{}}Softmax\\ Classifier\end{tabular} & \begin{tabular}[c]{@{}c@{}}Where’s\\ Crypto\end{tabular} \\ \hline\hline
+% Tool & Aligot & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Hunt\end{tabular} & \begin{tabular}[c]{@{}c@{}}Crypto-\\ Knight\end{tabular} & DRACA & FindCrypt2 & FALKE-MC & HCD & Kerckhoff & \begin{tabular}[c]{@{}c@{}}PEiD\\ KANAL\end{tabular} & SignSrch & \begin{tabular}[c]{@{}c@{}}Softmax\\ Classifier\end{tabular} & \begin{tabular}[c]{@{}c@{}}Where's\\ Crypto\end{tabular} \\ \hline\hline
 % Cryptographic Function & & & & & & & & & & & & \\ \hline
 % Real-World Application & & & & & & & & & & & & \\ \hline
 % Evaluation Metrics & & & & & & & & & & & & \\ \hline
@@ -67,6 +68,7 @@ Furthermore, the selection criteria of previous evaluations were not clearly exp
 \begin{table*}[h]
 \caption{Cryptographic Algorithms Selected in Previous Evaluation Experiments}
 \vspace*{6pt}
+\renewcommand{\arraystretch}{1.4}
 \centering
 \footnotesize
 \begin{tabular}{c||c|c|c|c|c|c|c|c|c|c}
@@ -93,12 +95,12 @@ However, similar to the evaluation with basic cryptographic algorithms, previous
 
 In addition to considering the selection of evaluation benchmarks, other evaluation metrics such as obfuscation and compiler version also play a crucial role in influencing the results of cryptographic function detection. For example, optimization and obfuscation can significantly affect the analysis results for cryptographic function detection \cite{ren2021unleashing}. Several tools have specifically addressed these challenges by developing advanced techniques that demonstrate improved performance in detecting cryptographic functions within binary applications compiled with optimizations. For instance, CryptoHunt \cite{xu2017cryptographic} focuses primarily on detecting cryptographic functions in obfuscated binaries. Similarly, Aligot \cite{calvet2012aligot} and FALKE-MC \cite{benedetti2017detection} consider optimization flags and include optimized binary programs in their evaluation experiments.
 
-Even though some tools consider certain metrics in their evaluations, their evaluation metrics do not comprehensively address all the challenges associated with cryptographic function detection discussed in Section \ref{subsec:challenges}. This oversight leaves potential areas unexplored, resulting in gaps in the evaluation process and a lack of understanding of the tools’ performance under certain conditions. Addressing these unevaluated areas is crucial for advancing the field and ensuring robust assessments of cryptographic function detection tools.
+Even though some tools consider certain metrics in their evaluations, their evaluation metrics do not comprehensively address all the challenges associated with cryptographic function detection discussed in Section \ref{subsec:challenges}. This oversight leaves potential areas unexplored, resulting in gaps in the evaluation process and a lack of understanding of the tools' performance under certain conditions. Addressing these unevaluated areas is crucial for advancing the field and ensuring robust assessments of cryptographic function detection tools.
 
 Table \ref{tab:previous_opt} summarizes the types of optimization flags that have been considered by previous tools in their evaluation studies, providing insights into the approaches taken to address the impact of optimization on detection accuracy.
 
 
-\begin{table}[]
+\begin{table}[tbp]
 \caption{Optimization Flags Selected by Evaluation Experiments}
 \vspace*{6pt}
 \centering

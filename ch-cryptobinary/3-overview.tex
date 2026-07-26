@@ -2,7 +2,7 @@
 \label{sec:cryptobinary-overview}
 
 This paper focuses on comprehensive replication and reproduction studies for existing work on identifying cryptography code in binary applications.
-To aid in this, we propose a novel analysis framework aimed at facilitating a comprehensive evaluation of cryptographic function detection tools' replicability. Our framework is introduced in \autoref{sec:cryptobinary-framework}. Subsequently, we conduct two evaluations: a reproducibility evaluation in \autoref{sec:cryptobinary-reproduction}, and a replicability evaluation in \autoref{sec:cryptobinary-replication}. Additionally, we provide further discussion on the results of our reproducibility and replicability evaluations, as well as point out a number of important takeaways and directions for future work, in \autoref{sec:cryptobinary-discussion}. Finally, to support future research in this domain, we present a summary cryptographic detection approaches and tools in \autoref{sec:cryptobinary-background} as part of our background.
+To aid in this, we propose a novel analysis framework aimed at facilitating a comprehensive evaluation of cryptographic function detection tools' replicability. Our framework is introduced in \autoref{sec:cryptobinary-framework}. Subsequently, we conduct two evaluations: a reproducibility evaluation in \autoref{sec:cryptobinary-reproduction}, and a replicability evaluation in \autoref{sec:cryptobinary-replication}. Additionally, we provide further discussion on the results of our reproducibility and replicability evaluations, as well as point out a number of important takeaways and directions for future work, in \autoref{sec:cryptobinary-discussion}. Finally, to support future research in this domain, we present a summary of cryptographic detection approaches and tools in \autoref{sec:cryptobinary-background} as part of our background.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
@@ -38,12 +38,12 @@ We also employ a systematic approach to categorize, classify, and interrelate th
 We comprehensively summarize the detection abilities of each cryptographic function detection tool. We did a thorough check of each tool's documents and signatures to see what types of cryptographic algorithms they can find. \autoref{fig:cryptobinary-percentage} shows the distribution of various algorithms that existing work has focused on.
 After that, we gather all the information we found and explain it in more detail in \autoref{tab:cryptobinary-summary}. This helps us better understand what each tool can do in terms of detecting different cryptographic algorithms.
 
-\begin{table*}[]
+\begin{table*}[tbp]
 \caption{Cryptographic algorithm detection support as stated in the paper or documentation for each tool}
 \vspace*{6pt}
 \centering
 \setlength{\tabcolsep}{4pt}
-\begin{adjustbox}{max width=\textwidth}
+\begin{adjustbox}{max width=0.95\textwidth}
 \renewcommand{\arraystretch}{1.5}
 \begin{tabular}{l||c|c|c|c|c|c|c|c|c|c|c|c}
 \hline
@@ -90,7 +90,7 @@ XTEA &  &  &  &  &  &  &  &  &  &  &  & \cmark \\ \hline
 \label{tab:cryptobinary-summary}
 \end{table*}
 
-Note that we compiled these results based on information provided by the developers of each tool. Through our comprehensive analysis, we found that commercial tools like DRACA~\cite{draca}, FindCrypt2~\cite{findcrypt2}, and Signsrch~\cite{signsrch} can detect a diverse range of cryptographic algorithms. However, their performance falter when encountering obfuscation or atypical situations. Certain academic-developed tools such as Aligot~\cite{calvet2012aligot},  CryptoHunt~\cite{xu2017cryptographic}, and Where's Crypto~\cite{meijer2021s} offer superior analysis results in specific scenarios, such as detecting cryptographic algorithms from obfuscated binaries. Many of them can only detect a few cryptographic algorithm, but they can be easily expanded.
+Note that we compiled these results based on information provided by the developers of each tool. Through our comprehensive analysis, we found that commercial tools like DRACA~\cite{draca}, FindCrypt2~\cite{findcrypt2}, and Signsrch~\cite{signsrch} can detect a diverse range of cryptographic algorithms. However, their performance falters when encountering obfuscation or atypical situations. Certain academic-developed tools such as Aligot~\cite{calvet2012aligot},  CryptoHunt~\cite{xu2017cryptographic}, and Where's Crypto~\cite{meijer2021s} offer superior analysis results in specific scenarios, such as detecting cryptographic algorithms from obfuscated binaries. Many of them can only detect a few cryptographic algorithms, but they can be easily expanded.
 
 It is important to recognize that a simple summary may not fully capture the current capabilities and detection abilities of each tool. Moreover, many of these tools were developed years ago, and they may not be compatible with current programming languages, compilers, and/or hardware architectures.  This is why our reproduction and replication study is so crucial.  It not only highlights these major gaps in existing work as the space has progressed, but allows us to provide insights on the space more broadly, and on a variety of important avenues for future work.
 
@@ -143,7 +143,7 @@ We employ a systematic approach to categorize, classify, and interrelate the div
 \centering
 \footnotesize
 
-\renewcommand{\arraystretch}{1.75}
+\renewcommand{\arraystretch}{1.8}
 
 \begin{adjustbox}{max width=0.9\textheight}
 \begin{tabular}{c||c|c|c|c|c|c|c|c}

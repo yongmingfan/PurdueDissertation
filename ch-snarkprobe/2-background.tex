@@ -3,25 +3,24 @@
 
 In this section, we introduce the necessary background and prior work related to zkSNARKs, fuzzing, SMT solvers, and automated testing for cryptographic vulnerabilities.
 
-\subsection{Background}
+% \subsection{Background}
 % \parhead{Zero-knowledge proofs.}
 % In a zero-knowledge protocol \cite{gmw86} a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
 % It has been shown that any NP statement has a zero knowledge proof system \cite{gmw86b}, providing us with an immense range of and flexibility in the statements and properties that we are able to prove.
 % For practical settings, we typically focus on \textit{non-interactive} zero-knowledge proofs of knowledge (or NIZKs), where a prover can produce a proof without any interaction from the verifier.
+\subsection{\zksnark}
+In a zero-knowledge protocol \cite{goldreich2019proofs}, a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
+zkSNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)~\cite{ben2013snarks,parno2016pinocchio,groth2016size} are one of the current most popular zero-knowledge proof systems, and have begun to see increasingly complex, real world deployment in a number of privacy-preserving applications, such as anonymous transactions, verifiable computation, and privacy-preserving identity systems.~\cite{zcash,darkforest,aleo,filecoin,zkrollup,fan2025byzsfl,kosba2016hawk,bowe2020zexe}.
+At a very high level, \zksnark works as follows.  The first step in proof creation is to turn the statement that one wishes to prove into an equivalent form that relies on knowing a solution to some algebraic equations.  This representation is then broken down into an arithmetic circuit.  To ensure the correct evaluation of the circuit (and thus the proof), a programmer must express a series of constraints on the wires, called a constraint system, which is typically a Rank 1 constraint system or R1CS. 
+\zksnark libraries often provide an abstraction called a \textit{gadget}, as expressing large programs with constraints can be quite difficult.  A gadget allows programmers to specify a series of inputs, hidden internal variables and constraints on the inputs and internal variables. Rather than expressing a large program as many constraints, one can instead express it as some gadgets, and a few constraints binding them together.
 
-\parhead{zkSNARKs.}
-In a zero-knowledge protocol \cite{goldreich2019proofs} a user (the prover) proves a statement to another party (the verifier) without revealing anything about the statement other than that it is true.
-zkSNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)~\cite{ben2013snarks,parno2013pinocchio,groth2016size} are one of the current most popular zero-knowledge proof systems, and have begun to see increasingly complex, real world deployment in a number of privacy-preserving applications~\cite{zcash,darkforest,aleo,filecoin,zkrollup}.
-At a very high level, zkSNARKs work as follows.  The first step in proof creation is to turn the statement that one wishes to prove into an equivalent form that relies on knowing a solution to some algebraic equations.  This representation is then broken down into an arithmetic circuit.  To ensure the correct evaluation of the circuit (and thus the proof), a programmer must express a series of constraints on the wires, called a constraint system, which is typically a Rank 1 constraint system or R1CS. 
-zkSNARK libraries often provide an abstraction called a \textit{gadget}, as expressing large programs with constraints can be quite difficult.  A gadget allows programmers to specify a series of inputs, hidden internal variables and constraints on the inputs and internal variables. Rather than expressing a large program as many constraints, one can instead express it as some gadgets, and a few constraints binding them together.
-
-\parhead{Fuzzing.}
+\subsection{Fuzzing}
 Fuzzing is an automated software security testing technique to explore software for bugs that cause incorrect or unexpected results, program crashes, or in some extreme cases, lead to exploit paths. Fuzzing works by generating inputs and monitoring the program for crashing, assertions, and memory leaks \cite{chen2018systematic} without the need for manual review by developers, security engineers, and auditors, which can be ineffective, expensive, and hard to guarantee complete coverage.
 An important part of fuzzing is code coverage, a metric used to evaluate how much of the target program is tested.
-Early fuzzing systems only generated inputs by mutating a seed input and watching for crashes or errors. Over time, fuzzing test structure has been improved and other techniques have been developed to improve the effectiveness, such as coverage feedback \cite{bohme2017coverage,bohme2017directed}, advanced algorithms \cite{bohme2017directed,householder2012probability,woo2013scheduling}, and machine learning \cite{godefroid2017learn}. Some feedback-guided fuzzing tools have also been developed \cite{afl,syzkaller}, which have found security vulnerabilities in widely deployed software \cite{stevens2017summoning}.
+Early fuzzing systems only generated inputs by mutating a seed input and watching for crashes or errors. Over time, fuzzing test structure has been improved and other techniques have been developed to improve the effectiveness, such as coverage feedback \cite{bohme2016coverage,bohme2017directed}, advanced algorithms \cite{bohme2017directed,householder2012probability,woo2013scheduling}, and machine learning \cite{godefroid2017learn}. Some feedback-guided fuzzing tools have also been developed \cite{afl,syzkaller}, which have found security vulnerabilities in widely deployed software \cite{stevens2017summoning}.
 
-\parhead{SMT Solvers.}
-Satisfiability modulo theory (SMT) is a complex version of the boolean satisfiability problem (SAT) that can determine if a mathematical equation is satisfiable or unsatisfiable.  Z3 (which we choose to use in this paper) is an efficient SMT solver that has been used in various software verification and analysis applications \cite{moura2008z3}. Typically, SMT solvers such as Z3 can only handle first-order logic, but recent research \cite{barbosa2019extending} proposed a pragmatic extension for SMT solvers to support higher-order logic.
+\subsection{SMT Solver}
+Satisfiability modulo theory (SMT) is a complex version of the boolean satisfiability problem (SAT) that can determine if a mathematical equation is satisfiable or unsatisfiable.  Z3 (which we choose to use in this paper) is an efficient SMT solver that has been used in various software verification and analysis applications \cite{de2008z3}. Typically, SMT solvers such as Z3 can only handle first-order logic, but recent research \cite{barbosa2019extending} proposed a pragmatic extension for SMT solvers to support higher-order logic.
 Most SMT solvers are built based on an efficient SAT solver \cite{de2011satisfiability}, and as SAT is an NP-Complete problem, SMT solving is considered to be an NP-Hard and undecidable problem. 
 
 
@@ -29,8 +28,7 @@ Most SMT solvers are built based on an efficient SAT solver \cite{de2011satisfia
 There has been work to automate the conversion between proof statement and R1CS \cite{fredrikson2014zo,snarky,xjsnark,circom}, but they do not necessarily guarantee the correctness of the translation.  Manually writing/editing R1CS is also still popular as it can result in substantial efficiency gains.  Such work can help secure new applications but cannot help with the security of existing implementations.
 
 Fuzzing has been used for some cryptographic implementations.
-Special-purpose fuzzing has been used for TLS \cite{somorovsky2016systematic,walz2017exploiting}. CDF \cite{aumasson2017automated} targets cryptographic algorithms such as DSA, ECDSA, and RSA. %, and works primarily by using differential fuzzing and known test vectors.
-%, which feeds in edge cases and various values, and then compares the output to either a set of known test vectors or the output of another implementation.
+Special-purpose fuzzing has been used for TLS \cite{somorovsky2016systematic,walz2017exploiting}. CDF \cite{aumasson2017automated} targets cryptographic algorithms such as DSA, ECDSA, and RSA, and works primarily by using differential fuzzing and known test vectors, which feeds in edge cases and various values, and then compares the output to either a set of known test vectors or the output of another implementation.
 We are inspired in part by these ideas, though we have no known test vectors or reference implementations to compare against and use more targetted input generation techniques.
 In addition, most general purpose fuzzing tools cannot detect \textit{\logicerror{s}} since they are specifically designed to find and trigger standard software errors.
 We consider a \logicerror to be one that causes a deviation from the expected protocol flow or an incorrect output, without causing an error message or crash.
@@ -80,7 +78,7 @@ Based on the prior work and current techquies, there are following challenges to
     \setlength{\itemsep}{0pt}
     \setlength{\parskip}{0pt}
 		\item Manually evaluating the security of cryptographic library source code requires a significant investment of time and resources.
-        \item Existing cryptographic fuzzers and their techniques does not support \zksnark or  other zero knowledge proof protocol due to their complexity.
+        \item Existing cryptographic fuzzers and their techniques does not support \zksnark or other zero-knowledge proof protocol due to their complexity.
         \item General-purpose fuzzing tools cannot detect \textit{\logicerror{s}} and are unable to produce suitable input for \zksnark programs.
 	  %\item \fanyo{We evaluate \snarkprobe's ability with recent \zksnark applications in academic paper and projects to find potential inconsistencies and different types of errors in zkSNARK protocols and implementations and discuss the various inconsistencies it detected.}
 \end{itemize}

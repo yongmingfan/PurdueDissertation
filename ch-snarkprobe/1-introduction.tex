@@ -3,7 +3,7 @@
 
 We have seen a growing interest in privacy and privacy-enhancing technologies from the general public~\cite{adoption}, which has led to subsequent increased interest from parties that build and deploy the technologies that we use every day, with even the US government expressing interest in ways to best deploy privacy-enhancing technologies for data analytics~\cite{usgov}.
 One of the key components in many privacy-enhancing protocols are zero-knowledge proofs~\cite{goldreich2019proofs}, which are cryptographic algorithms that allow one party (the prover) to prove to another (the verifier) that a statement is true, without revealing any information beyond the validity of the statement itself.
-Of these, one of the most popular instantiations are zkSNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)~\cite{ben2013snarks,parno2013pinocchio,groth2016size}, because of their small proof size, fast verification, and expressiveness.
+Of these, one of the most popular instantiations is \zksnark (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)~\cite{ben2013snarks,parno2016pinocchio,groth2016size}, because of their small proof size, fast verification, and expressiveness.
 
 Because of this popularity, we have seen an explosion of new zkSNARK protocols and libraries being developed in academia, and substantial interest from industry and other domains in actually deploying these protocols for real world usage~\cite{zcash,darkforest,aleo,filecoin,zkrollup}.
 
@@ -32,7 +32,7 @@ While one could tackle some of this from a formal analysis approach~\cite{projec
 We will see later on how a formally verified library for a specific protocol could be adapted as part of \snarkprobe to provide stronger guarantees, though we leave this for future work.
 As such, we believe \snarkprobe is a step in the right direction for ensuring the correctness of existing zkSNARK implementations and applications.
 
-We choose to focus on two widely used zkSNARK protocols, \pinocchio~\cite{parno2013pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}. \libsnark implements both \pinocchio and \groth16 in C++, while \bellman and \arkworks implement \groth16 in Rust, and \gnark implements \groth16 in Go.  These represent four of the most popular and widespread open source libraries that have seen real world usage and underpin many projects that use zkSNARKs.  This selection also demonstrates the flexibility of \snarkprobe to handle different R1CS-based zkSNARK protocols, as well as diverse languages.
+We choose to focus on two widely used zkSNARK protocols, \pinocchio~\cite{parno2016pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}. \libsnark implements both \pinocchio and \groth16 in C++, while \bellman and \arkworks implement \groth16 in Rust, and \gnark implements \groth16 in Go.  These represent four of the most popular and widespread open source libraries that have seen real world usage and underpin many projects that use zkSNARKs.  This selection also demonstrates the flexibility of \snarkprobe to handle different R1CS-based zkSNARK protocols, as well as diverse languages.
 
 In addition to designing and implementing \snarkprobe, we tested its performance extensively, using a number of different statement types to test the \ConstraintChecker, and a wide variety of R1CS matrix sizes and configurations (which are representative of statements of varying complexity) to test \SnarkFuzzer.
 
@@ -49,7 +49,7 @@ In this paper we make the following contributions:
     \setlength{\itemsep}{0pt}
     \setlength{\parskip}{0pt}
 		\item We design \snarkprobe, a tool that can automatically check for potential software errors and cryptographic logic errors, as well as for consistency in the implemented proof statement, in R1CS-based zkSNARK libraries.
-		\item We implement and build \snarkprobe\footnote{\url{https://github.com/BARC-Purdue/SNARKProbe}} for two zkSNARK protocols, \pinocchio~\cite{parno2013pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}, to demonstrate its flexibility and extensibility.
+		\item We implement and build \snarkprobe\footnote{\url{https://github.com/BARC-Purdue/SNARKProbe}} for two zkSNARK protocols, \pinocchio~\cite{parno2016pinocchio,ben2014succinct} and \groth16~\cite{groth2016size}, and four libraries, \libsnark~\cite{libsnark}, \bellman~\cite{bellman}, \arkworks~\cite{arkworks}, and \gnark~\cite{gnark}, to demonstrate its flexibility and extensibility.
 		\item To the best of our knowledge, we are the first to explore applying fuzzing and other analysis techniques to zkSNARKs specifically.
 	  \item We evaluate the performance of \snarkprobe in an extensive set of experiments, demonstrating its acceptable performance for real world applications.
 		\item We demonstrate and discuss \snarkprobe's ability to \emph{automatically} catch different types of errors in \zksnark libraries, finding seven inconsistencies and successfully locating a prior CVE.

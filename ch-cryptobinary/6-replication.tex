@@ -71,9 +71,11 @@ Based on our replicability evaluation, we find that some tools cannot be replica
 \label{subsec:cryptobinary-false}
 
 \begin{table}[H]
-\caption{Comparative analysis of detection approaches versus stated capabilities in original documentation. Cross mark denotes inconsistencies (false positive or false negative), check mark successful replication.}\vspace*{6pt}
+\caption{Comparative analysis of detection approaches versus stated capabilities in original documentation. Cross mark denotes inconsistencies (false positive or false negative), check mark successful replication.}
+\vspace*{6pt}
 \footnotesize
 \centering
+\renewcommand{\arraystretch}{1.05}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||c|c|c|c|c|c|c|c|c}
 \hline
@@ -101,8 +103,8 @@ During our evaluation, we encountered instances where certain tools yielded fals
 \caption{Performance Metrics for Tool Evaluation: False Positives, False Negatives, True Positives, and True Negatives}
 \vspace*{6pt}
 \centering
+\renewcommand{\arraystretch}{1.4}
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.2}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{cc|ccccccccc|ccccc}
 \hline
@@ -356,7 +358,7 @@ Optimization flags significantly alter the structure and behavior of a binary pr
 
 We also carried out evaluations to determine whether variations in a cryptographic algorithm affects the success of its detection. As a case study, we analyzed different variants of the Tiny Encryption Algorithm (TEA), including standard TEA, XTEA, and XXTEA. While all the tools were able to successfully detect TEA binaries with any of these three variants, we observed some interesting details in the detection results.
 
-\begin{table}[h]
+\begin{table}[ht]
 \caption{Output when evaluating DRACA and Signsrch with different variants of TEA}
 \vspace*{6pt}
 \centering
@@ -404,10 +406,11 @@ We tested the tools with these malware samples and present the results in \autor
 %Meanwhile, most tools cannot detect AES in TeslaCrypt, but DRACA successfully finds AES algorithm in TeslaCrypt version 3372C.  And even though AES cannot be detected, some tools still successfully found other cryptographic hash algorithms in CryptoWall and TeslaCrypt including SHA256, RIPEMD, and Fork256.
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \caption{Evaluation results for cryptographic function detection in different malware versions}
 \vspace*{6pt}
 \centering
+% \renewcommand{\arraystretch}{1.1}
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c||c|c|c|c}
 \hline

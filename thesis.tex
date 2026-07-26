@@ -974,7 +974,8 @@
 
 % greybox
 \usepackage{mfirstuc}
-
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
 
 \newcommand{\protocolblock}[1]{%
 \fbox{%
@@ -1089,8 +1090,8 @@
 \def\pinocchio{Pinocchio\xspace}
 
 % ----- tmp for greybox start -----
-\def\zkp{zero knowldge proof\xspace}
-\def\greyboxfuzz{\texttt{GreyBox-Fuzzing}\xspace}
+\def\zkp{zero-knowldge proof\xspace}
+\def\greyboxfuzz{\texttt{zkGreyFuzz}\xspace}
 \def\pp{proving program\xspace}
 \def\vp{verification program\xspace}
 \def\programbranch{general programming branch\xspace}
@@ -1103,7 +1104,7 @@
 \def\vfunc{\ensuremath{\mathcal{V}}\xspace}
 \def\pprog{\ensuremath{\mathcal{P}_\texttt{func}}\xspace}
 \def\vprog{\ensuremath{\mathcal{V}_\texttt{func}}\xspace}
-\def\inputconvert{input converter\xspace}
+\def\inputconvert{witness converter\xspace}
 \def\afl{\texttt{AFL/AFL++}\xspace}
 \def\diffafl{\texttt{Diff AFL}\xspace}
 % ----- tmp for greybox end -----

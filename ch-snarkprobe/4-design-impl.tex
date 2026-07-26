@@ -76,6 +76,8 @@ fcmp.runComparisonTests()
 
 \begin{protocol}[!htbp]
 \caption{Protocol of the \ConstraintChecker Using an SMT Solver}
+
+\label{pro:constraintchecker}
 \vspace*{6pt}
 \centering
 \begingroup
@@ -269,7 +271,6 @@ Check if $S$ is \textit{SAT}, \textit{UNSAT}, or \textit{UNSURE} as $c$.
 \end{adjustbox}
 
 \vspace{0.5em}
-\label{pro:constraintchecker}
 
 \vspace*{\fill}
 
@@ -637,25 +638,25 @@ To make the \valuechecker more universal, we developed a PrettyPrint functionali
 
 \begin{figure}[t]
 \centering
-\begin{subfigure}{0.9\textwidth}
+\begin{subfigure}{0.95\textwidth}
   \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-a.jpg}
   \caption{Content without PrettyPrint in \libsnark}
   \label{subfig:snarkprobe-prettyprint_a}
 \end{subfigure}
 \par\vspace{10pt}
-\begin{subfigure}{0.9\textwidth}
+\begin{subfigure}{0.95\textwidth}
   \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-b.jpg}
   \caption{Content without PrettyPrint in \bellman}
   \label{subfig:snarkprobe-prettyprint_b}
 \end{subfigure}
 \par\vspace{10pt}
-\begin{subfigure}{0.9\textwidth}
+\begin{subfigure}{0.95\textwidth}
   \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-c.jpg}
   \caption{Content without PrettyPrint in \arkworks}
   \label{subfig:snarkprobe-prettyprint_c}
 \end{subfigure}
 \par\vspace{10pt}
-\begin{subfigure}{0.9\textwidth}
+\begin{subfigure}{0.95\textwidth}
   \includegraphics[width=\textwidth]{ch-snarkprobe/figure/prettyprint-d.jpg}
   \caption{Content with PrettyPrint in any library}
   \label{subfig:snarkprobe-prettyprint_d}
@@ -671,7 +672,7 @@ The \valueextractor extracts all variables defined in the ideal value file using
 
 \parheadit{\valuechecker.}
 %\label{secsec:snarkprobe-impvaluechecker}
-We developed the \valuechecker for \pinocchio by following \cite{parno2013pinocchio} and \cite{ben2014succinct} and \groth16 by \cite{groth2016size} and \cite{nitulescu2020zk}. To help ensure accurate re-evaluation of the protocol calculations, the \valuechecker uses exactly the same variable names as the original papers, and we follow the protocol description exactly, without any optimizations, to avoid introducing mistakes.
+We developed the \valuechecker for \pinocchio by following \cite{parno2016pinocchio} and \cite{ben2014succinct} and \groth16 by \cite{groth2016size} and \cite{nitulescu2020zk}. To help ensure accurate re-evaluation of the protocol calculations, the \valuechecker uses exactly the same variable names as the original papers, and we follow the protocol description exactly, without any optimizations, to avoid introducing mistakes.
 
 \parheadit{ECC Libraries.} We use two well-tested elliptic curve libraries to demonstrate diversity and flexibility.
 py\_ecc \cite{pyecc}, developed by Ethereum in Python, supports both the BN128 and BLS12-381 curves. CIRCL \cite{circl}, developed by Cloudflare in Go, supports BLS12-381.  Since it is written in Go, we developed the necessary APIs so that our Python-based \valuechecker can access the functions. If users would like to test a new zkSNARK library using a curve that py\_ecc or CIRCL do not support, they can easily plug it into the \valuechecker in this same manner.
